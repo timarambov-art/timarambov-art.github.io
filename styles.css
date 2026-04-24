@@ -1101,8 +1101,13 @@ img {
 }
 
 /* ==================== FAQ ==================== */
+.faq .section-header {
+  text-align: center;
+}
+
 .faq-list {
   max-width: 900px;
+  margin: 0 auto;
 }
 
 .faq-item {
