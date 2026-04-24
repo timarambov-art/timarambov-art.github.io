@@ -1106,7 +1106,9 @@ img {
 }
 
 .faq .section-title {
-  display: inline-block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
   text-align: left;
 }
 
