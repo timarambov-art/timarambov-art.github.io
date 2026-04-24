@@ -1105,6 +1105,11 @@ img {
   text-align: center;
 }
 
+.faq .section-title {
+  display: inline-block;
+  text-align: left;
+}
+
 .faq-list {
   max-width: 900px;
   margin: 0 auto;
