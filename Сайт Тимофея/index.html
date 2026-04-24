@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тимофей Рямбов — делаю сайты руками</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="cursor"></div>
+
+  <div class="gradient-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grain"></div>
+  </div>
+
+  <header class="header">
+    <a href="#" class="logo">
+      <span class="logo-dot"></span>
+      <span class="logo-text">Тимофей Рямбов</span>
+    </a>
+    <nav class="nav">
+      <a href="#about">Обо мне</a>
+      <a href="#cases">Работы</a>
+      <a href="#process">Как работаю</a>
+      <a href="#pricing">Цены</a>
+      <a href="#contact">Связаться</a>
+    </nav>
+    <a href="#contact" class="btn btn-primary btn-sm header-cta">Написать</a>
+    <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Мобильное меню -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav class="mobile-menu-nav">
+      <a href="#about">Обо мне</a>
+      <a href="#cases">Работы</a>
+      <a href="#process">Как работаю</a>
+      <a href="#pricing">Цены</a>
+      <a href="#faq">Вопросы</a>
+      <a href="#contact">Связаться</a>
+    </nav>
+    <div class="mobile-menu-channels">
+      <a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a>
+      <a href="https://t.me/TRyambov" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://wa.me/79022540481" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero">
+    <div class="hero-photo" data-reveal="scale-in">
+      <div class="photo-backdrop">
+        <div class="backdrop-grid"></div>
+      </div>
+      <div class="photo-stage"></div>
+      <div class="photo-glow"></div>
+      <img src="assets/3N7A2360-Photoroom.png" alt="Тимофей Рямбов" class="hero-img">
+      <div class="photo-floor"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-tag" data-reveal="fade-right" data-delay="100">
+        <span class="tag-pulse"></span>
+        ВЕБ-РАЗРАБОТЧИК · ЕКАТЕРИНБУРГ
+      </div>
+
+      <h1 class="hero-title split-words" data-reveal="words" data-delay="200">
+        Делаю сайты —<br>
+        от идеи до <span class="accent">запуска</span>.
+      </h1>
+
+      <p class="hero-subtitle" data-reveal="fade-up" data-delay="600">
+        Продумываю структуру, рисую макет, собираю и&nbsp;запускаю. Полный цикл —
+        от&nbsp;первой встречи до&nbsp;рабочего сайта на&nbsp;вашем домене.
+      </p>
+
+      <div class="hero-actions" data-reveal="fade-up" data-delay="800">
+        <a href="#contact" class="btn btn-primary btn-lg">
+          Написать мне
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="#cases" class="btn btn-ghost btn-lg">Посмотреть работы</a>
+      </div>
+
+      <div class="hero-stats" data-reveal="fade-up" data-delay="1000">
+        <div class="stat">
+          <div class="stat-value" data-count="3">0</div>
+          <div class="stat-label">завершённых проекта</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value"><span data-count="1">0</span>&nbsp;сек</div>
+          <div class="stat-label">загрузка страницы</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">Адаптив</div>
+          <div class="stat-label">компьютер, планшет, телефон</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ОБО МНЕ ==================== -->
+  <section id="about" class="section about">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>ОБО МНЕ</div>
+        <h2 class="section-title split-words" data-reveal="words">
+          Привет.<br>
+          Я&nbsp;Тимофей — <span class="accent">пишу сайты с&nbsp;нуля</span>.
+        </h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-photo" data-reveal="fade-right">
+          <div class="about-photo-frame">
+            <img src="assets/about.jpg" alt="Тимофей Рямбов">
+          </div>
+          <div class="about-photo-glow"></div>
+        </div>
+
+        <div class="about-text">
+          <p class="about-lead" data-reveal="fade-up" data-delay="100">
+            Живу и&nbsp;работаю в&nbsp;Екатеринбурге. Веб-разработка для&nbsp;меня —
+            не&nbsp;подработка и&nbsp;не&nbsp;хобби, а&nbsp;то, чем занимаюсь каждый день.
+          </p>
+          <p data-reveal="fade-up" data-delay="200">
+            Не&nbsp;работаю на&nbsp;шаблонах и&nbsp;конструкторах. Каждый сайт пишу
+            с&nbsp;чистого кода&nbsp;— HTML, CSS, JavaScript, при&nbsp;необходимости
+            подключаю React и&nbsp;Next.js. Такой подход даёт контроль
+            над&nbsp;скоростью, дизайном и&nbsp;поведением: сайт выглядит ровно
+            так, как&nbsp;задумали на&nbsp;макете, а&nbsp;не&nbsp;«как разрешает Тильда».
+          </p>
+          <p data-reveal="fade-up" data-delay="300">
+            Если нужен сайт&nbsp;— от&nbsp;визитки до&nbsp;каталога с&nbsp;сотнями позиций&nbsp;—
+            расскажите о&nbsp;задаче. Продумаю структуру, предложу решение
+            и&nbsp;согласуем сроки с&nbsp;бюджетом.
+          </p>
+
+          <div class="stack" data-reveal="fade-up" data-delay="400">
+            <div class="stack-label">Инструменты</div>
+            <div class="stack-tags">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>React</span>
+              <span>Next.js</span>
+              <span>Node.js</span>
+              <span>Git</span>
+              <span>Figma</span>
+              <span>Анимации</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== КЕЙСЫ ==================== -->
+  <section id="cases" class="section cases">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>РАБОТЫ</div>
+        <h2 class="section-title split-words" data-reveal="words">
+          Проекты, которые<br>
+          <span class="accent">уже работают в&nbsp;интернете</span>.
+        </h2>
+      </div>
+
+      <div class="cases-list">
+
+        <article class="case-card" data-reveal="fade-up" data-case="alexandra">
+          <div class="case-preview">
+            <img src="assets/case-alexandra.png" alt="Лендинг Александры" data-parallax="0.12">
+            <div class="case-preview-grid"></div>
+          </div>
+          <div class="case-body">
+            <div class="case-meta">
+              <span class="case-tag">Одностраничный сайт</span>
+              <span class="case-type">LED-наращивание · Екатеринбург</span>
+            </div>
+            <h3 class="case-title">Александра — LED-наращивание</h3>
+            <p class="case-desc">
+              Один мастер, одна услуга. Задача была собрать лендинг, который
+              с&nbsp;первого экрана отвечает на&nbsp;три вопроса: что это&nbsp;за&nbsp;технология,
+              сколько стоит и&nbsp;как записаться. Тёмная тема с&nbsp;жёлтым акцентом —
+              выглядит премиально, но&nbsp;не&nbsp;перегружает глаз.
+            </p>
+            <div class="case-facts">
+              <div class="fact"><div class="fact-value">12&nbsp;секций</div><div class="fact-label">в одну страницу</div></div>
+              <div class="fact"><div class="fact-value">Квиз</div><div class="fact-label">подбор услуги</div></div>
+              <div class="fact"><div class="fact-value">WhatsApp</div><div class="fact-label">запись в&nbsp;один клик</div></div>
+            </div>
+            <button type="button" class="case-link" data-open-case="alexandra">
+              Посмотреть сайт
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="case-card case-card--reversed" data-reveal="fade-up" data-case="coffee">
+          <div class="case-preview case-preview--coffee">
+            <!-- МОКАП: главный экран кофейни -->
+            <div class="mockup mockup--coffee">
+              <div class="mockup-bar">
+                <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+                <span class="mockup-url">orient-coffee.ru</span>
+              </div>
+              <div class="mockup-nav">
+                <div class="mockup-logo"><span class="logo-mark">☕</span>ОРИЕНТ</div>
+                <div class="mockup-nav-links"><span>Меню</span><span>Адрес</span><span>Броня</span></div>
+              </div>
+              <div class="mockup-hero mockup-hero--split mockup-hero--compact">
+                <div class="mockup-hero-text">
+                  <div class="mockup-eyebrow">кофейня в&nbsp;центре</div>
+                  <div class="mockup-title">Кофе, который<br>греет руки.</div>
+                  <div class="mockup-sub">Свежая выпечка каждое утро&nbsp;· ул.&nbsp;Ленина&nbsp;28</div>
+                  <div class="mockup-cta">
+                    <span class="mockup-btn mockup-btn--primary">Забронировать</span>
+                    <span class="mockup-btn mockup-btn--ghost">Меню</span>
+                  </div>
+                </div>
+                <div class="mockup-hero-photo">
+                  <img src="assets/coffee-real.jpg" alt="Интерьер кофейни Ориент">
+                  <div class="mockup-hero-photo-tag">интерьер</div>
+                </div>
+              </div>
+              <div class="mockup-menu">
+                <div class="menu-row"><span>Капучино</span><span>220&nbsp;₽</span></div>
+                <div class="menu-row"><span>Раф ванильный</span><span>290&nbsp;₽</span></div>
+                <div class="menu-row"><span>Круассан миндальный</span><span>210&nbsp;₽</span></div>
+              </div>
+            </div>
+            <div class="case-preview-grid"></div>
+          </div>
+          <div class="case-body">
+            <div class="case-meta">
+              <span class="case-tag">Сайт заведения</span>
+              <span class="case-type">Кофейня · Екатеринбург</span>
+            </div>
+            <h3 class="case-title">Кофейня «Ориент»</h3>
+            <p class="case-desc">
+              Небольшое место в&nbsp;центре города с&nbsp;постоянной аудиторией.
+              Собрал сайт, через который гость смотрит меню, находит адрес
+              и&nbsp;бронирует столик&nbsp;— без звонков и&nbsp;переписок. Внутренняя
+              атмосфера заведения и&nbsp;фото интерьера вынесены на&nbsp;первый план,
+              чтобы люди ещё до&nbsp;визита понимали, куда идут.
+            </p>
+            <div class="case-facts">
+              <div class="fact"><div class="fact-value">Меню</div><div class="fact-label">две категории, фото</div></div>
+              <div class="fact"><div class="fact-value">Яндекс.Карты</div><div class="fact-label">адрес и&nbsp;маршрут</div></div>
+              <div class="fact"><div class="fact-value">Броня</div><div class="fact-label">форма за&nbsp;30&nbsp;секунд</div></div>
+            </div>
+            <button type="button" class="case-link" data-open-case="coffee">
+              Посмотреть сайт
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="case-card" data-reveal="fade-up" data-case="drive">
+          <div class="case-preview case-preview--auto">
+            <!-- МОКАП: калькулятор автосервиса -->
+            <div class="mockup mockup--drive">
+              <div class="mockup-bar">
+                <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+                <span class="mockup-url">drive-service.ru</span>
+              </div>
+              <div class="mockup-nav">
+                <div class="mockup-logo"><span class="logo-mark">⚙</span>ДРАЙВ</div>
+                <div class="mockup-nav-badge">24 / 7</div>
+              </div>
+              <div class="mockup-calc">
+                <div class="calc-head">
+                  <div class="calc-title">Калькулятор ТО</div>
+                  <div class="calc-sub">Посчитайте стоимость за&nbsp;30&nbsp;секунд</div>
+                </div>
+                <div class="calc-field">
+                  <label>Марка авто</label>
+                  <div class="calc-select">Hyundai Solaris <span class="chev">▾</span></div>
+                </div>
+                <div class="calc-field">
+                  <label>Услуга</label>
+                  <div class="calc-select">Замена масла + фильтр <span class="chev">▾</span></div>
+                </div>
+                <div class="calc-total">
+                  <span class="total-label">Итого</span>
+                  <span class="total-value">3&nbsp;400&nbsp;₽</span>
+                </div>
+                <div class="calc-cta">Записаться на&nbsp;сегодня</div>
+              </div>
+            </div>
+            <div class="case-preview-grid"></div>
+          </div>
+          <div class="case-body">
+            <div class="case-meta">
+              <span class="case-tag">Многостраничный сайт</span>
+              <span class="case-type">Автосервис · 24 / 7</span>
+            </div>
+            <h3 class="case-title">Автосервис «Драйв»</h3>
+            <p class="case-desc">
+              Сервис работает круглосуточно, поэтому сайт должен уметь принимать
+              заявки в&nbsp;любое время. Ключевой элемент&nbsp;— калькулятор стоимости
+              ТО&nbsp;с&nbsp;выбором марки и&nbsp;услуги: клиент за&nbsp;минуту считает цену
+              и&nbsp;сразу оформляет запись. Плюс открытый прайс и&nbsp;подтверждение
+              заявки с&nbsp;итоговой суммой.
+            </p>
+            <div class="case-facts">
+              <div class="fact"><div class="fact-value">4 страницы</div><div class="fact-label">главная, цены, запись, контакты</div></div>
+              <div class="fact"><div class="fact-value">Калькулятор</div><div class="fact-label">стоимость за&nbsp;30&nbsp;секунд</div></div>
+              <div class="fact"><div class="fact-value">Запись 24/7</div><div class="fact-label">заявка уходит мастеру</div></div>
+            </div>
+            <button type="button" class="case-link" data-open-case="drive">
+              Посмотреть сайт
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ПРОЦЕСС ==================== -->
+  <section id="process" class="section process">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>КАК РАБОТАЮ</div>
+        <h2 class="section-title split-words" data-reveal="words">
+          Работаем по&nbsp;этапам —<br>
+          <span class="accent">прозрачно и&nbsp;без&nbsp;сюрпризов</span>.
+        </h2>
+      </div>
+
+      <div class="steps">
+        <div class="step" data-reveal="fade-up" data-delay="0">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Обсуждаем задачу</h3>
+          <p>Созваниваемся или общаемся в&nbsp;мессенджере. Разбираю, что&nbsp;за&nbsp;продукт, кто&nbsp;аудитория, какие задачи должен решать сайт. Фиксирую всё в&nbsp;одном документе&nbsp;— структура, тексты, референсы.</p>
+        </div>
+        <div class="step" data-reveal="fade-up" data-delay="100">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Показываю дизайн</h3>
+          <p>Рисую макет в&nbsp;Figma: главный экран, ключевые блоки, версия для&nbsp;телефона. Согласуем цвета, типографику, переходы. Этап итеративный&nbsp;— правлю, пока результат не&nbsp;устроит обе стороны.</p>
+        </div>
+        <div class="step" data-reveal="fade-up" data-delay="200">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Собираю</h3>
+          <p>Вёрстка точно по&nbsp;макету: HTML, CSS, JavaScript. Сайт корректно работает на&nbsp;компьютере, планшете и&nbsp;телефоне. На&nbsp;одностраничник уходит 5–7&nbsp;дней, на&nbsp;многостраничный&nbsp;— 2–3&nbsp;недели.</p>
+        </div>
+        <div class="step" data-reveal="fade-up" data-delay="300">
+          <div class="step-num">04</div>
+          <h3 class="step-title">Тестирую</h3>
+          <p>Проверяю на&nbsp;реальных устройствах и&nbsp;в&nbsp;разных браузерах&nbsp;— iPhone, Android, медленный интернет, старый ноут. Фикшу всё, что&nbsp;съезжает, тормозит или&nbsp;отображается иначе.</p>
+        </div>
+        <div class="step" data-reveal="fade-up" data-delay="400">
+          <div class="step-num">05</div>
+          <h3 class="step-title">Запускаю</h3>
+          <p>Размещаю сайт на&nbsp;хостинге, подключаю ваш домен (<i>yoursite.ru</i>), настраиваю доставку заявок. В&nbsp;комплекте&nbsp;— короткая инструкция по&nbsp;самостоятельному обновлению текстов и&nbsp;цен.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ЦЕНЫ ==================== -->
+  <section id="pricing" class="section pricing">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>ЦЕНЫ</div>
+        <h2 class="section-title split-words" data-reveal="words">
+          Три формата.<br>
+          <span class="accent">Без звёздочек и&nbsp;скрытых платежей</span>.
+        </h2>
+      </div>
+
+      <div class="price-grid">
+
+        <div class="price-card" data-reveal="fade-up" data-delay="0">
+          <div class="price-head">
+            <div class="price-name">Одна страница</div>
+            <div class="price-sub">Для услуги или события</div>
+          </div>
+          <div class="price-value">от&nbsp;<b>20 000</b>&nbsp;₽</div>
+          <ul class="price-features">
+            <li>До&nbsp;8&nbsp;смысловых блоков</li>
+            <li>Работает на&nbsp;любом устройстве</li>
+            <li>Плавные анимации</li>
+            <li>Форма → заявки к&nbsp;вам в&nbsp;Телеграм</li>
+            <li>Подключу ваш адрес в&nbsp;интернете</li>
+            <li>Готово за&nbsp;5–7&nbsp;дней</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-full">Обсудить</a>
+        </div>
+
+        <div class="price-card price-card--featured" data-reveal="fade-up" data-delay="150">
+          <div class="price-badge">Часто выбирают</div>
+          <div class="price-head">
+            <div class="price-name">Несколько страниц</div>
+            <div class="price-sub">Сайт компании или каталог</div>
+          </div>
+          <div class="price-value">от&nbsp;<b>50 000</b>&nbsp;₽</div>
+          <ul class="price-features">
+            <li>До&nbsp;5&nbsp;страниц — «Главная», «О&nbsp;нас», «Услуги», «Контакты»</li>
+            <li>Работает везде, есть тёмная и&nbsp;светлая темы</li>
+            <li>Сложные и&nbsp;красивые анимации</li>
+            <li>Простая панель — меняете тексты сами</li>
+            <li>Чтобы Яндекс и&nbsp;Google находили</li>
+            <li>Готово за&nbsp;2–3&nbsp;недели</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary btn-full">Обсудить</a>
+        </div>
+
+        <div class="price-card" data-reveal="fade-up" data-delay="300">
+          <div class="price-head">
+            <div class="price-name">Что-то своё</div>
+            <div class="price-sub">Нестандартная задача</div>
+          </div>
+          <div class="price-value">по&nbsp;запросу</div>
+          <ul class="price-features">
+            <li>Интернет-магазин с&nbsp;оплатой</li>
+            <li>Личный кабинет для клиентов</li>
+            <li>Связка с&nbsp;другими сервисами</li>
+            <li>Нестандартные штуки</li>
+            <li>Поддержка после запуска</li>
+            <li>Срок — обсуждаем</li>
+          </ul>
+          <a href="#contact" class="btn btn-ghost btn-full">Обсудить</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section id="faq" class="section faq">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>ВОПРОСЫ</div>
+        <h2 class="section-title split-words" data-reveal="words">
+          Отвечаю на&nbsp;то,<br>
+          о&nbsp;чём <span class="accent">чаще всего спрашивают</span>.
+        </h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item" data-reveal="fade-up" data-delay="0">
+          <summary>
+            <span>А&nbsp;долго делать?</span>
+            <span class="faq-chevron">+</span>
+          </summary>
+          <div class="faq-answer">
+            Одностраничный сайт — 5–7&nbsp;дней. Если страниц несколько — 2–3&nbsp;недели.
+            Точный срок скажу после первого разговора, когда пойму объём.
+            И&nbsp;да, я&nbsp;всегда сдаю в&nbsp;срок.
+          </div>
+        </details>
+
+        <details class="faq-item" data-reveal="fade-up" data-delay="80">
+          <summary>
+            <span>Что входит в&nbsp;цену?</span>
+            <span class="faq-chevron">+</span>
+          </summary>
+          <div class="faq-answer">
+            Всё: разговор о&nbsp;задаче, макет в&nbsp;Figma, сам сайт, проверка на&nbsp;устройствах,
+            выкладка в&nbsp;интернет и&nbsp;подключение адреса. Плюс две недели бесплатных мелких
+            правок после запуска — если что-то нужно поменять.
+          </div>
+        </details>
+
+        <details class="faq-item" data-reveal="fade-up" data-delay="160">
+          <summary>
+            <span>А&nbsp;ты делаешь на&nbsp;Тильде?</span>
+            <span class="faq-chevron">+</span>
+          </summary>
+          <div class="faq-answer">
+            Нет. Пишу всё руками — на&nbsp;чистом коде. Это даёт три вещи:
+            сайт работает быстрее, выглядит ровно так, как задумали, и&nbsp;не&nbsp;нужно
+            платить ежемесячную подписку. Тильда — хороший инструмент, но&nbsp;не&nbsp;мой.
+          </div>
+        </details>
+
+        <details class="faq-item" data-reveal="fade-up" data-delay="240">
+          <summary>
+            <span>На&nbsp;телефоне сайт будет нормально работать?</span>
+            <span class="faq-chevron">+</span>
+          </summary>
+          <div class="faq-answer">
+            Обязательно. Проверяю на&nbsp;iPhone, Android, планшетах и&nbsp;разных размерах
+            экранов. Большинство посетителей сейчас заходят с&nbsp;телефона — так что
+            сайт должен быть удобным именно там в&nbsp;первую очередь.
+          </div>
+        </details>
+
+        <details class="faq-item" data-reveal="fade-up" data-delay="320">
+          <summary>
+            <span>А&nbsp;если что-то сломается потом?</span>
+            <span class="faq-chevron">+</span>
+          </summary>
+          <div class="faq-answer">
+            Две недели после запуска правлю всё бесплатно. Дальше — если нужно что-то
+            добавить или поменять — пишете, договариваемся. Обычно это мелочи: новый блок,
+            обновить цены, заменить фото.
+          </div>
+        </details>
+
+        <details class="faq-item" data-reveal="fade-up" data-delay="400">
+          <summary>
+            <span>Как платить?</span>
+            <span class="faq-chevron">+</span>
+          </summary>
+          <div class="faq-answer">
+            Обычно половину до&nbsp;работы, половину — когда всё готово и&nbsp;вам нравится.
+            Для больших проектов разбиваем на&nbsp;этапы. Беру на&nbsp;карту или через СБП.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== КОНТАКТЫ ==================== -->
+  <section id="contact" class="section contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>СВЯЗЬ</div>
+          <h2 class="section-title contact-title split-words" data-reveal="words">
+            Расскажите<br>
+            про <span class="accent">вашу идею</span>.
+          </h2>
+          <p class="contact-lead" data-reveal="fade-up" data-delay="200">
+            Напишите в&nbsp;любом мессенджере или через форму — отвечу
+            в&nbsp;течение часа. Даже если это час ночи (тогда, может, утром —
+            но&nbsp;точно сегодня).
+          </p>
+
+          <div class="contact-channels">
+            <a href="tel:+79022540481" class="channel" data-reveal="fade-right" data-delay="0">
+              <div class="channel-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div class="channel-body">
+                <div class="channel-title">Позвонить</div>
+                <div class="channel-value">+7&nbsp;(902)&nbsp;254-04-81</div>
+              </div>
+            </a>
+
+            <a href="https://wa.me/79022540481" target="_blank" rel="noopener" class="channel" data-reveal="fade-right" data-delay="100">
+              <div class="channel-icon channel-icon--wa">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              </div>
+              <div class="channel-body">
+                <div class="channel-title">WhatsApp</div>
+                <div class="channel-value">Написать сообщение</div>
+              </div>
+            </a>
+
+            <a href="https://t.me/TRyambov" target="_blank" rel="noopener" class="channel" data-reveal="fade-right" data-delay="200">
+              <div class="channel-icon channel-icon--tg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+              </div>
+              <div class="channel-body">
+                <div class="channel-title">Telegram</div>
+                <div class="channel-value">@TRyambov</div>
+              </div>
+            </a>
+
+            <a href="https://vk.com/ryambov" target="_blank" rel="noopener" class="channel" data-reveal="fade-right" data-delay="300">
+              <div class="channel-icon channel-icon--vk">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.15 14.27h-1.46c-.55 0-.72-.44-1.71-1.43-.86-.83-1.23-.94-1.45-.94-.3 0-.39.09-.39.5v1.31c0 .36-.11.57-1.05.57-1.56 0-3.29-.95-4.51-2.7-1.83-2.57-2.34-4.51-2.34-4.9 0-.22.09-.42.5-.42h1.46c.37 0 .51.17.65.56.72 2.08 1.91 3.9 2.4 3.9.18 0 .27-.09.27-.55v-2.15c-.06-.99-.58-1.07-.58-1.42 0-.17.14-.34.36-.34h2.29c.31 0 .42.17.42.54v2.9c0 .31.14.42.22.42.18 0 .33-.11.66-.44 1.02-1.14 1.75-2.9 1.75-2.9.09-.2.25-.38.62-.38h1.46c.44 0 .54.22.44.54-.18.86-1.97 3.39-1.97 3.39-.15.25-.22.37 0 .65.16.2.68.66 1.03 1.06.65.73 1.14 1.34 1.28 1.76.13.43-.09.65-.52.65z"/></svg>
+              </div>
+              <div class="channel-body">
+                <div class="channel-title">ВКонтакте</div>
+                <div class="channel-value">vk.com/ryambov</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST" data-reveal="fade-left">
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+          <input type="hidden" name="subject" value="Новая заявка с сайта">
+          <input type="hidden" name="from_name" value="Сайт Тимофея">
+
+          <div class="form-field">
+            <label for="name">Как к&nbsp;вам обращаться?</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+
+          <div class="form-field">
+            <label for="contact">Куда написать ответ?</label>
+            <input type="text" id="contact" name="contact" placeholder="Телеграм, WhatsApp, телефон — как удобно" required>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Расскажите про задачу</label>
+            <textarea id="message" name="message" rows="4" placeholder="Что за&nbsp;бизнес, зачем нужен сайт, есть&nbsp;ли примеры которые нравятся"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-full">
+            Отправить
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <div class="form-status" id="formStatus"></div>
+          <div class="form-note">Заявка улетит мне на&nbsp;почту и&nbsp;в&nbsp;Телеграм. Отвечу быстро.</div>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ФУТЕР ==================== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <span class="logo-dot"></span>
+          <span>Тимофей Рямбов</span>
+        </a>
+        <p class="footer-tag">Делаю сайты в&nbsp;Екатеринбурге</p>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Разделы</div>
+        <a href="#about">Обо мне</a>
+        <a href="#cases">Работы</a>
+        <a href="#process">Как работаю</a>
+        <a href="#pricing">Цены</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Связь</div>
+        <a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a>
+        <a href="https://t.me/TRyambov" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://wa.me/79022540481" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://vk.com/ryambov" target="_blank" rel="noopener">ВКонтакте</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Документы</div>
+        <a href="privacy.html">Политика конфиденциальности</a>
+        <a href="offer.html">Договор-оферта</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 · Тимофей Рямбов</div>
+      <div>Сделано руками, не&nbsp;на&nbsp;Тильде</div>
+    </div>
+  </footer>
+
+  <!-- ==================== МОДАЛКА «ПОСМОТРЕТЬ САЙТ» ==================== -->
+  <div class="case-modal" id="caseModal" aria-hidden="true">
+    <div class="case-modal-backdrop" data-modal-close></div>
+
+    <div class="case-modal-inner">
+      <button class="modal-close" type="button" data-modal-close aria-label="Закрыть">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">Проект</div>
+        <div class="modal-counter" id="modalCounter">1 / 1</div>
+      </div>
+
+      <div class="modal-stage">
+        <button class="modal-arrow modal-arrow--prev" type="button" id="modalPrev" aria-label="Предыдущий экран">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <div class="modal-viewport">
+          <div class="modal-track" id="modalTrack"><!-- слайды JS --></div>
+        </div>
+
+        <button class="modal-arrow modal-arrow--next" type="button" id="modalNext" aria-label="Следующий экран">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-dots" id="modalDots"><!-- точки JS --></div>
+
+      <div class="modal-caption" id="modalCaption"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

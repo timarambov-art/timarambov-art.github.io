@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Политика конфиденциальности · Тимофей Рямбов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-2: #0F1E36;
+      --text: #EAEEF5;
+      --text-2: #9BAAC4;
+      --text-3: #7E8FAC;
+      --accent: #E8946A;
+      --accent-2: #6BA4FF;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      font-size: 16px;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 0% 0%, rgba(107, 164, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(232, 148, 106, 0.06) 0%, transparent 45%);
+    }
+    .doc {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 60px 28px 120px;
+    }
+    .doc-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-2);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: all .2s ease;
+      margin-bottom: 40px;
+    }
+    .doc-back:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+    }
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .doc-meta {
+      color: var(--text-3);
+      font-size: 14px;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+    }
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin: 46px 0 18px;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+    h2 .num {
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 26px 0 10px;
+    }
+    p {
+      color: var(--text-2);
+      margin-bottom: 14px;
+    }
+    ul {
+      list-style: none;
+      margin: 10px 0 20px;
+      padding: 0;
+    }
+    ul li {
+      color: var(--text-2);
+      padding-left: 22px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 10px;
+      height: 1px;
+      background: var(--accent);
+    }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    strong { color: var(--text); font-weight: 600; }
+    .callout {
+      margin: 36px 0;
+      padding: 22px 26px;
+      background: rgba(107, 164, 255, 0.06);
+      border: 1px solid rgba(107, 164, 255, 0.18);
+      border-left: 3px solid var(--accent-2);
+      border-radius: 10px;
+      color: var(--text-2);
+      font-size: 15px;
+    }
+    .contacts-box {
+      margin-top: 50px;
+      padding: 28px 30px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .contacts-box h3 { margin-top: 0; }
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 20px;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+    .contacts-grid dt { color: var(--text-3); }
+    .contacts-grid dd { color: var(--text); }
+    @media (max-width: 600px) {
+      .doc { padding: 30px 18px 80px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <article class="doc">
+    <a href="index.html" class="doc-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Вернуться на&nbsp;сайт
+    </a>
+
+    <div class="doc-eyebrow">Документ</div>
+    <h1>Политика конфиденциальности</h1>
+    <div class="doc-meta">Редакция от&nbsp;24&nbsp;апреля 2026&nbsp;года</div>
+
+    <h2><span class="num">01</span> Общие положения</h2>
+    <p>
+      Настоящая Политика описывает, какие персональные данные собираются
+      на&nbsp;сайте <a href="https://ryambov.ru">ryambov.ru</a> (далее&nbsp;— Сайт),
+      на&nbsp;каком основании они обрабатываются и&nbsp;как защищаются.
+    </p>
+    <p>
+      Оператор данных&nbsp;— Рямбов Тимофей Степанович, самозанятый
+      (плательщик налога на&nbsp;профессиональный доход),
+      ИНН&nbsp;<strong>663230454496</strong>, далее&nbsp;— «Исполнитель».
+    </p>
+    <p>
+      Политика составлена в&nbsp;соответствии с&nbsp;Федеральным законом
+      от&nbsp;27.07.2006 №&nbsp;152-ФЗ «О&nbsp;персональных данных».
+      Используя Сайт и&nbsp;отправляя формы, вы&nbsp;подтверждаете согласие
+      с&nbsp;условиями настоящей Политики.
+    </p>
+
+    <h2><span class="num">02</span> Какие данные собираются</h2>
+    <p>Исполнитель собирает только те&nbsp;данные, которые вы&nbsp;сообщаете сами:</p>
+    <ul>
+      <li>Имя или&nbsp;то, как&nbsp;к&nbsp;вам обращаться</li>
+      <li>Контакт для&nbsp;связи&nbsp;— телефон, Telegram, WhatsApp, e-mail или&nbsp;ссылка на&nbsp;профиль</li>
+      <li>Текст сообщения о&nbsp;вашей задаче</li>
+    </ul>
+    <p>Дополнительно автоматически собираются технические данные:</p>
+    <ul>
+      <li>IP-адрес, тип и&nbsp;версия браузера, операционная система</li>
+      <li>Страницы, которые вы&nbsp;открыли на&nbsp;Сайте, источник перехода, время визита</li>
+      <li>Cookie-файлы счётчиков (Яндекс.Метрика)</li>
+    </ul>
+
+    <h2><span class="num">03</span> Для&nbsp;чего используются данные</h2>
+    <ul>
+      <li>Ответить вам по&nbsp;присланной заявке и&nbsp;обсудить задачу</li>
+      <li>Сформировать коммерческое предложение или&nbsp;договор</li>
+      <li>Вести с&nbsp;вами переписку в&nbsp;рамках работы над&nbsp;проектом</li>
+      <li>Улучшать Сайт и&nbsp;понимать, какие разделы востребованы (обезличенная статистика)</li>
+    </ul>
+    <p>
+      Данные не&nbsp;передаются третьим лицам, не&nbsp;продаются
+      и&nbsp;не&nbsp;используются для&nbsp;рекламных рассылок.
+    </p>
+
+    <h2><span class="num">04</span> Где хранятся данные</h2>
+    <p>
+      Заявки с&nbsp;Сайта уходят на&nbsp;e-mail Исполнителя
+      через сервис <a href="https://web3forms.com" target="_blank" rel="noopener">web3forms.com</a>
+      и&nbsp;(опционально) дублируются сообщением в&nbsp;Telegram.
+      Переписка хранится в&nbsp;соответствующих мессенджерах и&nbsp;почтовом ящике.
+    </p>
+    <p>
+      Хостинг Сайта, почтовый сервер и&nbsp;сервисы аналитики находятся
+      на&nbsp;территории Российской Федерации либо соответствуют требованиям
+      152-ФЗ по&nbsp;трансграничной передаче.
+    </p>
+
+    <h2><span class="num">05</span> Сколько хранятся данные</h2>
+    <ul>
+      <li>Данные по&nbsp;открытым проектам&nbsp;— в&nbsp;течение срока работы и&nbsp;ещё один год после завершения для&nbsp;возможной поддержки</li>
+      <li>Отказные заявки (когда сотрудничество не&nbsp;состоялось)&nbsp;— до&nbsp;90&nbsp;дней</li>
+      <li>Данные счётчиков аналитики&nbsp;— в&nbsp;обезличенном виде, по&nbsp;правилам самих счётчиков</li>
+    </ul>
+    <p>
+      По&nbsp;запросу пользователя данные удаляются раньше срока.
+    </p>
+
+    <h2><span class="num">06</span> Cookie-файлы</h2>
+    <p>
+      Сайт использует cookie для&nbsp;корректной работы страниц и&nbsp;сбора
+      обезличенной статистики посещений. Вы&nbsp;можете отключить cookie
+      в&nbsp;настройках своего браузера&nbsp;— при&nbsp;этом часть функций Сайта
+      может работать ограниченно.
+    </p>
+
+    <h2><span class="num">07</span> Права пользователя</h2>
+    <p>Вы&nbsp;имеете право:</p>
+    <ul>
+      <li>Запросить, какие ваши данные хранятся у&nbsp;Исполнителя</li>
+      <li>Попросить исправить или&nbsp;удалить ваши данные</li>
+      <li>Отозвать согласие на&nbsp;обработку данных в&nbsp;любой момент</li>
+      <li>Обжаловать действия Исполнителя в&nbsp;Роскомнадзоре</li>
+    </ul>
+    <p>
+      Для&nbsp;этого напишите на&nbsp;e-mail
+      <a href="mailto:timarambov@gmail.com">timarambov@gmail.com</a>&nbsp;—
+      запрос будет обработан в&nbsp;течение 10&nbsp;рабочих дней.
+    </p>
+
+    <h2><span class="num">08</span> Защита данных</h2>
+    <p>
+      Исполнитель применяет разумные технические и&nbsp;организационные меры
+      для&nbsp;защиты полученных данных от&nbsp;потери, кражи
+      или&nbsp;несанкционированного доступа. Передача данных через Сайт
+      осуществляется по&nbsp;защищённому соединению&nbsp;(HTTPS).
+    </p>
+
+    <h2><span class="num">09</span> Изменение Политики</h2>
+    <p>
+      Политика может обновляться. Актуальная версия всегда доступна
+      по&nbsp;адресу <a href="https://ryambov.ru/privacy.html">ryambov.ru/privacy.html</a>.
+      Дата последней редакции указана в&nbsp;начале документа.
+    </p>
+
+    <div class="contacts-box">
+      <h3>Контакты Исполнителя</h3>
+      <dl class="contacts-grid">
+        <dt>ФИО</dt><dd>Рямбов Тимофей Степанович</dd>
+        <dt>Статус</dt><dd>Самозанятый (НПД)</dd>
+        <dt>ИНН</dt><dd>663230454496</dd>
+        <dt>E-mail</dt><dd><a href="mailto:timarambov@gmail.com">timarambov@gmail.com</a></dd>
+        <dt>Телефон</dt><dd><a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a></dd>
+        <dt>Telegram</dt><dd><a href="https://t.me/TRyambov" target="_blank" rel="noopener">@TRyambov</a></dd>
+      </dl>
+    </div>
+  </article>
+</body>
+</html>

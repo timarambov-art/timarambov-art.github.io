@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Договор-оферта · Тимофей Рямбов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-2: #0F1E36;
+      --text: #EAEEF5;
+      --text-2: #9BAAC4;
+      --text-3: #7E8FAC;
+      --accent: #E8946A;
+      --accent-2: #6BA4FF;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.7;
+      font-size: 16px;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 0% 0%, rgba(107, 164, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(232, 148, 106, 0.06) 0%, transparent 45%);
+    }
+    .doc {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 60px 28px 120px;
+    }
+    .doc-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-2);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: all .2s ease;
+      margin-bottom: 40px;
+    }
+    .doc-back:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+    }
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .doc-meta {
+      color: var(--text-3);
+      font-size: 14px;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+    }
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin: 46px 0 18px;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+    h2 .num {
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 26px 0 10px;
+    }
+    p {
+      color: var(--text-2);
+      margin-bottom: 14px;
+    }
+    p.sub {
+      margin-left: 28px;
+    }
+    ul, ol {
+      list-style: none;
+      margin: 10px 0 20px;
+      padding: 0;
+      counter-reset: clist;
+    }
+    ul li {
+      color: var(--text-2);
+      padding-left: 22px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 10px;
+      height: 1px;
+      background: var(--accent);
+    }
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    strong { color: var(--text); font-weight: 600; }
+    .lead {
+      font-size: 17px;
+      color: var(--text);
+      padding: 22px 26px;
+      background: rgba(232, 148, 106, 0.06);
+      border: 1px solid rgba(232, 148, 106, 0.18);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+      margin: 20px 0 36px;
+    }
+    .callout {
+      margin: 30px 0;
+      padding: 20px 24px;
+      background: rgba(107, 164, 255, 0.06);
+      border: 1px solid rgba(107, 164, 255, 0.18);
+      border-radius: 10px;
+      color: var(--text-2);
+      font-size: 15px;
+    }
+    .contacts-box {
+      margin-top: 50px;
+      padding: 28px 30px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .contacts-box h3 { margin-top: 0; }
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 20px;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+    .contacts-grid dt { color: var(--text-3); }
+    .contacts-grid dd { color: var(--text); }
+    @media (max-width: 600px) {
+      .doc { padding: 30px 18px 80px; }
+      h2 { font-size: 19px; }
+      p.sub { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <article class="doc">
+    <a href="index.html" class="doc-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Вернуться на&nbsp;сайт
+    </a>
+
+    <div class="doc-eyebrow">Документ</div>
+    <h1>Договор-оферта<br>на&nbsp;разработку сайта</h1>
+    <div class="doc-meta">Редакция от&nbsp;24&nbsp;апреля 2026&nbsp;года&nbsp;· г.&nbsp;Екатеринбург</div>
+
+    <p class="lead">
+      Это&nbsp;— публичная оферта. Исполнитель&nbsp;— Рямбов Тимофей Степанович,
+      самозанятый (плательщик НПД), ИНН&nbsp;<strong>663230454496</strong>,
+      далее&nbsp;— «Исполнитель». Физическое или&nbsp;юридическое лицо,
+      принявшее условия оферты, далее&nbsp;— «Заказчик».
+    </p>
+
+    <h2><span class="num">01</span> Предмет договора</h2>
+    <p>
+      Исполнитель обязуется разработать для&nbsp;Заказчика сайт в&nbsp;соответствии
+      с&nbsp;согласованным техническим заданием, а&nbsp;Заказчик&nbsp;— оплатить работу
+      на&nbsp;условиях настоящей оферты.
+    </p>
+    <p>
+      В&nbsp;состав работ входит: сбор требований, подготовка макета,
+      вёрстка, программирование, тестирование, публикация результата
+      на&nbsp;домене Заказчика.
+    </p>
+
+    <h2><span class="num">02</span> Как заключается договор</h2>
+    <p>
+      Договор считается заключённым с&nbsp;момента, когда Заказчик совершил
+      любое из&nbsp;следующих действий:
+    </p>
+    <ul>
+      <li>Подтвердил согласие с&nbsp;оферной ценой и&nbsp;сроком в&nbsp;переписке с&nbsp;Исполнителем</li>
+      <li>Внёс предоплату на&nbsp;реквизиты Исполнителя</li>
+      <li>Подписал отдельный акт или&nbsp;техническое задание к&nbsp;настоящей оферте</li>
+    </ul>
+    <p>
+      Реквизиты и&nbsp;сумма фиксируются в&nbsp;переписке (мессенджер, e-mail)
+      и&nbsp;имеют юридическую силу для&nbsp;обеих сторон.
+    </p>
+
+    <h2><span class="num">03</span> Стоимость и&nbsp;оплата</h2>
+    <p>
+      Стоимость работ определяется индивидуально и&nbsp;согласовывается
+      до&nbsp;начала выполнения. Общий порядок&nbsp;— двумя платежами:
+    </p>
+    <ul>
+      <li><strong>50%</strong>&nbsp;— предоплата при&nbsp;старте работ</li>
+      <li><strong>50%</strong>&nbsp;— после сдачи и&nbsp;согласования результата</li>
+    </ul>
+    <p>
+      Для&nbsp;больших проектов оплата может быть разбита на&nbsp;этапы
+      с&nbsp;отдельным актом по&nbsp;каждому. Оплата принимается переводом
+      на&nbsp;банковскую карту, через СБП или&nbsp;на&nbsp;расчётный счёт
+      самозанятого. После каждого платежа Исполнитель отправляет Заказчику
+      чек из&nbsp;приложения «Мой налог».
+    </p>
+    <p>
+      НДС не&nbsp;облагается на&nbsp;основании п.&nbsp;8 ст.&nbsp;2 Федерального закона
+      от&nbsp;27.11.2018 №&nbsp;422-ФЗ.
+    </p>
+
+    <h2><span class="num">04</span> Сроки</h2>
+    <p>Ориентировочные сроки от&nbsp;получения предоплаты:</p>
+    <ul>
+      <li>Одностраничный сайт&nbsp;— 5–7&nbsp;рабочих дней</li>
+      <li>Многостраничный сайт&nbsp;— 2–3&nbsp;недели</li>
+      <li>Сайт с&nbsp;нестандартной функциональностью&nbsp;— отдельно</li>
+    </ul>
+    <p>
+      Точный срок фиксируется в&nbsp;переписке до&nbsp;старта работ. Сроки могут
+      увеличиваться на&nbsp;время ожидания материалов от&nbsp;Заказчика
+      (тексты, фото, логотип, доступы) и&nbsp;на&nbsp;время согласования правок.
+    </p>
+
+    <h2><span class="num">05</span> Обязанности сторон</h2>
+
+    <h3>Исполнитель обязуется:</h3>
+    <ul>
+      <li>Выполнить работу качественно и&nbsp;в&nbsp;согласованный срок</li>
+      <li>Согласовывать с&nbsp;Заказчиком ключевые этапы&nbsp;— структура, макет, готовая сборка</li>
+      <li>Передать Заказчику исходные файлы (HTML, CSS, JavaScript, изображения) после полной оплаты</li>
+      <li>Бесплатно исправить недочёты и&nbsp;мелкие правки в&nbsp;течение 14&nbsp;дней после сдачи</li>
+    </ul>
+
+    <h3>Заказчик обязуется:</h3>
+    <ul>
+      <li>Предоставить материалы для&nbsp;сайта (тексты, логотип, фото, контакты) в&nbsp;разумные сроки</li>
+      <li>Давать обратную связь по&nbsp;этапам в&nbsp;течение 3&nbsp;рабочих дней</li>
+      <li>Своевременно оплачивать работу согласно п.&nbsp;3</li>
+      <li>Предоставить доступ к&nbsp;домену и&nbsp;хостингу для&nbsp;публикации, если они уже зарегистрированы</li>
+    </ul>
+
+    <h2><span class="num">06</span> Правки и&nbsp;согласование</h2>
+    <p>
+      На&nbsp;этапе дизайна в&nbsp;стоимость включено до&nbsp;<strong>3&nbsp;раундов</strong>
+      правок по&nbsp;макету. Дальнейшие существенные изменения (смена концепции,
+      переработка структуры) оплачиваются отдельно.
+    </p>
+    <p>
+      После запуска в&nbsp;течение <strong>14&nbsp;дней</strong> Исполнитель бесплатно
+      правит недочёты: опечатки, съехавшую вёрстку, некорректное поведение
+      на&nbsp;устройствах. Новые блоки, изменение дизайна, расширение функциональности
+      не&nbsp;входят в&nbsp;этот период и&nbsp;тарифицируются отдельно.
+    </p>
+
+    <h2><span class="num">07</span> Гарантии и&nbsp;ответственность</h2>
+    <p>
+      Исполнитель гарантирует, что&nbsp;сайт будет работать на&nbsp;актуальных версиях
+      браузеров (Chrome, Safari, Firefox, Edge&nbsp;— две последние версии)
+      и&nbsp;на&nbsp;типовых мобильных устройствах.
+    </p>
+    <p>
+      Исполнитель не&nbsp;несёт ответственность за:
+    </p>
+    <ul>
+      <li>Сбои хостинга, доменной зоны или&nbsp;сторонних сервисов, выбранных Заказчиком</li>
+      <li>Содержание информации, которую публикует Заказчик</li>
+      <li>Потерю прибыли, недополученные доходы и&nbsp;иные косвенные убытки</li>
+      <li>Изменения, внесённые в&nbsp;сайт самим Заказчиком или&nbsp;третьими лицами после сдачи</li>
+    </ul>
+    <p>
+      Совокупная ответственность Исполнителя по&nbsp;настоящему договору ограничена
+      фактически полученной от&nbsp;Заказчика суммой за&nbsp;соответствующий проект.
+    </p>
+
+    <h2><span class="num">08</span> Сдача работы</h2>
+    <p>
+      По&nbsp;готовности Исполнитель передаёт Заказчику ссылку на&nbsp;готовый сайт
+      и&nbsp;краткую инструкцию. Заказчик в&nbsp;течение <strong>5&nbsp;рабочих дней</strong>
+      проверяет результат и&nbsp;присылает список замечаний либо подтверждает приёмку.
+    </p>
+    <p>
+      Если в&nbsp;течение 5&nbsp;дней не&nbsp;поступило ни&nbsp;замечаний, ни&nbsp;подтверждения&nbsp;—
+      работа считается принятой, окончательный платёж подлежит оплате.
+    </p>
+
+    <h2><span class="num">09</span> Авторские права</h2>
+    <p>
+      После полной оплаты исключительные права на&nbsp;итоговый сайт&nbsp;— дизайн,
+      тексты, код, созданный специально для&nbsp;Заказчика&nbsp;— переходят к&nbsp;Заказчику
+      без&nbsp;дополнительных соглашений.
+    </p>
+    <p>
+      Исполнитель оставляет за&nbsp;собой право использовать готовый проект
+      в&nbsp;портфолио и&nbsp;показывать его в&nbsp;рекламных целях&nbsp;— без&nbsp;раскрытия
+      закрытой информации о&nbsp;бизнесе Заказчика.
+    </p>
+    <p>
+      Шрифты, иконки, стоковые изображения, библиотеки с&nbsp;открытыми лицензиями
+      остаются под&nbsp;лицензиями своих правообладателей и&nbsp;не&nbsp;являются
+      объектом передачи прав.
+    </p>
+
+    <h2><span class="num">10</span> Расторжение и&nbsp;возврат</h2>
+    <p>
+      Любая из&nbsp;сторон вправе отказаться от&nbsp;дальнейшего сотрудничества,
+      уведомив другую сторону в&nbsp;переписке.
+    </p>
+    <p>
+      При&nbsp;отказе Заказчика после внесения предоплаты:
+    </p>
+    <ul>
+      <li>Если работа ещё не&nbsp;начата&nbsp;— предоплата возвращается в&nbsp;полном объёме в&nbsp;течение 10&nbsp;рабочих дней</li>
+      <li>Если часть работы выполнена&nbsp;— возвращается часть предоплаты, пропорциональная невыполненному объёму. Выполненная часть передаётся Заказчику</li>
+    </ul>
+    <p>
+      При&nbsp;отказе Исполнителя по&nbsp;своей инициативе полученная предоплата
+      возвращается полностью в&nbsp;течение 10&nbsp;рабочих дней.
+    </p>
+
+    <h2><span class="num">11</span> Форс-мажор</h2>
+    <p>
+      Стороны освобождаются от&nbsp;ответственности за&nbsp;неисполнение обязательств,
+      если это связано с&nbsp;обстоятельствами непреодолимой силы: отключение
+      электричества в&nbsp;регионе, серьёзные проблемы со&nbsp;здоровьем, сбои
+      магистральных провайдеров и&nbsp;другие подобные события. В&nbsp;таких случаях
+      срок исполнения продлевается на&nbsp;время действия обстоятельств.
+    </p>
+
+    <h2><span class="num">12</span> Разрешение споров</h2>
+    <p>
+      Сначала&nbsp;— переговоры. Стороны стараются договориться мирно,
+      через переписку или&nbsp;созвон. Срок досудебной претензии&nbsp;— 30&nbsp;календарных дней
+      с&nbsp;момента её&nbsp;получения.
+    </p>
+    <p>
+      Если договориться не&nbsp;получилось, спор рассматривается в&nbsp;суде
+      по&nbsp;месту нахождения Исполнителя&nbsp;— в&nbsp;соответствии с&nbsp;законодательством
+      Российской Федерации.
+    </p>
+
+    <h2><span class="num">13</span> Контакты для&nbsp;связи</h2>
+    <p>
+      Все уведомления, согласования и&nbsp;претензии направляются по&nbsp;контактам,
+      указанным ниже. Переписка в&nbsp;мессенджерах и&nbsp;на&nbsp;e-mail признаётся
+      надлежащим способом связи.
+    </p>
+
+    <div class="contacts-box">
+      <h3>Реквизиты Исполнителя</h3>
+      <dl class="contacts-grid">
+        <dt>ФИО</dt><dd>Рямбов Тимофей Степанович</dd>
+        <dt>Статус</dt><dd>Самозанятый (плательщик НПД)</dd>
+        <dt>ИНН</dt><dd>663230454496</dd>
+        <dt>E-mail</dt><dd><a href="mailto:timarambov@gmail.com">timarambov@gmail.com</a></dd>
+        <dt>Телефон</dt><dd><a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a></dd>
+        <dt>Telegram</dt><dd><a href="https://t.me/TRyambov" target="_blank" rel="noopener">@TRyambov</a></dd>
+        <dt>WhatsApp</dt><dd><a href="https://wa.me/79022540481" target="_blank" rel="noopener">+7&nbsp;(902)&nbsp;254-04-81</a></dd>
+        <dt>ВКонтакте</dt><dd><a href="https://vk.com/ryambov" target="_blank" rel="noopener">vk.com/ryambov</a></dd>
+      </dl>
+    </div>
+
+    <div class="callout" style="margin-top: 40px">
+      Принятие оферты означает согласие со&nbsp;всеми её&nbsp;условиями без&nbsp;каких-либо
+      изъятий и&nbsp;оговорок. Если хотя бы одно условие не&nbsp;подходит&nbsp;—
+      не&nbsp;принимайте оферту и&nbsp;свяжитесь с&nbsp;Исполнителем для&nbsp;обсуждения
+      индивидуального договора.
+    </div>
+  </article>
+</body>
+</html>
