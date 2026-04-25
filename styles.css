@@ -1100,6 +1100,555 @@ img {
   justify-content: center;
 }
 
+/* ==================== CALCULATOR ==================== */
+.calc-builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 32px;
+  align-items: start;
+}
+
+.calc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.calc-group {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: rgba(15, 30, 54, 0.35);
+  padding: 28px 28px 24px;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s;
+}
+
+.calc-group:hover {
+  border-color: rgba(107, 164, 255, 0.22);
+}
+
+.calc-group-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.calc-group-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(107, 164, 255, 0.12);
+  color: var(--accent-2);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.calc-group-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.calc-group-hint {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.calc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calc-option {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(10, 22, 40, 0.4);
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s, transform 0.2s;
+}
+
+.calc-option:hover {
+  border-color: rgba(107, 164, 255, 0.3);
+  background: rgba(15, 30, 54, 0.55);
+}
+
+.calc-option input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  margin: 3px 0 0;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid rgba(140, 168, 210, 0.4);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.calc-option input[type="checkbox"] {
+  border-radius: 6px;
+}
+
+.calc-option input:checked {
+  border-color: var(--accent-2);
+  background: var(--accent-2);
+}
+
+.calc-option input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: #061327;
+}
+
+.calc-option input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 11px;
+  border-right: 2px solid #061327;
+  border-bottom: 2px solid #061327;
+  transform: rotate(45deg);
+}
+
+.calc-option:has(input:checked) {
+  border-color: rgba(107, 164, 255, 0.55);
+  background: linear-gradient(180deg,
+    rgba(107, 164, 255, 0.12) 0%,
+    rgba(61, 43, 92, 0.1) 100%);
+  box-shadow: 0 12px 28px rgba(107, 164, 255, 0.08);
+}
+
+.calc-option-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.calc-option-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.calc-option-desc {
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+
+.calc-option-price {
+  flex-shrink: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-2);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* === SUMMARY === */
+.calc-summary {
+  position: relative;
+}
+
+.calc-summary-sticky {
+  position: sticky;
+  top: 100px;
+  padding: 32px 28px;
+  border: 1px solid rgba(107, 164, 255, 0.25);
+  border-radius: 24px;
+  background: linear-gradient(180deg,
+    rgba(107, 164, 255, 0.1) 0%,
+    rgba(61, 43, 92, 0.18) 100%);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
+}
+
+.calc-summary-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin-bottom: 12px;
+}
+
+.calc-summary-price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-bottom: 6px;
+}
+
+.calc-summary-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.calc-summary-old {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-color: rgba(140, 168, 210, 0.6);
+  text-decoration-thickness: 2px;
+}
+
+.calc-summary-saved {
+  display: inline-block;
+  margin-bottom: 22px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(56, 220, 140, 0.12);
+  border: 1px solid rgba(56, 220, 140, 0.32);
+  color: #7eebad;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.calc-summary-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 22px 0 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 24px;
+}
+
+.calc-summary-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.calc-summary-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 4px;
+  border-left: 2px solid var(--accent-2);
+  border-bottom: 2px solid var(--accent-2);
+  transform: rotate(-45deg);
+}
+
+.calc-summary-cta {
+  margin-top: 4px;
+}
+
+.calc-summary-note {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ===== Спецпредложение в шапке summary ===== */
+.calc-offer {
+  position: relative;
+  margin-bottom: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(56, 220, 140, 0.35);
+  border-radius: 16px;
+  background: linear-gradient(180deg,
+    rgba(56, 220, 140, 0.12) 0%,
+    rgba(56, 220, 140, 0.04) 100%);
+  overflow: hidden;
+}
+
+.calc-offer-pulse {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38dc8c;
+  box-shadow: 0 0 0 0 rgba(56, 220, 140, 0.6);
+  animation: calc-offer-pulse 1.8s infinite;
+}
+
+@keyframes calc-offer-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(56, 220, 140, 0.6); }
+  70%  { box-shadow: 0 0 0 10px rgba(56, 220, 140, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(56, 220, 140, 0); }
+}
+
+.calc-offer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-right: 18px;
+}
+
+.calc-offer-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7eebad;
+}
+
+.calc-offer-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.calc-offer-prices {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-bottom: 6px;
+}
+
+.calc-offer-old {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-decoration: line-through;
+  text-decoration-color: rgba(140, 168, 210, 0.55);
+}
+
+.calc-offer-arrow {
+  color: #7eebad;
+  font-weight: 700;
+}
+
+.calc-offer-new {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #7eebad;
+}
+
+.calc-offer-unit {
+  font-size: 13px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.calc-offer-note {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+
+/* ==================== СЛАЙДЕР РАЗМЕРА ==================== */
+.calc-slider-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.calc-slider-display {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.calc-slider-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent-2) 0%, #b48dff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.calc-slider-label {
+  font-size: 16px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.calc-slider-hint {
+  font-size: 13.5px;
+  color: var(--text-3);
+  line-height: 1.5;
+  margin-top: -4px;
+}
+
+/* === Сама дорожка слайдера === */
+.calc-slider-track-wrap {
+  position: relative;
+  height: 36px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Базовая «серая» дорожка */
+.calc-slider-track-wrap::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(140, 168, 210, 0.18);
+  pointer-events: none;
+}
+
+/* Заполненная (синяя) часть */
+.calc-slider-fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 6px;
+  width: 30%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-2), #b48dff);
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(107, 164, 255, 0.4);
+  transition: width 0.18s ease;
+}
+
+/* Сам range — поверх, прозрачный, но активный */
+.calc-slider {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  height: 36px;
+  margin: 0;
+  cursor: grab;
+}
+.calc-slider:active { cursor: grabbing; }
+
+.calc-slider::-webkit-slider-runnable-track {
+  height: 36px;
+  background: transparent;
+}
+.calc-slider::-moz-range-track {
+  height: 36px;
+  background: transparent;
+}
+
+/* Кружок-«ручка» */
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--accent-2);
+  box-shadow: 0 6px 18px rgba(107, 164, 255, 0.5),
+              0 0 0 6px rgba(107, 164, 255, 0.12);
+  cursor: grab;
+  margin-top: 4px;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.calc-slider:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+  cursor: grabbing;
+  box-shadow: 0 8px 26px rgba(107, 164, 255, 0.6),
+              0 0 0 10px rgba(107, 164, 255, 0.18);
+}
+.calc-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--accent-2);
+  box-shadow: 0 6px 18px rgba(107, 164, 255, 0.5),
+              0 0 0 6px rgba(107, 164, 255, 0.12);
+  cursor: grab;
+}
+
+.calc-slider-marks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+/* === Визуальная «стопка» блоков — растёт с ползунком === */
+.calc-slider-stack {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.calc-stack-cell {
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(140, 168, 210, 0.1);
+  border: 1px solid rgba(140, 168, 210, 0.15);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.calc-stack-cell.is-on {
+  background: linear-gradient(180deg, rgba(107, 164, 255, 0.45), rgba(180, 141, 255, 0.32));
+  border-color: rgba(107, 164, 255, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(107, 164, 255, 0.18);
+}
+
+/* === Тоггл «срочно» — растягиваем на всю ширину === */
+.calc-option--toggle {
+  align-items: center;
+}
+
 /* ==================== FAQ ==================== */
 .faq .section-header {
   text-align: center;
@@ -1198,11 +1747,15 @@ img {
 }
 
 /* ==================== CONTACT ==================== */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: start;
+.contact-center {
+  display: flex;
+  justify-content: center;
+}
+
+.contact-info {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
 }
 
 .contact-title {
@@ -1213,14 +1766,15 @@ img {
   font-size: 17px;
   color: var(--text-2);
   line-height: 1.6;
-  margin-bottom: 40px;
-  max-width: 480px;
+  margin: 0 auto 40px;
+  max-width: 560px;
 }
 
 .contact-channels {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 14px;
+  text-align: left;
 }
 
 .channel {
@@ -1288,83 +1842,6 @@ img {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* Form */
-.contact-form {
-  padding: 40px;
-  border: 1px solid var(--border);
-  border-radius: 26px;
-  background: rgba(15, 30, 54, 0.4);
-  backdrop-filter: blur(14px);
-}
-
-.form-field {
-  margin-bottom: 22px;
-}
-
-.form-field label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-3);
-  margin-bottom: 10px;
-}
-
-.form-field input,
-.form-field textarea {
-  width: 100%;
-  padding: 14px 18px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: rgba(10, 22, 40, 0.5);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 15px;
-  transition: border-color 0.3s, background 0.3s;
-  resize: vertical;
-}
-
-.form-field input:focus,
-.form-field textarea:focus {
-  outline: none;
-  border-color: var(--accent-2);
-  background: rgba(10, 22, 40, 0.7);
-}
-
-.form-field input::placeholder,
-.form-field textarea::placeholder {
-  color: var(--text-3);
-}
-
-.form-status {
-  margin-top: 16px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  display: none;
-}
-
-.form-status.show { display: block; }
-.form-status.success {
-  background: rgba(56, 220, 140, 0.1);
-  border: 1px solid rgba(56, 220, 140, 0.3);
-  color: #7eebad;
-}
-.form-status.error {
-  background: rgba(235, 87, 87, 0.1);
-  border: 1px solid rgba(235, 87, 87, 0.3);
-  color: #ff8888;
-}
-
-.form-note {
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--text-3);
-  text-align: center;
 }
 
 /* ==================== FOOTER ==================== */
@@ -1542,9 +2019,11 @@ body.menu-open { overflow: hidden; }
   .case-body { padding: 36px; }
 
   .steps { grid-template-columns: repeat(2, 1fr); }
-  .price-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
-  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .contact-channels { grid-template-columns: 1fr; }
+
+  /* Калькулятор: складываем в одну колонку */
+  .calc-builder { grid-template-columns: 1fr; gap: 28px; }
+  .calc-summary-sticky { position: static; }
 
   .footer-inner {
     grid-template-columns: 1fr 1fr;
@@ -1704,13 +2183,31 @@ body.menu-open { overflow: hidden; }
   .step-title { font-size: 18px; }
   .step p { font-size: 14px; }
 
-  /* ===== ЦЕНЫ ===== */
-  .price-card { padding: 28px 24px; }
-  .price-name { font-size: 20px; }
-  .price-value { font-size: 28px; }
-  .price-value b { font-size: 32px; }
-  .price-features li { font-size: 13.5px; }
-  .price-badge { font-size: 10px; }
+  /* ===== КАЛЬКУЛЯТОР ===== */
+  .calc-builder { gap: 22px; }
+  .calc-group { padding: 22px 20px 20px; border-radius: 18px; }
+  .calc-group-head { gap: 10px; margin-bottom: 16px; }
+  .calc-group-num { min-width: 32px; height: 24px; font-size: 11px; }
+  .calc-group-title { font-size: 17px; }
+  .calc-group-hint { font-size: 11px; }
+  .calc-option { padding: 14px 14px; gap: 12px; border-radius: 14px; }
+  .calc-option-name { font-size: 14px; }
+  .calc-option-desc { font-size: 12.5px; }
+  .calc-option-price { font-size: 13px; }
+
+  .calc-slider-value { font-size: 44px; }
+  .calc-slider-label { font-size: 14px; }
+  .calc-slider-hint  { font-size: 12.5px; }
+  .calc-stack-cell   { height: 11px; }
+
+  .calc-summary-sticky { padding: 22px 18px; border-radius: 20px; }
+  .calc-summary-tag    { font-size: 11px; }
+  .calc-summary-value  { font-size: 30px; }
+  .calc-summary-old    { font-size: 16px; }
+  .calc-summary-list li { font-size: 13px; }
+  .calc-offer { padding: 14px 14px; }
+  .calc-offer-new { font-size: 20px; }
+  .calc-offer-old { font-size: 14px; }
 
   /* ===== FAQ ===== */
   .faq-item summary { padding: 20px 22px; font-size: 15px; }
@@ -1720,21 +2217,13 @@ body.menu-open { overflow: hidden; }
   .faq-chevron { font-size: 20px; }
 
   /* ===== КОНТАКТЫ ===== */
-  .contact-grid { gap: 36px; }
   .contact-title { font-size: 36px !important; }
   .contact-lead { font-size: 15px; }
+  .contact-channels { grid-template-columns: 1fr; gap: 12px; }
   .channel { padding: 16px 18px; gap: 14px; }
   .channel-icon { width: 42px; height: 42px; }
   .channel-title { font-size: 13px; }
   .channel-value { font-size: 15px; }
-  .contact-form { padding: 28px 22px; }
-  .form-field label { font-size: 13px; }
-  .form-field input,
-  .form-field textarea {
-    font-size: 16px; /* 16px+ чтобы Safari не зумил на фокусе */
-    padding: 14px 16px;
-  }
-  .form-note { font-size: 12px; }
 
   /* ===== ФУТЕР ===== */
   .footer { padding: 50px 18px 24px; }
@@ -2569,29 +3058,47 @@ body.menu-open { overflow: hidden; }
 .case-modal-inner {
   position: relative;
   width: min(1120px, 94vw);
+  height: 92vh;
   max-height: 92vh;
   background: linear-gradient(180deg, rgba(15, 30, 54, 0.95), rgba(10, 22, 40, 0.95));
   border: 1px solid rgba(107, 164, 255, 0.18);
   border-radius: 28px;
-  padding: 28px 32px 32px;
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
   transform: scale(0.92) translateY(20px);
   transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  overflow: hidden;
 }
 
 .case-modal.is-open .case-modal-inner {
   transform: scale(1) translateY(0);
 }
 
+.modal-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px 18px 28px;
+  border-bottom: 1px solid rgba(107, 164, 255, 0.12);
+  background: rgba(10, 22, 40, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.modal-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
 .modal-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 44px;
-  height: 44px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.04);
@@ -2601,7 +3108,6 @@ body.menu-open { overflow: hidden; }
   justify-content: center;
   cursor: none;
   transition: background 0.25s, border-color 0.25s, transform 0.25s;
-  z-index: 2;
 }
 
 .modal-close:hover {
@@ -2610,95 +3116,37 @@ body.menu-open { overflow: hidden; }
   transform: rotate(90deg);
 }
 
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 50px;
-}
-
-.modal-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-
-.modal-counter {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  color: var(--text-3);
-  text-transform: uppercase;
-}
-
-.modal-stage {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
+/* Главная область — вертикальный скролл, как настоящий сайт */
+.modal-scroll {
   flex: 1;
-  min-height: 0;
-}
-
-.modal-viewport {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.3);
-  aspect-ratio: 16 / 9;
-  max-height: 65vh;
-}
-
-.modal-track {
-  display: flex;
-  height: 100%;
-  transition: transform 0.55s cubic-bezier(0.19, 1, 0.22, 1);
-  will-change: transform;
-}
-
-.modal-slide {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-}
-
-.modal-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-}
-
-/* Скриншоты длинные — пусть можно скроллить слайд */
-.modal-slide {
   overflow-y: auto;
+  background: #0A1628;
   scrollbar-width: thin;
   scrollbar-color: rgba(107, 164, 255, 0.3) transparent;
 }
-.modal-slide::-webkit-scrollbar { width: 6px; }
-.modal-slide::-webkit-scrollbar-thumb {
+.modal-scroll::-webkit-scrollbar { width: 8px; }
+.modal-scroll::-webkit-scrollbar-thumb {
   background: rgba(107, 164, 255, 0.3);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
-/* Если слайд — картинка, растягиваем по ширине, высота авто */
-.modal-slide > img {
+/* Каждая «секция» сайта внутри модалки */
+.modal-section {
+  position: relative;
+}
+
+.modal-section-frame {
   width: 100%;
-  height: auto;
-  object-fit: contain;
-  min-height: 100%;
 }
 
-.modal-slide > iframe {
+/* Если внутри секции iframe — он растягивается на всю высоту модалки и
+   скроллится своим скроллом, как настоящий сайт */
+.modal-section-frame:has(> iframe:only-child) {
+  height: calc(92vh - 77px); /* 92vh минус шапка модалки */
+  min-height: 600px;
+}
+
+.modal-section-frame > iframe {
   width: 100%;
   height: 100%;
   border: none;
@@ -2706,93 +3154,29 @@ body.menu-open { overflow: hidden; }
   display: block;
 }
 
-/* Реальные фотографии внутри слайдов (напр. фото кофейни) */
-.modal-slide > img.case-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  min-height: 100%;
-}
-
-/* Мокап внутри модалки — растягивается на весь слайд */
-.modal-slide .mockup {
+/* Когда секция — это мокап (как у кофейни), она занимает всю ширину
+   и имеет своё соотношение сторон — выглядит как один экран сайта */
+.modal-section-frame > .mockup {
   position: relative;
   inset: auto;
   width: 100%;
-  height: 100%;
+  height: auto;
+  border-radius: 0;
+  min-height: 600px;
 }
 
-.modal-slide .mockup-title { font-size: 42px; }
-.modal-slide .mockup-sub   { font-size: 15px; }
-.modal-slide .mockup-btn   { font-size: 13px; padding: 11px 20px; }
-.modal-slide .menu-row     { font-size: 15px; padding: 10px 0; }
-.modal-slide .calc-title   { font-size: 26px; }
-.modal-slide .calc-sub     { font-size: 14px; }
-.modal-slide .calc-select  { font-size: 15px; padding: 13px 18px; }
-.modal-slide .total-value  { font-size: 28px; }
-.modal-slide .calc-cta     { font-size: 15px; padding: 14px; }
-.modal-slide .mockup-logo  { font-size: 18px; }
-.modal-slide .mockup-nav-links span { font-size: 14px; }
-.modal-slide .mockup-nav-badge { font-size: 13px; padding: 7px 16px; }
+/* Шрифты внутри мокапов в модалке — крупнее, чем в превью */
+.modal-section .mockup-title { font-size: 44px; }
+.modal-section .mockup-sub   { font-size: 16px; }
+.modal-section .mockup-btn   { font-size: 14px; padding: 12px 22px; }
+.modal-section .menu-row     { font-size: 16px; padding: 12px 0; }
+.modal-section .calc-select  { font-size: 15px; padding: 14px 18px; }
+.modal-section .mockup-logo  { font-size: 19px; }
+.modal-section .mockup-nav-links span { font-size: 14px; }
 
-.modal-arrow {
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: rgba(15, 30, 54, 0.6);
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: none;
-  transition: background 0.25s, border-color 0.25s, transform 0.25s;
-}
-
-.modal-arrow:hover:not(:disabled) {
-  background: rgba(107, 164, 255, 0.18);
-  border-color: rgba(107, 164, 255, 0.4);
-  transform: translateY(-2px);
-}
-
-.modal-arrow:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.modal-dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.modal-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  cursor: none;
-  transition: background 0.25s, transform 0.25s, width 0.35s;
-}
-
-.modal-dot.is-active {
-  background: var(--accent-2);
-  width: 28px;
-  border-radius: 4px;
-}
-
-.modal-caption {
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-2);
-  max-width: 720px;
-  margin: 0 auto;
-  line-height: 1.5;
-  min-height: 22px;
+/* Если в секции есть hero — фотография побольше */
+.modal-section .mockup-hero--split {
+  grid-template-columns: 1.05fr 0.95fr;
 }
 
 body.modal-open {
@@ -2802,46 +3186,27 @@ body.modal-open {
 @media (max-width: 720px) {
   .case-modal { padding: 0; align-items: stretch; }
   .case-modal-inner {
-    padding: 54px 10px 18px;
     border-radius: 0;
     max-width: 100%;
     width: 100%;
-    max-height: 100%;
     height: 100dvh;
-  }
-  .modal-close {
-    top: 12px;
-    right: 12px;
-    width: 38px;
-    height: 38px;
+    max-height: 100dvh;
   }
   .modal-head {
-    margin-bottom: 12px;
-    padding: 0 4px;
+    padding: 14px 14px 14px 18px;
   }
   .modal-title { font-size: 15px; }
-  .modal-counter { font-size: 11px; }
-  .modal-stage { gap: 4px; }
-  .modal-arrow {
-    width: 34px;
-    height: 34px;
-    flex-shrink: 0;
+  .modal-close {
+    width: 36px;
+    height: 36px;
   }
-  .modal-viewport {
-    max-height: calc(100dvh - 170px);
-    border-radius: 14px;
-  }
-  .modal-slide { padding: 0; }
-  .modal-slide .mockup {
-    border-radius: 14px;
-  }
-  .modal-caption {
-    font-size: 12px;
-    padding: 0 6px;
-    line-height: 1.4;
-    margin-top: 10px;
+  .modal-section-frame:has(> iframe:only-child) {
+    height: calc(100dvh - 64px);
     min-height: 0;
   }
-  .modal-dots { margin-top: 10px; gap: 6px; }
-  .modal-dot { width: 7px; height: 7px; }
+  .modal-section-frame > .mockup {
+    min-height: 480px;
+  }
+  .modal-section .mockup-title { font-size: 30px; }
+  .modal-section .mockup-sub   { font-size: 14px; }
 }
