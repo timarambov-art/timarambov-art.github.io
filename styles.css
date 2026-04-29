@@ -552,6 +552,337 @@ img {
   max-width: 900px;
 }
 
+.section-lead {
+  margin-top: 18px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text-2);
+  max-width: 640px;
+}
+
+/* ==================== УСЛУГИ ==================== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.service-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 30px 28px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: rgba(15, 30, 54, 0.4);
+  backdrop-filter: blur(10px);
+  transition: border-color 0.4s, transform 0.4s, background 0.4s;
+}
+
+.service-card:hover {
+  border-color: rgba(107, 164, 255, 0.32);
+  transform: translateY(-6px);
+  background: rgba(15, 30, 54, 0.55);
+}
+
+.service-card--featured {
+  background: linear-gradient(180deg,
+    rgba(107, 164, 255, 0.13) 0%,
+    rgba(61, 43, 92, 0.18) 100%);
+  border-color: rgba(107, 164, 255, 0.38);
+  box-shadow: 0 30px 70px rgba(107, 164, 255, 0.12);
+}
+
+.service-card--featured:hover {
+  border-color: rgba(107, 164, 255, 0.55);
+}
+
+/* === Низкая плашка-полоса (5-я услуга, бот) === */
+.service-bar {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(280px, 360px);
+  gap: 28px;
+  align-items: center;
+  padding: 22px 30px;
+  border: 1px solid rgba(107, 164, 255, 0.28);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 0% 50%, rgba(107, 164, 255, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse at 100% 50%, rgba(180, 141, 255, 0.18) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(15, 30, 54, 0.65), rgba(10, 22, 40, 0.55));
+  backdrop-filter: blur(12px);
+  transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
+}
+
+.service-bar:hover {
+  border-color: rgba(107, 164, 255, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 22px 50px rgba(107, 164, 255, 0.18);
+}
+
+.service-bar-ic {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: rgba(107, 164, 255, 0.15);
+  border: 1px solid rgba(107, 164, 255, 0.32);
+  color: #6BA4FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.service-bar-ic svg { width: 26px; height: 26px; }
+
+.service-bar-text { min-width: 0; }
+.service-bar-text .service-tag {
+  margin-bottom: 8px;
+}
+.service-bar-text h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.service-bar-text p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-2);
+  margin: 0;
+}
+
+.service-bar-outcome {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,
+    rgba(56, 220, 140, 0.14) 0%,
+    rgba(107, 164, 255, 0.08) 100%);
+  border: 1px solid rgba(56, 220, 140, 0.3);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.service-bar-outcome b { color: #7eebad; font-weight: 700; }
+
+.service-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #6BA4FF, #B48DFF);
+  color: #061327;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  box-shadow: 0 10px 26px rgba(107, 164, 255, 0.4);
+  white-space: nowrap;
+}
+
+.service-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(107, 164, 255, 0.12);
+  border: 1px solid rgba(107, 164, 255, 0.25);
+  color: #6BA4FF;
+  margin-bottom: 18px;
+}
+.service-ic svg { width: 26px; height: 26px; }
+
+.service-card--featured .service-ic {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #B48DFF;
+}
+
+.service-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+
+.service-card h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.service-card > p {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-2);
+  margin-bottom: 20px;
+}
+
+/* Кому подходит — короткая плашка между описанием и списком */
+.service-aud {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-left: 2px solid rgba(107, 164, 255, 0.55);
+  background: rgba(107, 164, 255, 0.06);
+  border-radius: 4px 12px 12px 4px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.service-aud span {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6BA4FF;
+  margin-bottom: 4px;
+}
+
+.service-list {
+  list-style: none;
+  padding: 0 0 18px;
+  margin: 0 0 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.service-list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+
+.service-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 12px;
+  height: 7px;
+  border-left: 2px solid #6BA4FF;
+  border-bottom: 2px solid #6BA4FF;
+  transform: rotate(-45deg);
+}
+
+/* Результат — финальный акцент карточки */
+.service-outcome {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,
+    rgba(56, 220, 140, 0.12) 0%,
+    rgba(107, 164, 255, 0.08) 100%);
+  border: 1px solid rgba(56, 220, 140, 0.25);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text);
+}
+/* Текстовая часть после стрелки — растягивается на всю оставшуюся ширину
+   и переносится по словам (а не по букве на строку) */
+.service-outcome > span:last-child {
+  flex: 1 1 0;
+  min-width: 0;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+.service-outcome b {
+  font-weight: 700;
+  color: #7eebad;
+}
+.service-outcome-arrow {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(56, 220, 140, 0.22);
+  color: #7eebad;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.service-card--featured .service-outcome {
+  background: linear-gradient(135deg,
+    rgba(180, 141, 255, 0.18) 0%,
+    rgba(107, 164, 255, 0.12) 100%);
+  border-color: rgba(180, 141, 255, 0.35);
+}
+.service-card--featured .service-outcome b { color: #d4b9ff; }
+.service-card--featured .service-outcome-arrow {
+  background: rgba(180, 141, 255, 0.25);
+  color: #d4b9ff;
+}
+
+/* «Карточка-CTA» в конце сетки услуг */
+.service-cta {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 8px;
+  padding: 28px 36px;
+  border-radius: 20px;
+  background: linear-gradient(135deg,
+    rgba(107, 164, 255, 0.1) 0%,
+    rgba(180, 141, 255, 0.08) 50%,
+    rgba(232, 148, 106, 0.06) 100%);
+  border: 1px solid rgba(107, 164, 255, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.service-cta-text { flex: 1; min-width: 280px; }
+.service-cta h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.service-cta p {
+  font-size: 14.5px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
 /* ==================== REVEAL ANIMATIONS ==================== */
 
 /* Старый класс .reveal — оставляем для совместимости */
@@ -955,17 +1286,98 @@ img {
 }
 
 .step {
+  position: relative;
   padding: 32px 26px;
   border: 1px solid var(--border);
   border-radius: 22px;
   background: rgba(15, 30, 54, 0.3);
   transition: border-color 0.35s, transform 0.35s, background 0.35s;
+  overflow: hidden;
+}
+
+.step::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -30%;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(107, 164, 255, 0.18) 0%,
+    rgba(180, 141, 255, 0.08) 40%,
+    transparent 70%);
+  pointer-events: none;
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .step:hover {
-  border-color: rgba(107, 164, 255, 0.3);
+  border-color: rgba(107, 164, 255, 0.32);
   background: rgba(15, 30, 54, 0.5);
   transform: translateY(-6px);
+}
+
+.step:hover::before {
+  transform: scale(1.18);
+}
+
+/* === Иллюстрация-«картинка» этапа === */
+.step-illu {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  margin-bottom: 22px;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(107, 164, 255, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 70%, rgba(180, 141, 255, 0.16) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(15, 30, 54, 0.6), rgba(10, 22, 40, 0.4));
+  border: 1px solid rgba(107, 164, 255, 0.18);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.5s;
+}
+
+.step-illu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(90deg, rgba(107, 164, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(0deg,  rgba(107, 164, 255, 0.06) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.step-illu svg {
+  position: relative;
+  z-index: 1;
+  width: 78%;
+  height: auto;
+  max-height: 80%;
+  filter: drop-shadow(0 8px 22px rgba(107, 164, 255, 0.28));
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.step:hover .step-illu {
+  box-shadow: 0 18px 40px rgba(107, 164, 255, 0.18);
+  border-color: rgba(107, 164, 255, 0.35);
+}
+
+.step:hover .step-illu svg {
+  transform: scale(1.06) rotate(-1.5deg);
+}
+
+.step > .step-num,
+.step > .step-title,
+.step > p {
+  position: relative;
+  z-index: 1;
 }
 
 .step-num {
@@ -2031,6 +2443,16 @@ body.menu-open { overflow: hidden; }
 
   .steps { grid-template-columns: repeat(2, 1fr); }
   .contact-channels { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .service-bar {
+    grid-template-columns: auto 1fr;
+    gap: 18px 22px;
+    padding: 22px 24px;
+  }
+  .service-bar-outcome {
+    grid-column: 1 / -1;
+  }
+  .service-cta { padding: 24px 28px; }
 
   /* Калькулятор: складываем в одну колонку */
   .calc-builder { grid-template-columns: 1fr; gap: 28px; }
@@ -2192,6 +2614,29 @@ body.menu-open { overflow: hidden; }
   .step { padding: 24px 22px; }
   .step-num { font-size: 38px; }
   .step-title { font-size: 18px; }
+  .step-illu { aspect-ratio: 16 / 9; margin-bottom: 18px; }
+  .step-illu svg { width: 65%; }
+
+  /* ===== УСЛУГИ ===== */
+  .services-grid { grid-template-columns: 1fr; gap: 14px; }
+  .service-card { padding: 26px 22px 24px; border-radius: 18px; }
+  .service-card h3 { font-size: 19px; }
+  .service-card > p { font-size: 14px; }
+  .service-list li { font-size: 13px; }
+  .service-bar {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 22px 22px;
+    border-radius: 18px;
+    text-align: left;
+  }
+  .service-bar-text h3 { font-size: 18px; }
+  .service-bar-text p { font-size: 13.5px; }
+  .service-bar-outcome { font-size: 13px; padding: 12px 14px; }
+  .service-cta { flex-direction: column; align-items: flex-start; padding: 22px 22px; }
+  .service-cta h3 { font-size: 19px; }
+  .service-cta p { font-size: 14px; }
+  .section-lead { font-size: 15px; }
   .step p { font-size: 14px; }
 
   /* ===== КАЛЬКУЛЯТОР ===== */
