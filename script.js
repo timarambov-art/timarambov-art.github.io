@@ -295,6 +295,15 @@ const CASE_DATA = {
       },
     ],
   },
+
+  raritet: {
+    title: '«Магазинъ раритета»',
+    slides: [
+      {
+        html: `<iframe src="assets/raritet/index.html" title="Магазин раритета — живое демо" loading="lazy"></iframe>`,
+      },
+    ],
+  },
 };
 
 const modal        = document.getElementById('caseModal');

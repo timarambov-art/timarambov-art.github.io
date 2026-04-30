@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 480" fill="none">
+  <defs>
+    <linearGradient id="cBrass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a2410"></stop>
+      <stop offset="0.5" stop-color="#d6a85a"></stop>
+      <stop offset="1" stop-color="#3a2410"></stop>
+    </linearGradient>
+    <radialGradient id="flameG" cx="0.5" cy="0.6" r="0.5">
+      <stop offset="0" stop-color="#fff4d8"></stop>
+      <stop offset="0.4" stop-color="#ffc870"></stop>
+      <stop offset="0.8" stop-color="#d96820"></stop>
+      <stop offset="1" stop-color="#a82810" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd870" stop-opacity="0.5"></stop>
+      <stop offset="0.6" stop-color="#c89548" stop-opacity="0.15"></stop>
+      <stop offset="1" stop-color="#c89548" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+
+  
+  <circle cx="160" cy="80" r="140" fill="url(#glow)"></circle>
+  <circle cx="60" cy="100" r="80" fill="url(#glow)" opacity="0.7"></circle>
+  <circle cx="260" cy="100" r="80" fill="url(#glow)" opacity="0.7"></circle>
+
+  
+  <ellipse cx="160" cy="460" rx="60" ry="10" fill="#0a0604" opacity="0.6"></ellipse>
+  <path d="M120 440 L200 440 L210 460 L110 460 Z" fill="url(#cBrass)"></path>
+  <rect x="118" y="430" width="84" height="12" fill="#7a5226"></rect>
+  <ellipse cx="160" cy="430" rx="42" ry="6" fill="#d6a85a"></ellipse>
+
+  
+  <rect x="155" y="280" width="10" height="155" fill="url(#cBrass)"></rect>
+  <ellipse cx="160" cy="285" rx="12" ry="5" fill="#9c6f35"></ellipse>
+  <ellipse cx="160" cy="430" rx="14" ry="5" fill="#9c6f35"></ellipse>
+  
+  <ellipse cx="160" cy="320" rx="14" ry="6" fill="#d6a85a"></ellipse>
+  <ellipse cx="160" cy="370" rx="14" ry="6" fill="#d6a85a"></ellipse>
+
+  
+  <path d="M150 270 L170 270 L165 285 L155 285 Z" fill="#7a5226"></path>
+  <path d="M148 268 L172 268 L172 274 L148 274 Z" fill="url(#cBrass)"></path>
+
+  
+  <path d="M160 280 Q90 240 60 180 Q40 130 80 110" stroke="url(#cBrass)" stroke-width="6" fill="none" stroke-linecap="round"></path>
+  <path d="M160 280 Q230 240 260 180 Q280 130 240 110" stroke="url(#cBrass)" stroke-width="6" fill="none" stroke-linecap="round"></path>
+  
+  <ellipse cx="100" cy="220" rx="6" ry="4" fill="#d6a85a" transform="rotate(-30 100 220)"></ellipse>
+  <ellipse cx="220" cy="220" rx="6" ry="4" fill="#d6a85a" transform="rotate(30 220 220)"></ellipse>
+  <ellipse cx="60" cy="160" rx="5" ry="4" fill="#d6a85a"></ellipse>
+  <ellipse cx="260" cy="160" rx="5" ry="4" fill="#d6a85a"></ellipse>
+
+  
+  <path d="M68 100 L92 100 L86 116 L74 116 Z" fill="#7a5226"></path>
+  <path d="M66 98 L94 98 L94 104 L66 104 Z" fill="url(#cBrass)"></path>
+  <path d="M228 100 L252 100 L246 116 L234 116 Z" fill="#7a5226"></path>
+  <path d="M226 98 L254 98 L254 104 L226 104 Z" fill="url(#cBrass)"></path>
+
+  
+  <rect x="153" y="220" width="14" height="50" rx="1" fill="#e8d8b8"></rect>
+  <path d="M153 222 Q160 215 167 222" fill="#e8d8b8"></path>
+  <ellipse cx="160" cy="270" rx="7" ry="2" fill="#a87858"></ellipse>
+  
+  <path d="M155 240 Q156 250 154 256" stroke="#d4c098" stroke-width="1" fill="none"></path>
+  <path d="M165 244 Q166 254 164 260" stroke="#d4c098" stroke-width="1" fill="none"></path>
+
+  <rect x="73" y="50" width="14" height="50" rx="1" fill="#e8d8b8"></rect>
+  <path d="M73 52 Q80 46 87 52" fill="#e8d8b8"></path>
+  <ellipse cx="80" cy="100" rx="7" ry="2" fill="#a87858"></ellipse>
+  <path d="M76 70 Q77 80 75 86" stroke="#d4c098" stroke-width="1" fill="none"></path>
+
+  <rect x="233" y="50" width="14" height="50" rx="1" fill="#e8d8b8"></rect>
+  <path d="M233 52 Q240 46 247 52" fill="#e8d8b8"></path>
+  <ellipse cx="240" cy="100" rx="7" ry="2" fill="#a87858"></ellipse>
+  <path d="M236 70 Q237 80 235 86" stroke="#d4c098" stroke-width="1" fill="none"></path>
+
+  
+  <g>
+    <ellipse cx="160" cy="208" rx="10" ry="20" fill="url(#flameG)"></ellipse>
+    <ellipse cx="160" cy="212" rx="4" ry="10" fill="#fff8e0"></ellipse>
+    <line x1="160" y1="218" x2="160" y2="222" stroke="#1a0e04" stroke-width="1.2"></line>
+  </g>
+  <g>
+    <ellipse cx="80" cy="38" rx="9" ry="18" fill="url(#flameG)"></ellipse>
+    <ellipse cx="80" cy="42" rx="3" ry="9" fill="#fff8e0"></ellipse>
+    <line x1="80" y1="48" x2="80" y2="52" stroke="#1a0e04" stroke-width="1.2"></line>
+  </g>
+  <g>
+    <ellipse cx="240" cy="38" rx="9" ry="18" fill="url(#flameG)"></ellipse>
+    <ellipse cx="240" cy="42" rx="3" ry="9" fill="#fff8e0"></ellipse>
+    <line x1="240" y1="48" x2="240" y2="52" stroke="#1a0e04" stroke-width="1.2"></line>
+  </g>
+</svg>

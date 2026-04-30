@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 480" fill="none">
+  <defs>
+    <radialGradient id="featherEye" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#1a3a4a"></stop>
+      <stop offset="0.3" stop-color="#3a8a8a"></stop>
+      <stop offset="0.55" stop-color="#a89a3a"></stop>
+      <stop offset="0.8" stop-color="#3a5a3a"></stop>
+      <stop offset="1" stop-color="#0a1a1a"></stop>
+    </radialGradient>
+    <linearGradient id="featherFil" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1a3a3a"></stop>
+      <stop offset="0.5" stop-color="#2a6a5a"></stop>
+      <stop offset="1" stop-color="#1a3a3a"></stop>
+    </linearGradient>
+  </defs>
+  
+  <line x1="100" y1="80" x2="100" y2="470" stroke="#3a2410" stroke-width="2"></line>
+  
+  <g stroke="url(#featherFil)" stroke-width="0.8" fill="none" opacity="0.85">
+    
+    <path d="M100 90 Q60 110 40 140"></path>
+    <path d="M100 100 Q60 120 35 150"></path>
+    <path d="M100 110 Q58 130 32 165"></path>
+    <path d="M100 125 Q55 145 28 185"></path>
+    <path d="M100 140 Q52 160 24 200"></path>
+    <path d="M100 160 Q48 175 20 215"></path>
+    <path d="M100 180 Q45 195 18 235"></path>
+    <path d="M100 200 Q44 215 18 250"></path>
+    <path d="M100 220 Q44 232 20 264"></path>
+    <path d="M100 240 Q46 250 24 278"></path>
+    <path d="M100 260 Q50 268 30 290"></path>
+    <path d="M100 280 Q56 285 38 304"></path>
+    <path d="M100 300 Q62 305 48 320"></path>
+    <path d="M100 320 Q68 325 56 338"></path>
+    <path d="M100 340 Q74 345 66 356"></path>
+    <path d="M100 360 Q82 364 76 374"></path>
+    <path d="M100 380 Q88 384 86 392"></path>
+    
+    <path d="M100 90 Q140 110 160 140"></path>
+    <path d="M100 100 Q140 120 165 150"></path>
+    <path d="M100 110 Q142 130 168 165"></path>
+    <path d="M100 125 Q145 145 172 185"></path>
+    <path d="M100 140 Q148 160 176 200"></path>
+    <path d="M100 160 Q152 175 180 215"></path>
+    <path d="M100 180 Q155 195 182 235"></path>
+    <path d="M100 200 Q156 215 182 250"></path>
+    <path d="M100 220 Q156 232 180 264"></path>
+    <path d="M100 240 Q154 250 176 278"></path>
+    <path d="M100 260 Q150 268 170 290"></path>
+    <path d="M100 280 Q144 285 162 304"></path>
+    <path d="M100 300 Q138 305 152 320"></path>
+    <path d="M100 320 Q132 325 144 338"></path>
+    <path d="M100 340 Q126 345 134 356"></path>
+    <path d="M100 360 Q118 364 124 374"></path>
+    <path d="M100 380 Q112 384 114 392"></path>
+  </g>
+  
+  <ellipse cx="100" cy="60" rx="42" ry="50" fill="url(#featherEye)"></ellipse>
+  <ellipse cx="100" cy="55" rx="22" ry="28" fill="#0a2a3a" opacity="0.7"></ellipse>
+  <ellipse cx="100" cy="50" rx="10" ry="14" fill="#0a1a2a"></ellipse>
+  <ellipse cx="96" cy="46" rx="3" ry="5" fill="#fff" opacity="0.4"></ellipse>
+  
+  <line x1="100" y1="395" x2="100" y2="475" stroke="#5a3a18" stroke-width="1.5"></line>
+</svg>

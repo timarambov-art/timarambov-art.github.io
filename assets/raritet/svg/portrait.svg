@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 360" fill="none">
+  <defs>
+    <linearGradient id="frameP" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0e04"></stop>
+      <stop offset="0.5" stop-color="#3a2410"></stop>
+      <stop offset="1" stop-color="#0a0604"></stop>
+    </linearGradient>
+    <linearGradient id="paperG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8d8b8"></stop>
+      <stop offset="1" stop-color="#c4a878"></stop>
+    </linearGradient>
+  </defs>
+  
+  <rect x="4" y="4" width="272" height="352" fill="url(#frameP)"></rect>
+  <rect x="14" y="14" width="252" height="332" fill="#0a0604"></rect>
+  
+  <rect x="22" y="22" width="236" height="316" fill="#9c6f35"></rect>
+  <rect x="26" y="26" width="228" height="308" fill="url(#paperG)"></rect>
+
+  
+  <g transform="translate(140 180)">
+    
+    <path d="M-60 100 Q-20 60 30 70 Q60 80 70 110 L70 140 L-80 140 Z" fill="#1a1a1a" opacity="0.85"></path>
+    <path d="M-50 80 Q-10 60 30 70 Q50 80 60 100" stroke="#0a0a0a" stroke-width="1" fill="none"></path>
+
+    
+    <path d="M-20 30 Q-15 50 -10 70 L20 70 Q15 50 10 30 Z" fill="#3a2a20" opacity="0.6"></path>
+
+    
+    <path d="M-50 -60 Q-70 -20 -55 30 Q-40 50 -20 50 L-30 -40 Z" fill="#1a1a1a"></path>
+    <path d="M-40 -70 Q-60 -30 -50 20 Q-45 35 -35 30" stroke="#0a0a0a" stroke-width="0.5" fill="none" opacity="0.6"></path>
+
+    
+    <path d="M-30 -60 Q-40 -40 -38 -20 Q-32 0 -20 20 L-12 30 Q-8 36 0 36 L8 30 L0 22 Q-2 14 4 8 L8 -6 Q4 -16 8 -22 Q4 -32 0 -36 Q4 -50 -10 -54 Q-22 -60 -30 -60 Z" fill="#d4b890" opacity="0.85"></path>
+    
+    
+    <ellipse cx="-15" cy="-25" rx="3" ry="1.5" fill="#2a1808"></ellipse>
+    
+    <path d="M-22 -32 Q-15 -34 -10 -32" stroke="#1a1a1a" stroke-width="1" fill="none"></path>
+    
+    <path d="M-2 -8 Q4 -2 0 4" stroke="#5a3a18" stroke-width="0.8" fill="none"></path>
+    
+    <path d="M-6 12 Q-2 14 2 12" stroke="#7a3a2a" stroke-width="1" fill="none"></path>
+    <path d="M-4 16 Q-1 18 2 16" stroke="#5a2a1a" stroke-width="0.6" fill="none"></path>
+    
+    <path d="M-8 30 Q-4 38 4 32" stroke="#7a5226" stroke-width="0.5" fill="none" opacity="0.5"></path>
+
+    
+    <path d="M-30 -50 Q-20 -30 -25 -10" stroke="#1a1a1a" stroke-width="2" fill="none"></path>
+    <path d="M-35 -40 Q-30 -20 -32 0" stroke="#1a1a1a" stroke-width="1.5" fill="none"></path>
+
+    
+    <circle cx="-22" cy="-10" r="1.5" fill="#d4a85a"></circle>
+
+    
+    <ellipse cx="-30" cy="60" rx="40" ry="20" fill="#3a2a20" opacity="0.3"></ellipse>
+  </g>
+
+  
+  <text x="220" y="320" font-family="cursive" font-size="9" fill="#5a3a18" opacity="0.7">A.K. &#39;19</text>
+</svg>

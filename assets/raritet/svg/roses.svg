@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 360" fill="none">
+  <defs>
+    <linearGradient id="vase" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a2a3a"></stop>
+      <stop offset="0.4" stop-color="#9c5a4a"></stop>
+      <stop offset="0.6" stop-color="#6a3a2a"></stop>
+      <stop offset="1" stop-color="#1a0e08"></stop>
+    </linearGradient>
+    <radialGradient id="rose" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5a1a14"></stop>
+      <stop offset="0.5" stop-color="#3a0a08"></stop>
+      <stop offset="1" stop-color="#1a0404"></stop>
+    </radialGradient>
+  </defs>
+  
+  <path d="M110 200 Q90 220 95 280 Q100 340 140 350 Q180 340 185 280 Q190 220 170 200 L170 180 Q170 170 160 168 L120 168 Q110 170 110 180 Z" fill="url(#vase)"></path>
+  
+  <ellipse cx="140" cy="172" rx="30" ry="3" fill="#3a2410"></ellipse>
+  <ellipse cx="140" cy="200" rx="35" ry="4" fill="#3a2410" opacity="0.7"></ellipse>
+  
+  <ellipse cx="115" cy="240" rx="4" ry="40" fill="#d6a85a" opacity="0.2"></ellipse>
+
+  
+  <path d="M140 170 Q138 120 145 80" stroke="#2a3a18" stroke-width="2" fill="none"></path>
+  <path d="M140 170 Q120 130 100 90" stroke="#2a3a18" stroke-width="1.8" fill="none"></path>
+  <path d="M140 170 Q160 140 175 100" stroke="#2a3a18" stroke-width="1.8" fill="none"></path>
+  <path d="M140 170 Q150 150 160 130" stroke="#2a3a18" stroke-width="1.5" fill="none"></path>
+
+  
+  <ellipse cx="130" cy="130" rx="6" ry="14" fill="#3a4a28" transform="rotate(-30 130 130)"></ellipse>
+  <ellipse cx="155" cy="120" rx="5" ry="12" fill="#3a4a28" transform="rotate(20 155 120)"></ellipse>
+  <ellipse cx="115" cy="115" rx="5" ry="12" fill="#2a3a18" transform="rotate(-50 115 115)"></ellipse>
+
+  
+  <g transform="translate(145 75)">
+    <circle r="22" fill="url(#rose)"></circle>
+    <path d="M-18 -4 Q-10 -16 0 -10 Q-12 -2 -18 -4 Z" fill="#3a0a08"></path>
+    <path d="M2 -16 Q14 -16 16 -4 Q8 -8 2 -16 Z" fill="#3a0a08"></path>
+    <path d="M-10 10 Q-2 18 8 12 Q4 4 -10 10 Z" fill="#2a0606"></path>
+    <path d="M-4 0 Q4 -6 8 2 Q4 6 -4 0 Z" fill="#5a1a14"></path>
+    <circle r="3" fill="#1a0404"></circle>
+  </g>
+  <g transform="translate(100 88)">
+    <circle r="16" fill="url(#rose)"></circle>
+    <path d="M-12 -2 Q-6 -10 0 -6 Q-8 0 -12 -2 Z" fill="#3a0a08"></path>
+    <path d="M2 -10 Q10 -10 12 -2 Q6 -6 2 -10 Z" fill="#3a0a08"></path>
+    <circle r="2" fill="#1a0404"></circle>
+  </g>
+  <g transform="translate(173 96)">
+    <circle r="14" fill="url(#rose)"></circle>
+    <circle r="6" fill="#3a0a08"></circle>
+    <circle r="2" fill="#1a0404"></circle>
+  </g>
+  <g transform="translate(160 130)">
+    <circle r="9" fill="url(#rose)" opacity="0.85"></circle>
+    <circle r="3" fill="#1a0404"></circle>
+  </g>
+</svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" fill="none">
+  <defs>
+    <radialGradient id="watchG" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#e8d8a8"></stop>
+      <stop offset="0.5" stop-color="#9c6f35"></stop>
+      <stop offset="1" stop-color="#3a2410"></stop>
+    </radialGradient>
+    <radialGradient id="dialP" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0" stop-color="#f0e0c0"></stop>
+      <stop offset="1" stop-color="#a87858"></stop>
+    </radialGradient>
+  </defs>
+  
+  <g stroke="#9c6f35" stroke-width="2" fill="none">
+    <path d="M120 10 Q140 20 130 40 Q120 50 140 60 Q160 70 145 90 Q130 100 150 115"></path>
+  </g>
+  <g fill="#d6a85a">
+    <circle cx="120" cy="10" r="3"></circle>
+    <circle cx="135" cy="35" r="2.5"></circle>
+    <circle cx="138" cy="55" r="2.5"></circle>
+    <circle cx="148" cy="80" r="2.5"></circle>
+    <circle cx="142" cy="100" r="2.5"></circle>
+  </g>
+  
+  <rect x="146" y="105" width="14" height="14" fill="#9c6f35" rx="1"></rect>
+  <rect x="148" y="103" width="10" height="4" fill="#d6a85a"></rect>
+  
+  <circle cx="120" cy="200" r="86" fill="url(#watchG)"></circle>
+  <circle cx="120" cy="200" r="86" fill="none" stroke="#1a0e04" stroke-width="1"></circle>
+  <circle cx="120" cy="200" r="76" fill="#3a2410"></circle>
+  <circle cx="120" cy="200" r="70" fill="url(#dialP)"></circle>
+  
+  <g stroke="#1a0e04" stroke-width="0.4" fill="none">
+    <circle cx="120" cy="200" r="82"></circle>
+    <circle cx="120" cy="200" r="78"></circle>
+  </g>
+  
+  <g font-family="Georgia, serif" font-size="9" fill="#3a2410" text-anchor="middle" font-weight="600">
+    <text x="120" y="146">XII</text>
+    <text x="160" y="160">I</text>
+    <text x="174" y="184">II</text>
+    <text x="180" y="204">III</text>
+    <text x="174" y="226">IV</text>
+    <text x="160" y="244">V</text>
+    <text x="120" y="258">VI</text>
+    <text x="80" y="244">VII</text>
+    <text x="66" y="226">VIII</text>
+    <text x="60" y="204">IX</text>
+    <text x="66" y="184">X</text>
+    <text x="80" y="160">XI</text>
+  </g>
+  
+  <circle cx="120" cy="232" r="14" fill="#a87858" stroke="#3a2410" stroke-width="0.5"></circle>
+  <line x1="120" y1="232" x2="120" y2="222" stroke="#1a0e04" stroke-width="0.8"></line>
+  <line x1="120" y1="232" x2="126" y2="234" stroke="#1a0e04" stroke-width="0.6"></line>
+  
+  <line x1="120" y1="200" x2="120" y2="160" stroke="#1a0e04" stroke-width="2.5" stroke-linecap="round"></line>
+  <line x1="120" y1="200" x2="148" y2="212" stroke="#1a0e04" stroke-width="1.8" stroke-linecap="round"></line>
+  <circle cx="120" cy="200" r="3" fill="#1a0e04"></circle>
+  
+  <text x="120" y="180" font-family="Georgia, serif" font-size="6" fill="#5a3a18" text-anchor="middle" font-style="italic">Bréguet</text>
+  <text x="120" y="188" font-family="Georgia, serif" font-size="4" fill="#7a5226" text-anchor="middle">à Paris</text>
+</svg>

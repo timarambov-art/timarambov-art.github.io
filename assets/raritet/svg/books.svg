@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 380" fill="none">
+  <defs>
+    <linearGradient id="leatherR" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a1a14"></stop>
+      <stop offset="0.5" stop-color="#7a2a1a"></stop>
+      <stop offset="1" stop-color="#3a0e08"></stop>
+    </linearGradient>
+    <linearGradient id="leatherB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a3a3a"></stop>
+      <stop offset="0.5" stop-color="#2a5a4a"></stop>
+      <stop offset="1" stop-color="#0e2020"></stop>
+    </linearGradient>
+    <linearGradient id="leatherG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2410"></stop>
+      <stop offset="0.5" stop-color="#5a3a1c"></stop>
+      <stop offset="1" stop-color="#1a0e04"></stop>
+    </linearGradient>
+    <linearGradient id="pages" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c4a878"></stop>
+      <stop offset="1" stop-color="#8a6b3c"></stop>
+    </linearGradient>
+  </defs>
+
+  
+  
+  <g transform="translate(40 60) rotate(-3)">
+    <rect x="0" y="0" width="70" height="280" fill="url(#leatherR)"></rect>
+    <rect x="0" y="0" width="6" height="280" fill="#2a0a08"></rect>
+    <rect x="64" y="0" width="6" height="280" fill="#2a0a08"></rect>
+    
+    <rect x="6" y="50" width="58" height="6" fill="#9c6f35"></rect>
+    <rect x="6" y="220" width="58" height="6" fill="#9c6f35"></rect>
+    
+    <rect x="14" y="80" width="42" height="60" fill="#3a0a08" stroke="#9c6f35" stroke-width="1"></rect>
+    <text x="35" y="115" font-family="Georgia, serif" font-size="8" fill="#d6a85a" text-anchor="middle" font-style="italic">ПУШКИНЪ</text>
+    <text x="35" y="128" font-family="Georgia, serif" font-size="6" fill="#b8935a" text-anchor="middle">том III</text>
+    
+    <circle cx="35" cy="175" r="6" fill="none" stroke="#d6a85a" stroke-width="0.6"></circle>
+    <path d="M30 175 Q35 170 40 175 Q35 180 30 175" fill="#d6a85a" opacity="0.6"></path>
+    
+    <rect x="2" y="3" width="66" height="3" fill="url(#pages)"></rect>
+    <rect x="2" y="274" width="66" height="3" fill="url(#pages)"></rect>
+  </g>
+
+  
+  <g transform="translate(120 30)">
+    <rect x="0" y="0" width="80" height="320" fill="url(#leatherG)"></rect>
+    <rect x="0" y="0" width="7" height="320" fill="#0a0604"></rect>
+    <rect x="73" y="0" width="7" height="320" fill="#0a0604"></rect>
+    <rect x="7" y="60" width="66" height="6" fill="#9c6f35"></rect>
+    <rect x="7" y="120" width="66" height="6" fill="#9c6f35"></rect>
+    <rect x="7" y="250" width="66" height="6" fill="#9c6f35"></rect>
+    
+    <rect x="14" y="78" width="52" height="40" fill="#1a0e04" stroke="#9c6f35" stroke-width="0.6"></rect>
+    <text x="40" y="102" font-family="Georgia, serif" font-size="9" fill="#d6a85a" text-anchor="middle">ЧЕХОВЪ</text>
+    
+    <g transform="translate(40 180)" stroke="#d6a85a" stroke-width="0.5" fill="none">
+      <circle cx="0" cy="0" r="14"></circle>
+      <circle cx="0" cy="0" r="9"></circle>
+      <path d="M-14 0 L14 0 M0 -14 L0 14"></path>
+    </g>
+    <text x="40" y="290" font-family="Georgia, serif" font-size="6" fill="#9c6f35" text-anchor="middle">МСКВ. 1903</text>
+    <rect x="2" y="3" width="76" height="3" fill="url(#pages)"></rect>
+    <rect x="2" y="314" width="76" height="3" fill="url(#pages)"></rect>
+  </g>
+
+  
+  <g transform="translate(210 80) rotate(2)">
+    <rect x="0" y="0" width="72" height="260" fill="url(#leatherB)"></rect>
+    <rect x="0" y="0" width="6" height="260" fill="#0a1818"></rect>
+    <rect x="66" y="0" width="6" height="260" fill="#0a1818"></rect>
+    <rect x="6" y="40" width="60" height="5" fill="#9c6f35"></rect>
+    <rect x="6" y="200" width="60" height="5" fill="#9c6f35"></rect>
+    <text x="36" y="100" font-family="Georgia, serif" font-size="8" fill="#d6a85a" text-anchor="middle">ДОСТОЕВСКIЙ</text>
+    <text x="36" y="115" font-family="Georgia, serif" font-size="7" fill="#b8935a" text-anchor="middle" font-style="italic">Идiотъ</text>
+    
+    <path d="M16 150 Q36 140 56 150 Q36 160 16 150" fill="none" stroke="#d6a85a" stroke-width="0.6"></path>
+    <rect x="2" y="3" width="68" height="3" fill="url(#pages)"></rect>
+  </g>
+
+  
+  <g transform="translate(280 280)">
+    <rect x="0" y="0" width="180" height="60" fill="url(#leatherG)"></rect>
+    <rect x="0" y="0" width="180" height="5" fill="#1a0e04"></rect>
+    <rect x="0" y="55" width="180" height="5" fill="#1a0e04"></rect>
+    
+    <rect x="0" y="5" width="180" height="50" fill="url(#pages)"></rect>
+    <line x1="0" y1="20" x2="180" y2="20" stroke="#7a5226" stroke-width="0.4"></line>
+    <line x1="0" y1="35" x2="180" y2="35" stroke="#7a5226" stroke-width="0.4"></line>
+    <line x1="0" y1="48" x2="180" y2="48" stroke="#7a5226" stroke-width="0.4"></line>
+    
+    <text x="90" y="35" font-family="Georgia, serif" font-size="8" fill="#3a2410" text-anchor="middle" opacity="0.7">САБРАНIЕ СОЧИНЕНIЙ</text>
+  </g>
+  
+  
+  <g transform="translate(310 256)">
+    <circle cx="14" cy="14" r="11" fill="none" stroke="#9c6f35" stroke-width="3"></circle>
+    <circle cx="14" cy="14" r="5" fill="#1a0e04"></circle>
+    <rect x="24" y="12" width="60" height="4" fill="#9c6f35"></rect>
+    <rect x="74" y="9" width="3" height="10" fill="#9c6f35"></rect>
+    <rect x="80" y="9" width="3" height="10" fill="#9c6f35"></rect>
+    <rect x="86" y="9" width="3" height="14" fill="#9c6f35"></rect>
+  </g>
+
+  
+  <ellipse cx="240" cy="360" rx="220" ry="8" fill="#000" opacity="0.6"></ellipse>
+</svg>
