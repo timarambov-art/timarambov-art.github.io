@@ -245,6 +245,93 @@ const CASE_DATA = {
       },
       {
         html: `
+          <div class="mockup mockup--coffee mockup--gallery">
+            <div class="m-gal-head">
+              <div class="m-gal-eyebrow">галерея</div>
+              <div class="m-gal-title">Атмосфера, которую<br>сложно <em>передать словами</em></div>
+              <div class="m-gal-sub">Поэтому на&nbsp;сайте&nbsp;— фотографии. Гость ещё&nbsp;до&nbsp;визита понимает, какой это формат заведения.</div>
+            </div>
+            <div class="m-gal-grid">
+              <figure class="m-gal-item m-gal-item--big">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80" alt="Интерьер кофейни" loading="lazy">
+                <figcaption>Зал у&nbsp;окна · вечером</figcaption>
+              </figure>
+              <figure class="m-gal-item">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" alt="Капучино с латте-артом" loading="lazy">
+                <figcaption>Капучино «фирменный»</figcaption>
+              </figure>
+              <figure class="m-gal-item">
+                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" alt="Свежая выпечка" loading="lazy">
+                <figcaption>Утренняя выпечка</figcaption>
+              </figure>
+              <figure class="m-gal-item">
+                <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=600&q=80" alt="Эспрессо-машина" loading="lazy">
+                <figcaption>Бариста за&nbsp;работой</figcaption>
+              </figure>
+              <figure class="m-gal-item">
+                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80" alt="Латте сверху" loading="lazy">
+                <figcaption>Раф ванильный</figcaption>
+              </figure>
+            </div>
+          </div>`,
+      },
+      {
+        html: `
+          <div class="mockup mockup--coffee mockup--ts">
+            <div class="m-ts-head">
+              <div class="m-gal-eyebrow">задача&nbsp;и&nbsp;решение</div>
+              <div class="m-gal-title">Что&nbsp;<em>болело</em>&nbsp;— и&nbsp;что<br>с&nbsp;этим&nbsp;сделали</div>
+            </div>
+            <div class="m-ts-grid">
+              <div class="m-ts-col m-ts-col--problem">
+                <div class="m-ts-tag">было до</div>
+                <ul>
+                  <li>Гости звонили, чтобы спросить адрес и&nbsp;часы&nbsp;работы</li>
+                  <li>Меню жило только в&nbsp;Инстаграме&nbsp;— и&nbsp;не&nbsp;всегда обновлялось</li>
+                  <li>Бронь принимали в&nbsp;личных сообщениях, иногда теряли</li>
+                  <li>Клиент не&nbsp;понимал атмосферы заведения до&nbsp;визита</li>
+                </ul>
+              </div>
+              <div class="m-ts-col m-ts-col--solution">
+                <div class="m-ts-tag">стало</div>
+                <ul>
+                  <li>Адрес, часы и&nbsp;карта&nbsp;— на&nbsp;первом экране, без&nbsp;звонков</li>
+                  <li>Меню обновляется&nbsp;на&nbsp;сайте, синхронизировано&nbsp;с&nbsp;соцсетями</li>
+                  <li>Бронь&nbsp;— форма за&nbsp;30&nbsp;секунд, заявки идут в&nbsp;Телеграм</li>
+                  <li>Галерея интерьера и&nbsp;кофе настраивает на&nbsp;визит ещё дома</li>
+                </ul>
+              </div>
+            </div>
+          </div>`,
+      },
+      {
+        html: `
+          <div class="mockup mockup--coffee">
+            <div style="padding: 40px 60px;">
+              <div class="mockup-eyebrow" style="margin-bottom: 20px">наше меню</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px;">
+                <div>
+                  <div style="font-size: 14px; letter-spacing: 0.2em; color: #E8946A; font-weight: 700; margin-bottom: 12px">КОФЕ</div>
+                  <div class="menu-row"><span>Эспрессо</span><span>160&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Американо</span><span>180&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Капучино</span><span>220&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Раф ванильный</span><span>290&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Флэт&nbsp;уайт</span><span>250&nbsp;₽</span></div>
+                </div>
+                <div>
+                  <div style="font-size: 14px; letter-spacing: 0.2em; color: #E8946A; font-weight: 700; margin-bottom: 12px">ВЫПЕЧКА</div>
+                  <div class="menu-row"><span>Круассан миндальный</span><span>210&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Синнабон</span><span>260&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Чизкейк Нью-Йорк</span><span>290&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Брауни</span><span>220&nbsp;₽</span></div>
+                  <div class="menu-row"><span>Банановый&nbsp;хлеб</span><span>180&nbsp;₽</span></div>
+                </div>
+              </div>
+            </div>
+          </div>`,
+      },
+      {
+        html: `
           <div class="mockup mockup--coffee">
             <div style="padding: 40px 60px;">
               <div class="mockup-eyebrow" style="margin-bottom: 20px">наше меню</div>
@@ -291,6 +378,41 @@ const CASE_DATA = {
                 Забронировать
               </div>
             </div>
+          </div>`,
+      },
+      {
+        html: `
+          <div class="mockup mockup--coffee mockup--results">
+            <div class="m-res-head">
+              <div class="m-gal-eyebrow">результаты</div>
+              <div class="m-gal-title">Что изменилось<br>за&nbsp;<em>первый месяц</em></div>
+            </div>
+            <div class="m-res-grid">
+              <div class="m-res-cell">
+                <div class="m-res-num">+38%</div>
+                <div class="m-res-label">броней&nbsp;через&nbsp;сайт</div>
+                <div class="m-res-note">по&nbsp;сравнению с&nbsp;записями<br>в&nbsp;Директе и&nbsp;звонками</div>
+              </div>
+              <div class="m-res-cell">
+                <div class="m-res-num">−2 ч</div>
+                <div class="m-res-label">в&nbsp;день&nbsp;на&nbsp;звонки</div>
+                <div class="m-res-note">«где находитесь», «есть ли&nbsp;вай-фай»&nbsp;— уже не&nbsp;спрашивают</div>
+              </div>
+              <div class="m-res-cell">
+                <div class="m-res-num">1.4 c</div>
+                <div class="m-res-label">время&nbsp;загрузки</div>
+                <div class="m-res-note">PageSpeed&nbsp;94&nbsp;на&nbsp;мобиле,<br>зелёная зона по&nbsp;всем метрикам</div>
+              </div>
+              <div class="m-res-cell">
+                <div class="m-res-num">4.9★</div>
+                <div class="m-res-label">оценка&nbsp;на&nbsp;Картах</div>
+                <div class="m-res-note">часть отзывов идёт от&nbsp;тех, кто пришёл&nbsp;по&nbsp;сайту</div>
+              </div>
+            </div>
+            <blockquote class="m-res-quote">
+              «Перестали отвечать на&nbsp;одни и&nbsp;те&nbsp;же вопросы. Сайт&nbsp;— как тихий администратор, который работает,&nbsp;пока мы&nbsp;готовим кофе.»
+              <cite>— владелец «Ориента»</cite>
+            </blockquote>
           </div>`,
       },
     ],
