@@ -135,16 +135,12 @@
     border-radius: 8px;
     position: relative;
     overflow: hidden;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 55%, #2d1f14 0%, #1a100a 45%, #08050a 85%),
-      #0a0606;
+    background: url('https://images.unsplash.com/photo-1750967785153-ac30b4eb9ac6?auto=format&fit=crop&w=1200&q=85') center/cover no-repeat;
     box-shadow: 0 20px 80px rgba(232, 227, 90, 0.04);
   }
   .hero-visual::before {
     content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 12% at 50% 48%, rgba(212, 165, 116, 0.3), transparent 70%),
-      radial-gradient(circle at 50% 48%, #000 6%, transparent 9%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, transparent 35%, rgba(0,0,0,0.38) 100%);
   }
   .hero-visual::after {
     content: ''; position: absolute; inset: 0;
@@ -197,33 +193,17 @@
   }
   .photo-card .caption b { font-size: 13px; font-weight: 500; display: block; margin-top: 3px; color: var(--text-on-dark); letter-spacing: 0; text-transform: none; }
 
-  /* Stylized "eye close-up" thumbnails via CSS gradients */
-  .pc-1 { background:
-    radial-gradient(ellipse 75% 55% at 50% 60%, #3a2618 0%, #1c0f08 60%, #060303 100%);
-  }
-  .pc-2 { background:
-    radial-gradient(ellipse 70% 50% at 50% 55%, #2a1d17 0%, #140a06 65%, #070404 100%);
-  }
-  .pc-3 { background:
-    radial-gradient(ellipse 80% 60% at 50% 58%, #4a2c1a 0%, #1f110a 55%, #0a0504 100%);
-  }
-  .pc-4 { background:
-    radial-gradient(ellipse 65% 45% at 50% 52%, #241810 0%, #0f0804 70%, #040202 100%);
-  }
-  .pc-5 { background:
-    radial-gradient(ellipse 75% 55% at 50% 60%, #352418 0%, #180d06 58%, #060303 100%);
-  }
-  .pc-6 { background:
-    radial-gradient(ellipse 70% 50% at 50% 55%, #2f1f14 0%, #160b06 65%, #070404 100%);
-  }
-  .pc-7 { background:
-    radial-gradient(ellipse 85% 60% at 50% 55%, #3f2718 0%, #1c0e08 55%, #080404 100%);
-  }
+  /* Real eye/lash photos from Unsplash (free license) */
+  .pc-1 { background: url('https://images.unsplash.com/photo-1492618269284-653dce58fd6d?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
+  .pc-2 { background: url('https://images.unsplash.com/photo-1639629509821-c54cdd984227?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
+  .pc-3 { background: url('https://images.unsplash.com/photo-1633346152343-5486573d3d50?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
+  .pc-4 { background: url('https://images.unsplash.com/photo-1674049406467-824ea37c7184?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
+  .pc-5 { background: url('https://images.unsplash.com/photo-1513138114450-972e59fd270a?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
+  .pc-6 { background: url('https://images.unsplash.com/photo-1616896590968-94d9a6e413a3?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
+  .pc-7 { background: url('https://images.unsplash.com/photo-1730226995154-efe9e13db300?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; }
   .photo-card::after {
     content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 50% 6% at 50% 52%, rgba(212, 165, 116, 0.22), transparent 75%),
-      radial-gradient(circle at 50% 52%, #000 5%, transparent 8%);
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.72) 100%);
     pointer-events: none;
   }
   .photo-card.cta {
@@ -278,14 +258,13 @@
   .about-photo {
     aspect-ratio: 4/5;
     border-radius: 8px;
-    background:
-      radial-gradient(ellipse 60% 40% at 50% 35%, #c9a384 0%, #8a6a4d 35%, #3a2818 75%, #1a0f08 100%);
+    background: url('https://images.unsplash.com/photo-1733145818867-2d09806e6542?auto=format&fit=crop&w=760&q=80') center/cover no-repeat;
     position: relative;
     overflow: hidden;
   }
   .about-photo::after {
     content: ''; position: absolute; inset: 0;
-    background: repeating-linear-gradient(93deg, transparent 0, transparent 4px, rgba(0,0,0,0.04) 5px, rgba(0,0,0,0.04) 6px);
+    background: linear-gradient(to bottom, transparent 70%, rgba(0,0,0,0.35) 100%);
   }
   .about-photo .lbl { position: absolute; left: 20px; bottom: 20px; font-size: 10.5px; letter-spacing: 2px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
   .about-body h2 { margin-top: 16px; }
@@ -1053,6 +1032,13 @@
       o.classList.add('on');
     });
   });
+</script>
+<script>
+  // Preview scroll helper — ?y=N scrolls page to N px on load (for headless screenshots)
+  (function(){
+    const y = parseInt(new URLSearchParams(location.search).get('y') || '0');
+    if (y) window.addEventListener('load', () => window.scrollTo(0, y));
+  })();
 </script>
 
 </body>
