@@ -22,7 +22,7 @@ function animateCursor() {
 }
 animateCursor();
 
-document.querySelectorAll('a, button, .btn, .case-card, .price-card, .channel, .step, summary, .faq-item')
+document.querySelectorAll('a, button, .btn, .case-card, .price-card, .channel, .step, .faq-flip')
   .forEach((el) => {
     el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
@@ -363,58 +363,10 @@ document.querySelectorAll('.modal-close').forEach((el) => {
   el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
 });
 
-// ==================== FAQ — ПЛАВНОЕ ОТКРЫТИЕ ====================
-document.querySelectorAll('.faq-item').forEach((item) => {
-  const summary = item.querySelector('summary');
-  const answer  = item.querySelector('.faq-answer');
-  if (!summary || !answer) return;
-
-  const PAD_BOTTOM = 26; // совпадает с CSS у открытого состояния
-
-  const openFaq = () => {
-    item.setAttribute('open', '');
-    // Замеряем «открытую» высоту
-    answer.style.height = 'auto';
-    answer.style.paddingBottom = PAD_BOTTOM + 'px';
-    const target = answer.scrollHeight;
-    // Стартуем с нуля
-    answer.style.height = '0px';
-    answer.style.paddingBottom = '0px';
-    // Форсируем reflow
-    void answer.offsetHeight;
-    // Едем на нужную высоту
-    answer.style.height = target + 'px';
-    answer.style.paddingBottom = PAD_BOTTOM + 'px';
-
-    const onEnd = (ev) => {
-      if (ev.propertyName !== 'height') return;
-      answer.style.height = 'auto'; // чтобы контент мог расти (адаптив, длинный текст)
-      answer.removeEventListener('transitionend', onEnd);
-    };
-    answer.addEventListener('transitionend', onEnd);
-  };
-
-  const closeFaq = () => {
-    // Фиксируем текущую высоту, чтобы уйти в ноль
-    answer.style.height = answer.scrollHeight + 'px';
-    answer.style.paddingBottom = PAD_BOTTOM + 'px';
-    void answer.offsetHeight;
-    answer.style.height = '0px';
-    answer.style.paddingBottom = '0px';
-
-    const onEnd = (ev) => {
-      if (ev.propertyName !== 'height') return;
-      item.removeAttribute('open');
-      answer.removeEventListener('transitionend', onEnd);
-    };
-    answer.addEventListener('transitionend', onEnd);
-  };
-
-  summary.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (item.hasAttribute('open')) closeFaq();
-    else openFaq();
-  });
+// ==================== FAQ — FLIP ПО ТАПУ (ДЛЯ MOBILE) ====================
+// На десктопе работает CSS hover. На тач-устройствах добавляем класс is-flipped.
+document.querySelectorAll('.faq-flip').forEach((card) => {
+  card.addEventListener('click', () => card.classList.toggle('is-flipped'));
 });
 
 // ==================== МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ====================
