@@ -3574,22 +3574,22 @@ body.menu-open { overflow: hidden; }
 
 .case-modal-inner {
   position: relative;
-  width: min(1120px, 94vw);
-  height: 92vh;
-  max-height: 92vh;
+  width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
   background: linear-gradient(180deg, rgba(15, 30, 54, 0.95), rgba(10, 22, 40, 0.95));
-  border: 1px solid rgba(107, 164, 255, 0.18);
-  border-radius: 28px;
-  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
-  transform: scale(0.92) translateY(20px);
-  transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  transform: translateY(36px);
+  transition: transform 0.55s cubic-bezier(0.19, 1, 0.22, 1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .case-modal.is-open .case-modal-inner {
-  transform: scale(1) translateY(0);
+  transform: translateY(0);
 }
 
 .modal-head {
@@ -3659,7 +3659,7 @@ body.menu-open { overflow: hidden; }
 /* Если внутри секции iframe — он растягивается на всю высоту модалки и
    скроллится своим скроллом, как настоящий сайт */
 .modal-section-frame:has(> iframe:only-child) {
-  height: calc(92vh - 77px); /* 92vh минус шапка модалки */
+  height: calc(100vh - 77px); /* 100vh минус шапка модалки */
   min-height: 600px;
 }
 
