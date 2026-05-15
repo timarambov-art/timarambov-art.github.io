@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Авито · Карточки · Тимофей Рямбов</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg:#0A1628; --bg-2:#0F1E36; --text:#EAEEF5; --text-2:#9BAAC4; --text-3:#7E8FAC;
+    --accent:#E8946A; --accent-2:#6BA4FF; --purple:#3D2B5C; --blue:#1E2F4F;
+    --border:rgba(255,255,255,.10); --border-hover:rgba(255,255,255,.20);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  html,body{background:#06101E;color:var(--text);font-family:'Manrope',sans-serif;}
+
+  /* === ПАНЕЛЬ УПРАВЛЕНИЯ === */
+  .toolbar{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(10,22,40,.85);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .toolbar h1{font-size:15px;font-weight:700;letter-spacing:-.01em;}
+  .toolbar .muted{color:var(--text-3);font-size:13px;}
+  .toolbar button{
+    appearance:none;border:1px solid var(--border-hover);background:rgba(232,148,106,.15);
+    color:var(--text);font:600 13px 'Manrope',sans-serif;letter-spacing:.02em;
+    padding:9px 16px;border-radius:10px;cursor:pointer;transition:.2s;
+  }
+  .toolbar button:hover{background:rgba(232,148,106,.3);border-color:var(--accent);}
+  .toolbar button.primary{background:var(--accent);color:#0A1628;border-color:var(--accent);}
+  .toolbar button.primary:hover{background:#F0A580;}
+  .toolbar .progress{margin-left:auto;color:var(--text-2);font-size:13px;}
+
+  /* === СЕТКА КАРТОЧЕК (превью) === */
+  .grid{
+    padding:80px 24px 80px;
+    display:flex;flex-direction:column;align-items:center;gap:30px;
+  }
+  .card-wrap{
+    width:100%;max-width:920px;
+    background:#000;border-radius:14px;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);
+    position:relative;
+  }
+  .card-wrap-label{
+    position:absolute;top:12px;left:14px;z-index:10;
+    background:rgba(0,0,0,.7);backdrop-filter:blur(10px);
+    color:var(--text);font:700 12px 'Manrope';padding:6px 10px;border-radius:6px;
+    letter-spacing:.04em;
+  }
+
+  /* Превью карточки (3628x2721 → масштабируется визуально) */
+  .card-scaler{
+    width:100%;
+    aspect-ratio: 3628 / 2721;
+    position:relative;overflow:hidden;
+  }
+  .card{
+    width:3628px;height:2721px;
+    transform-origin:top left;
+    position:absolute;top:0;left:0;
+    background:radial-gradient(ellipse at top,#14264C 0%,#0B1A30 55%,#06101E 100%);
+    overflow:hidden;
+    font-family:'Manrope',sans-serif;color:var(--text);
+  }
+
+  /* === ОБЩЕЕ ОФОРМЛЕНИЕ КАРТОЧЕК === */
+  .blob{position:absolute;border-radius:50%;filter:blur(220px);pointer-events:none;}
+  .blob-1{width:1400px;height:1400px;background:#264880;top:-500px;left:-400px;opacity:.55;}
+  .blob-2{width:1100px;height:1100px;background:#4A3270;top:30%;right:-300px;opacity:.5;}
+  .blob-3{width:900px;height:900px;background:#E8946A;bottom:-300px;left:30%;opacity:.18;}
+  .blob-4{width:1000px;height:1000px;background:#6BA4FF;bottom:-200px;right:-200px;opacity:.32;}
+
+  .grain{
+    position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .card-inner{
+    position:absolute;inset:0;
+    padding:200px 220px;
+    display:flex;flex-direction:column;justify-content:center;
+    z-index:2;
+  }
+
+  /* Логотип/брендинг */
+  .brand{
+    position:absolute;top:120px;left:220px;
+    display:flex;align-items:center;gap:24px;z-index:5;
+  }
+  .brand-dot{
+    width:32px;height:32px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 60px var(--accent),0 0 120px rgba(232,148,106,.5);
+  }
+  .brand-text{font:700 42px 'Manrope';letter-spacing:-.01em;}
+  .brand-tag{
+    position:absolute;top:120px;right:220px;
+    display:flex;align-items:center;gap:18px;
+    background:rgba(255,255,255,.06);border:1px solid var(--border);
+    backdrop-filter:blur(20px);
+    padding:18px 36px;border-radius:1000px;
+    color:var(--text-2);font:700 32px 'Manrope';letter-spacing:.08em;
+    z-index:5;
+  }
+  .brand-tag-pulse{
+    width:16px;height:16px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 30px var(--accent);
+  }
+
+  /* Тег-плашка */
+  .tag{
+    display:inline-flex;align-items:center;gap:18px;
+    background:rgba(255,255,255,.06);border:1px solid var(--border);
+    padding:20px 40px;border-radius:1000px;
+    color:var(--text-2);font:700 32px 'Manrope';letter-spacing:.12em;
+    width:fit-content;backdrop-filter:blur(20px);
+  }
+  .tag-pulse{
+    width:18px;height:18px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 30px var(--accent);
+  }
+
+  /* Заголовки */
+  h1.title{
+    font:900 240px/0.95 'Manrope';letter-spacing:-.04em;
+    margin-top:60px;
+  }
+  h1.title.smaller{font-size:200px;}
+  h1.title.smaller2{font-size:170px;}
+  .accent{color:var(--accent);}
+  .accent-2{color:var(--accent-2);}
+
+  .lead{
+    font:500 56px/1.45 'Manrope';color:var(--text-2);max-width:2400px;
+    margin-top:60px;letter-spacing:-.01em;
+  }
+
+  /* Подпись внизу */
+  .signature{
+    position:absolute;bottom:120px;left:220px;right:220px;
+    display:flex;align-items:center;justify-content:space-between;
+    z-index:5;
+  }
+  .signature-left{font:700 32px 'Manrope';color:var(--text-3);letter-spacing:.04em;}
+  .signature-arrow{
+    display:flex;align-items:center;gap:24px;
+    font:800 36px 'Manrope';color:var(--accent);letter-spacing:.04em;
+  }
+
+  /* ===== КАРТОЧКА 1: ГЛАВНАЯ ===== */
+  .c1 .card-inner{padding:240px 220px;flex-direction:row;align-items:center;gap:120px;}
+  .c1-photo{
+    flex:0 0 1400px;height:1900px;position:relative;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .c1-photo-bg{
+    position:absolute;inset:80px 0 0 0;border-radius:80px;
+    background:linear-gradient(180deg,rgba(232,148,106,.15) 0%,rgba(107,164,255,.12) 100%);
+    border:2px solid rgba(232,148,106,.3);
+    overflow:hidden;
+  }
+  .c1-photo-grid{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(232,148,106,.12) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(232,148,106,.12) 1px,transparent 1px);
+    background-size:120px 120px;
+    mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);
+  }
+  .c1-photo img{
+    position:relative;z-index:2;max-height:1900px;width:auto;
+    filter:drop-shadow(0 80px 120px rgba(0,0,0,.5));
+  }
+  .c1-photo-glow{
+    position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    width:1200px;height:300px;
+    background:radial-gradient(ellipse at center,rgba(232,148,106,.5) 0%,transparent 70%);
+    filter:blur(60px);
+  }
+  .c1-content{flex:1;}
+  .c1-name{font:900 130px/1 'Manrope';letter-spacing:-.03em;margin-bottom:36px;}
+  .c1-role{font:700 48px 'Manrope';color:var(--text-2);letter-spacing:.04em;margin-bottom:80px;text-transform:uppercase;}
+  .c1-stats{display:flex;flex-direction:column;gap:40px;margin-bottom:90px;}
+  .c1-stat{
+    display:flex;align-items:baseline;gap:32px;
+    padding-bottom:32px;border-bottom:2px solid var(--border);
+  }
+  .c1-stat-num{font:900 140px 'Manrope';color:var(--accent);letter-spacing:-.04em;line-height:1;}
+  .c1-stat-lbl{font:600 44px 'Manrope';color:var(--text-2);letter-spacing:-.01em;}
+  .c1-cta{
+    display:inline-flex;align-items:center;gap:30px;
+    background:linear-gradient(135deg,var(--accent) 0%,#F0A580 100%);
+    color:#0A1628;padding:46px 70px;border-radius:30px;
+    font:900 52px 'Manrope';letter-spacing:-.01em;width:fit-content;
+    box-shadow:0 30px 80px rgba(232,148,106,.5);
+  }
+  .c1-cta-icon{font-size:60px;}
+
+  /* ===== КАРТОЧКА 2: ВЫГОДА ===== */
+  .c2 h1{margin-top:30px;}
+  .c2-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;
+    margin-top:140px;
+  }
+  .c2-item{
+    background:rgba(255,255,255,.04);border:2px solid var(--border);
+    padding:80px 80px;border-radius:40px;
+    position:relative;overflow:hidden;
+    backdrop-filter:blur(20px);
+  }
+  .c2-item-num{
+    font:900 110px 'Manrope';color:var(--accent);letter-spacing:-.04em;line-height:1;
+    margin-bottom:30px;
+  }
+  .c2-item h3{font:800 60px 'Manrope';letter-spacing:-.02em;margin-bottom:30px;line-height:1.05;}
+  .c2-item p{font:500 38px/1.45 'Manrope';color:var(--text-2);}
+
+  /* ===== КАРТОЧКА 3: ПРИМЕР ===== */
+  .c3 .card-inner{padding:200px 220px;}
+  .c3-tag-row{display:flex;align-items:center;gap:30px;}
+  .c3-grid{
+    display:grid;grid-template-columns:1.4fr 1fr;gap:100px;
+    margin-top:120px;align-items:center;
+  }
+  .c3-screen{
+    background:#0A1628;border:3px solid var(--border-hover);border-radius:50px;
+    overflow:hidden;box-shadow:0 60px 140px rgba(0,0,0,.6);
+  }
+  .c3-screen img{width:100%;display:block;}
+  .c3-features{display:flex;flex-direction:column;gap:50px;}
+  .c3-feat{
+    display:flex;align-items:flex-start;gap:36px;
+  }
+  .c3-feat-ic{
+    flex:0 0 110px;width:110px;height:110px;border-radius:28px;
+    background:linear-gradient(135deg,rgba(232,148,106,.25),rgba(107,164,255,.15));
+    border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-size:60px;
+  }
+  .c3-feat-txt h4{font:800 48px 'Manrope';letter-spacing:-.01em;margin-bottom:14px;}
+  .c3-feat-txt p{font:500 34px/1.4 'Manrope';color:var(--text-2);}
+
+  /* ===== КАРТОЧКА 4: МОБИЛЬНАЯ ===== */
+  .c4 .card-inner{flex-direction:row;align-items:center;gap:140px;padding:200px 220px;}
+  .c4-left{flex:1;}
+  .c4-right{flex:0 0 1100px;display:flex;justify-content:center;align-items:center;position:relative;}
+  .c4-phone{
+    width:780px;height:1620px;
+    background:#0A1628;border:8px solid #1a2842;
+    border-radius:90px;padding:30px;
+    box-shadow:0 60px 140px rgba(0,0,0,.7),0 0 140px rgba(107,164,255,.15);
+    position:relative;
+  }
+  .c4-phone::before{
+    content:"";position:absolute;top:30px;left:50%;transform:translateX(-50%);
+    width:240px;height:36px;background:#000;border-radius:20px;z-index:5;
+  }
+  .c4-phone-screen{
+    width:100%;height:100%;background:linear-gradient(180deg,#0A1628,#0F1E36);
+    border-radius:64px;padding:120px 50px 50px;
+    display:flex;flex-direction:column;gap:30px;overflow:hidden;
+  }
+  .c4-mock-tag{
+    display:inline-flex;align-items:center;gap:12px;
+    background:rgba(232,148,106,.15);color:var(--accent);
+    padding:14px 28px;border-radius:1000px;
+    font:700 22px 'Manrope';letter-spacing:.08em;width:fit-content;
+  }
+  .c4-mock-h{font:900 78px/0.95 'Manrope';letter-spacing:-.03em;}
+  .c4-mock-h .accent{color:var(--accent);}
+  .c4-mock-p{font:500 28px/1.4 'Manrope';color:var(--text-2);margin-top:6px;}
+  .c4-mock-btn{
+    margin-top:30px;padding:34px;border-radius:24px;
+    background:linear-gradient(135deg,var(--accent),#F0A580);
+    color:#0A1628;font:800 32px 'Manrope';text-align:center;
+  }
+  .c4-mock-stats{
+    margin-top:34px;display:flex;gap:20px;
+  }
+  .c4-mock-stat{
+    flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);
+    padding:24px 18px;border-radius:18px;text-align:center;
+  }
+  .c4-mock-stat-n{font:900 44px 'Manrope';color:var(--accent);}
+  .c4-mock-stat-l{font:600 18px 'Manrope';color:var(--text-3);margin-top:6px;}
+  .c4-big-percent{
+    font:900 480px/0.85 'Manrope';color:var(--accent);
+    letter-spacing:-.06em;margin-top:60px;
+  }
+  .c4-big-percent-lbl{
+    font:700 56px/1.2 'Manrope';color:var(--text-2);margin-top:30px;max-width:1300px;
+  }
+
+  /* ===== КАРТОЧКА 5: СРОКИ ===== */
+  .c5-rows{display:flex;flex-direction:column;gap:30px;margin-top:140px;}
+  .c5-row{
+    display:flex;align-items:center;justify-content:space-between;gap:60px;
+    padding:70px 90px;border-radius:40px;
+    background:rgba(255,255,255,.04);border:2px solid var(--border);
+    backdrop-filter:blur(20px);
+  }
+  .c5-row-left{display:flex;align-items:center;gap:50px;}
+  .c5-row-icon{
+    font-size:96px;
+    width:160px;height:160px;flex:0 0 160px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(232,148,106,.15);border-radius:36px;border:2px solid var(--accent);
+  }
+  .c5-row-h{font:800 70px 'Manrope';letter-spacing:-.02em;}
+  .c5-row-h-sub{font:600 36px 'Manrope';color:var(--text-2);margin-top:14px;}
+  .c5-row-days{
+    font:900 130px 'Manrope';color:var(--accent);letter-spacing:-.04em;
+    text-align:right;
+  }
+  .c5-row-days-sub{font:600 32px 'Manrope';color:var(--text-3);text-align:right;margin-top:6px;}
+
+  /* ===== КАРТОЧКА 6: БЕСПЛАТНЫЙ ПЕРВЫЙ ЭКРАН ===== */
+  .c6 .card-inner{justify-content:center;align-items:center;text-align:center;}
+  .c6 .tag{margin:0 auto;}
+  .c6 h1{
+    font:900 320px/0.92 'Manrope';letter-spacing:-.05em;text-align:center;margin-top:80px;
+  }
+  .c6-zero{
+    font:900 700px/0.85 'Manrope';color:var(--accent);letter-spacing:-.08em;
+    text-align:center;margin:80px 0 40px;
+    background:linear-gradient(135deg,#E8946A 0%,#F0A580 50%,#E8946A 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    text-shadow:0 0 200px rgba(232,148,106,.4);
+  }
+  .c6-zero-tag{font:700 60px 'Manrope';color:var(--text-2);letter-spacing:-.01em;}
+  .c6-line{
+    font:600 56px/1.4 'Manrope';color:var(--text);margin-top:80px;text-align:center;max-width:2600px;
+  }
+  .c6-line .accent{color:var(--accent);}
+
+  /* ===== КАРТОЧКА 7: ГАРАНТИИ ===== */
+  .c7-cards{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:50px;
+    margin-top:140px;
+  }
+  .c7-card{
+    background:rgba(255,255,255,.04);border:2px solid var(--border);
+    padding:70px 60px;border-radius:36px;
+    backdrop-filter:blur(20px);
+    display:flex;flex-direction:column;gap:36px;
+  }
+  .c7-card-ic{
+    width:140px;height:140px;border-radius:30px;
+    background:linear-gradient(135deg,var(--accent) 0%,#F0A580 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:78px;color:#0A1628;
+    box-shadow:0 20px 60px rgba(232,148,106,.4);
+  }
+  .c7-card h3{font:800 56px/1.1 'Manrope';letter-spacing:-.02em;}
+  .c7-card p{font:500 32px/1.45 'Manrope';color:var(--text-2);}
+
+  /* ===== КАРТОЧКА 8: 4 ШАГА ===== */
+  .c8-steps{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:36px;
+    margin-top:140px;position:relative;
+  }
+  .c8-steps::before{
+    content:"";position:absolute;top:120px;left:80px;right:80px;height:4px;
+    background:linear-gradient(90deg,rgba(232,148,106,.2),rgba(232,148,106,.6),rgba(232,148,106,.2));
+    border-radius:2px;
+  }
+  .c8-step{
+    background:rgba(255,255,255,.04);border:2px solid var(--border);
+    padding:60px 50px;border-radius:36px;
+    backdrop-filter:blur(20px);position:relative;
+    display:flex;flex-direction:column;gap:32px;
+  }
+  .c8-step-num{
+    width:160px;height:160px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),#F0A580);
+    color:#0A1628;font:900 90px 'Manrope';letter-spacing:-.02em;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 20px 60px rgba(232,148,106,.5);
+    position:relative;z-index:2;
+  }
+  .c8-step h3{font:800 56px/1.05 'Manrope';letter-spacing:-.02em;margin-top:14px;}
+  .c8-step p{font:500 30px/1.45 'Manrope';color:var(--text-2);}
+
+  /* ===== КАРТОЧКА 9: ЧТО ДЕЛАЮ ===== */
+  .c9-grid{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:30px;
+    margin-top:140px;
+  }
+  .c9-item{
+    background:rgba(255,255,255,.04);border:2px solid var(--border);
+    padding:60px 40px;border-radius:32px;
+    backdrop-filter:blur(20px);
+    display:flex;flex-direction:column;gap:28px;
+    transition:.2s;
+  }
+  .c9-item-ic{
+    width:120px;height:120px;border-radius:26px;
+    background:linear-gradient(135deg,rgba(232,148,106,.2),rgba(107,164,255,.15));
+    border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    font-size:64px;
+  }
+  .c9-item-num{font:800 28px 'Manrope';color:var(--accent);letter-spacing:.06em;}
+  .c9-item h3{font:800 44px/1.05 'Manrope';letter-spacing:-.02em;}
+  .c9-item p{font:500 26px/1.4 'Manrope';color:var(--text-2);}
+
+  .c9-bottom{
+    margin-top:100px;display:flex;align-items:center;justify-content:space-between;gap:60px;
+    padding:70px 90px;border-radius:40px;
+    background:linear-gradient(135deg,rgba(232,148,106,.18),rgba(107,164,255,.1));
+    border:2px solid var(--accent);
+  }
+  .c9-bottom-txt{font:800 56px/1.15 'Manrope';letter-spacing:-.02em;flex:1;}
+  .c9-bottom-btn{
+    padding:40px 70px;border-radius:24px;
+    background:linear-gradient(135deg,var(--accent),#F0A580);
+    color:#0A1628;font:900 44px 'Manrope';letter-spacing:-.01em;
+  }
+
+  /* ===== КАРТОЧКА 10: CTA ===== */
+  .c10 .card-inner{padding:200px 220px;flex-direction:row;align-items:center;gap:100px;}
+  .c10-left{flex:1;}
+  .c10-right{flex:0 0 1300px;position:relative;display:flex;align-items:flex-end;justify-content:center;}
+  .c10-photo{height:1800px;width:auto;filter:drop-shadow(0 80px 120px rgba(0,0,0,.5));}
+  .c10-photo-bg{
+    position:absolute;inset:80px 100px 0 100px;border-radius:80px;
+    background:linear-gradient(180deg,rgba(232,148,106,.18) 0%,rgba(107,164,255,.12) 100%);
+    border:2px solid rgba(232,148,106,.3);overflow:hidden;
+  }
+  .c10-photo-grid{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(232,148,106,.12) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(232,148,106,.12) 1px,transparent 1px);
+    background-size:120px 120px;
+    mask-image:radial-gradient(ellipse at center,#000 0%,transparent 70%);
+  }
+  .c10 h1{font:900 200px/0.92 'Manrope';letter-spacing:-.04em;}
+  .c10-channels{margin-top:90px;display:flex;flex-direction:column;gap:30px;}
+  .c10-ch{
+    display:flex;align-items:center;gap:36px;
+    background:rgba(255,255,255,.05);border:2px solid var(--border);
+    padding:40px 50px;border-radius:28px;
+    backdrop-filter:blur(20px);
+  }
+  .c10-ch-ic{
+    width:120px;height:120px;flex:0 0 120px;border-radius:26px;
+    background:linear-gradient(135deg,var(--accent),#F0A580);
+    display:flex;align-items:center;justify-content:center;
+    font-size:68px;color:#0A1628;
+  }
+  .c10-ch-h{font:800 42px 'Manrope';letter-spacing:-.01em;}
+  .c10-ch-v{font:600 32px 'Manrope';color:var(--text-2);margin-top:8px;}
+  .c10-bonus{
+    margin-top:60px;padding:50px 60px;border-radius:28px;
+    background:linear-gradient(135deg,rgba(232,148,106,.2),rgba(107,164,255,.1));
+    border:2px solid var(--accent);
+    font:700 40px/1.4 'Manrope';
+  }
+  .c10-bonus .accent{color:var(--accent);}
+
+  /* === ОПИСАНИЕ === */
+  .description-section{
+    padding:60px 24px 120px;display:flex;justify-content:center;
+  }
+  .description-box{
+    max-width:920px;width:100%;
+    background:rgba(255,255,255,.04);border:1px solid var(--border);
+    border-radius:14px;padding:40px;
+  }
+  .description-box h2{font:800 22px 'Manrope';margin-bottom:18px;letter-spacing:-.01em;}
+  .description-box pre{
+    background:rgba(0,0,0,.3);padding:24px;border-radius:8px;
+    white-space:pre-wrap;font:400 14px/1.6 'Manrope';color:var(--text-2);
+    border:1px solid var(--border);
+  }
+  .description-box button{
+    margin-top:18px;padding:12px 22px;
+    background:var(--accent-2);color:#0A1628;
+    border:none;border-radius:8px;font:700 13px 'Manrope';cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h1>Авито · 10 карточек 3628×2721</h1>
+  <span class="muted">Нажми «Скачать всё» — получишь 10 PNG для загрузки в объявление</span>
+  <button class="primary" id="downloadAll">⬇ Скачать всё (10 PNG)</button>
+  <button id="downloadSingle">⬇ Скачать одну (выберу)</button>
+  <span class="progress" id="progress"></span>
+</div>
+
+<div class="grid">
+
+  <!-- ============ КАРТОЧКА 1 — ГЛАВНАЯ ============ -->
+  <div class="card-wrap" data-idx="1">
+    <div class="card-wrap-label">01 · ГЛАВНАЯ</div>
+    <div class="card-scaler">
+      <div class="card c1" id="card-1">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="brand">
+          <div class="brand-dot"></div>
+          <div class="brand-text">Тимофей Рямбов</div>
+        </div>
+        <div class="brand-tag">
+          <div class="brand-tag-pulse"></div>
+          ВЕБ-РАЗРАБОТЧИК · ЕКАТЕРИНБУРГ
+        </div>
+
+        <div class="card-inner">
+          <div class="c1-photo">
+            <div class="c1-photo-bg">
+              <div class="c1-photo-grid"></div>
+            </div>
+            <div class="c1-photo-glow"></div>
+            <img src="../assets/3N7A2360-Photoroom.png" alt="">
+          </div>
+          <div class="c1-content">
+            <div class="c1-name">Сайты,<br>которые<br><span class="accent">приводят клиентов</span></div>
+            <div class="c1-role">Лендинги · Сайты · Боты</div>
+            <div class="c1-stats">
+              <div class="c1-stat">
+                <div class="c1-stat-num">15+</div>
+                <div class="c1-stat-lbl">проектов под ключ</div>
+              </div>
+              <div class="c1-stat">
+                <div class="c1-stat-num">3 года</div>
+                <div class="c1-stat-lbl">в веб-разработке</div>
+              </div>
+              <div class="c1-stat">
+                <div class="c1-stat-num">5–7 дней</div>
+                <div class="c1-stat-lbl">средний срок лендинга</div>
+              </div>
+            </div>
+            <div class="c1-cta">Первый экран — БЕСПЛАТНО →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 2 — ВЫГОДА ============ -->
+  <div class="card-wrap" data-idx="2">
+    <div class="card-wrap-label">02 · ЧТО ПОЛУЧИШЬ</div>
+    <div class="card-scaler">
+      <div class="card c2" id="card-2">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>ЧТО ПОЛУЧИШЬ</div>
+          <h1 class="title smaller">Сайт <span class="accent">под ключ</span>,<br>который приводит<br>клиентов с рекламы</h1>
+
+          <div class="c2-grid">
+            <div class="c2-item">
+              <div class="c2-item-num">01</div>
+              <h3>Проработанные смыслы</h3>
+              <p>Сначала разбираю твой продукт и аудиторию, потом верстаю. Каждый блок отвечает на конкретный вопрос клиента — без «воды» и красивых картинок впустую.</p>
+            </div>
+            <div class="c2-item">
+              <div class="c2-item-num">02</div>
+              <h3>Уклон на маркетинг</h3>
+              <p>Квиз, калькулятор, форма записи, WhatsApp в один клик. Не просто красивый сайт — конверсионная структура, которая ведёт к заявке.</p>
+            </div>
+            <div class="c2-item">
+              <div class="c2-item-num">03</div>
+              <h3>Свой код, не Тильда</h3>
+              <p>Пишу с нуля на HTML, CSS, JavaScript. Без подписки, без ограничений конструктора. Сайт выглядит ровно как задумали, а не «как разрешает шаблон».</p>
+            </div>
+            <div class="c2-item">
+              <div class="c2-item-num">04</div>
+              <h3>Запуск на твоём домене</h3>
+              <p>Размещаю на хостинге, подключаю yoursite.ru, настраиваю доставку заявок в Telegram/WhatsApp. От первой встречи до запуска — всё на мне.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="signature-left">ТИМОФЕЙ РЯМБОВ · WEB</div>
+          <div class="signature-arrow">КЛИЕНТЫ С ПЕРВОГО ДНЯ →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 3 — ПРИМЕР АЛЕКСАНДРА ============ -->
+  <div class="card-wrap" data-idx="3">
+    <div class="card-wrap-label">03 · ПРИМЕР РАБОТЫ</div>
+    <div class="card-scaler">
+      <div class="card c3" id="card-3">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>РЕАЛЬНЫЙ КЕЙС</div>
+          <h1 class="title smaller">Лендинг для<br>мастера — <span class="accent">в работе</span></h1>
+
+          <div class="c3-grid">
+            <div class="c3-screen">
+              <img src="../assets/case-alexandra.png" alt="">
+            </div>
+            <div class="c3-features">
+              <div class="c3-feat">
+                <div class="c3-feat-ic">💡</div>
+                <div class="c3-feat-txt">
+                  <h4>Квиз для подбора услуги</h4>
+                  <p>Клиент сам выбирает услугу за 30 секунд, ты получаешь готовую заявку с деталями.</p>
+                </div>
+              </div>
+              <div class="c3-feat">
+                <div class="c3-feat-ic">📱</div>
+                <div class="c3-feat-txt">
+                  <h4>Запись в WhatsApp в 1 клик</h4>
+                  <p>Кнопка ведёт сразу в чат с готовым сообщением. Никаких форм с 10 полями.</p>
+                </div>
+              </div>
+              <div class="c3-feat">
+                <div class="c3-feat-ic">🎯</div>
+                <div class="c3-feat-txt">
+                  <h4>12 секций — все про выгоду</h4>
+                  <p>Цены, отзывы, до/после, частые вопросы. Клиент закрывает все возражения сам.</p>
+                </div>
+              </div>
+              <div class="c3-feat">
+                <div class="c3-feat-ic">⚡</div>
+                <div class="c3-feat-txt">
+                  <h4>Тёмная тема + жёлтый акцент</h4>
+                  <p>Премиальный вид без перегруза. Запоминается с первого экрана.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="signature-left">ALEXANDRA · LED-НАРАЩИВАНИЕ · ЕКБ</div>
+          <div class="signature-arrow">ЕЩЁ ПРИМЕРЫ — В ЛИЧКЕ →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 4 — МОБИЛЬНАЯ ============ -->
+  <div class="card-wrap" data-idx="4">
+    <div class="card-wrap-label">04 · МОБИЛЬНАЯ АДАПТАЦИЯ</div>
+    <div class="card-scaler">
+      <div class="card c4" id="card-4">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="c4-left">
+            <div class="tag"><div class="tag-pulse"></div>ВАЖНО</div>
+            <div class="c4-big-percent">80%</div>
+            <div class="c4-big-percent-lbl">твоих клиентов<br>заходят с телефона —<br><span style="color:var(--accent);">сайт должен быть<br>удобен прежде всего там</span></div>
+            <p style="font:600 42px/1.45 'Manrope';color:var(--text-2);margin-top:70px;max-width:1500px;">Проверяю каждый блок на iPhone, Android и планшетах. Кнопки нажимаются пальцем, текст читается, формы не съезжают.</p>
+          </div>
+          <div class="c4-right">
+            <div class="c4-phone">
+              <div class="c4-phone-screen">
+                <div class="c4-mock-tag"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></span>МАСТЕР · ЕКБ</div>
+                <div class="c4-mock-h">Запись на<br><span class="accent">завтра</span> — за<br>30 секунд</div>
+                <div class="c4-mock-p">Свободные слоты сегодня и завтра. Подтверждение в WhatsApp.</div>
+                <div class="c4-mock-btn">Записаться →</div>
+                <div class="c4-mock-stats">
+                  <div class="c4-mock-stat">
+                    <div class="c4-mock-stat-n">4.9</div>
+                    <div class="c4-mock-stat-l">оценка</div>
+                  </div>
+                  <div class="c4-mock-stat">
+                    <div class="c4-mock-stat-n">120+</div>
+                    <div class="c4-mock-stat-l">отзывов</div>
+                  </div>
+                  <div class="c4-mock-stat">
+                    <div class="c4-mock-stat-n">5 лет</div>
+                    <div class="c4-mock-stat-l">опыта</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 5 — СРОКИ ============ -->
+  <div class="card-wrap" data-idx="5">
+    <div class="card-wrap-label">05 · СРОКИ</div>
+    <div class="card-scaler">
+      <div class="card c5" id="card-5">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>СРОКИ</div>
+          <h1 class="title smaller">Делаю <span class="accent">быстро</span> —<br>без затягиваний</h1>
+          <p class="lead">Берусь только если успеваю. Срок согласуем до старта и фиксируем в договоре.</p>
+
+          <div class="c5-rows">
+            <div class="c5-row">
+              <div class="c5-row-left">
+                <div class="c5-row-icon">📄</div>
+                <div>
+                  <div class="c5-row-h">Лендинг</div>
+                  <div class="c5-row-h-sub">Одна страница · реклама → заявка</div>
+                </div>
+              </div>
+              <div>
+                <div class="c5-row-days">5–7 дней</div>
+                <div class="c5-row-days-sub">от макета до запуска</div>
+              </div>
+            </div>
+
+            <div class="c5-row">
+              <div class="c5-row-left">
+                <div class="c5-row-icon">🏠</div>
+                <div>
+                  <div class="c5-row-h">Многостраничный сайт</div>
+                  <div class="c5-row-h-sub">Несколько услуг или каталог</div>
+                </div>
+              </div>
+              <div>
+                <div class="c5-row-days">2–3 недели</div>
+                <div class="c5-row-days-sub">полностью с нуля</div>
+              </div>
+            </div>
+
+            <div class="c5-row">
+              <div class="c5-row-left">
+                <div class="c5-row-icon">🤖</div>
+                <div>
+                  <div class="c5-row-h">Telegram-бот</div>
+                  <div class="c5-row-h-sub">Запись, FAQ, рассылки 24/7</div>
+                </div>
+              </div>
+              <div>
+                <div class="c5-row-days">3–5 дней</div>
+                <div class="c5-row-days-sub">в работу сразу после ТЗ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="signature-left">СДАЮ В СРОК · ВСЕГДА</div>
+          <div class="signature-arrow">ОБСУДИМ ТВОЙ ДЕДЛАЙН →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 6 — БЕСПЛАТНЫЙ ПЕРВЫЙ ЭКРАН ============ -->
+  <div class="card-wrap" data-idx="6">
+    <div class="card-wrap-label">06 · БЕСПЛАТНЫЙ ПЕРВЫЙ ЭКРАН</div>
+    <div class="card-scaler">
+      <div class="card c6" id="card-6">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>ГЛАВНАЯ ФИШКА</div>
+          <h1 style="font:900 240px/0.92 'Manrope';letter-spacing:-.04em;text-align:center;margin-top:80px;">Сначала <span class="accent">макет</span>,<br>потом — деньги</h1>
+
+          <div class="c6-zero">0 ₽</div>
+          <div class="c6-zero-tag">за первый экран твоего сайта</div>
+
+          <div class="c6-line">
+            Покажу подход, стиль и качество <span class="accent">до оплаты</span>.<br>
+            Не зайдёт — макет твой. Без обязательств.
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="signature-left">~3 ДНЯ · БЕЗ ПРЕДОПЛАТЫ</div>
+          <div class="signature-arrow">ПОПРОБОВАТЬ →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 7 — ГАРАНТИИ ============ -->
+  <div class="card-wrap" data-idx="7">
+    <div class="card-wrap-label">07 · ГАРАНТИИ</div>
+    <div class="card-scaler">
+      <div class="card c7" id="card-7">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>БЕЗОПАСНО</div>
+          <h1 class="title smaller">Работаю <span class="accent">официально</span> —<br>деньги не пропадут</h1>
+          <p class="lead">Боишься заплатить и остаться без сайта? Закрепляем всё в договоре до старта.</p>
+
+          <div class="c7-cards">
+            <div class="c7-card">
+              <div class="c7-card-ic">📋</div>
+              <h3>Договор<br>перед стартом</h3>
+              <p>Самозанятый, плачу налоги. В договоре — сроки, объём, стоимость, твои и мои обязательства. Чек после оплаты.</p>
+            </div>
+            <div class="c7-card">
+              <div class="c7-card-ic">💸</div>
+              <h3>50% сейчас,<br>50% после сдачи</h3>
+              <p>Большие проекты разбиваем на этапы. Платишь только после согласования макета и приёмки работы.</p>
+            </div>
+            <div class="c7-card">
+              <div class="c7-card-ic">🔧</div>
+              <h3>2 недели<br>правок бесплатно</h3>
+              <p>После запуска две недели правлю всё, что не работает или хочется поменять. Дальше — мелкие задачи по договорённости.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="signature-left">САМОЗАНЯТЫЙ · ЧЕК · ДОГОВОР</div>
+          <div class="signature-arrow">УСЛОВИЯ — В ЛИЧКЕ →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 8 — 4 ШАГА ============ -->
+  <div class="card-wrap" data-idx="8">
+    <div class="card-wrap-label">08 · КАК РАБОТАЕМ</div>
+    <div class="card-scaler">
+      <div class="card c8" id="card-8">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>4 ШАГА</div>
+          <h1 class="title smaller">Прозрачный процесс —<br><span class="accent">без сюрпризов</span></h1>
+          <p class="lead">Знаешь на каждом этапе, что происходит и сколько осталось до запуска.</p>
+
+          <div class="c8-steps">
+            <div class="c8-step">
+              <div class="c8-step-num">01</div>
+              <h3>Брифинг</h3>
+              <p>Созвон или переписка. Разбираю задачу, фиксирую структуру, тексты, референсы в одном документе.</p>
+            </div>
+            <div class="c8-step">
+              <div class="c8-step-num">02</div>
+              <h3>Дизайн</h3>
+              <p>Рисую макет в Figma: главный экран, ключевые блоки, версия для телефона. Правлю, пока не устроит.</p>
+            </div>
+            <div class="c8-step">
+              <div class="c8-step-num">03</div>
+              <h3>Сборка + тесты</h3>
+              <p>Вёрстка точно по макету. Проверка на iPhone, Android, медленном интернете и старых браузерах.</p>
+            </div>
+            <div class="c8-step">
+              <div class="c8-step-num">04</div>
+              <h3>Запуск</h3>
+              <p>Хостинг, твой домен, доставка заявок. Инструкция, как обновлять цены и тексты самому.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="signature">
+          <div class="signature-left">ОТ ВСТРЕЧИ ДО ЗАПУСКА</div>
+          <div class="signature-arrow">ПОДРОБНОСТИ — В ЛИЧКЕ →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 9 — ЧТО ДЕЛАЮ ============ -->
+  <div class="card-wrap" data-idx="9">
+    <div class="card-wrap-label">09 · ЧТО ДЕЛАЮ</div>
+    <div class="card-scaler">
+      <div class="card c9" id="card-9">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="tag"><div class="tag-pulse"></div>УСЛУГИ</div>
+          <h1 class="title smaller">5 форматов —<br><span class="accent">под любую задачу</span></h1>
+
+          <div class="c9-grid">
+            <div class="c9-item">
+              <div class="c9-item-ic">📄</div>
+              <div class="c9-item-num">01 · ЛЕНДИНГ</div>
+              <h3>Реклама → заявка</h3>
+              <p>Одна страница, которая конвертит трафик с Яндекса, Авито, Инсты в обращения.</p>
+            </div>
+            <div class="c9-item">
+              <div class="c9-item-ic">📚</div>
+              <div class="c9-item-num">02 · МНОГОСТР.</div>
+              <h3>Несколько услуг</h3>
+              <p>Сайт с разделами под каждое направление. Структура, навигация, SEO.</p>
+            </div>
+            <div class="c9-item">
+              <div class="c9-item-ic">🏢</div>
+              <div class="c9-item-num">03 · КОМПАНИЯ</div>
+              <h3>Большой сайт</h3>
+              <p>Корпоративный сайт на годы: команда, кейсы, услуги, статьи, контакты.</p>
+            </div>
+            <div class="c9-item">
+              <div class="c9-item-ic">📱</div>
+              <div class="c9-item-num">04 · МИНИ-САЙТ</div>
+              <h3>Для соцсетей</h3>
+              <p>Одна ссылка для шапки Инсты или ВК. Все услуги, цены, контакты в одном месте.</p>
+            </div>
+            <div class="c9-item">
+              <div class="c9-item-ic">🤖</div>
+              <div class="c9-item-num">05 · БОТ</div>
+              <h3>Telegram 24/7</h3>
+              <p>Отвечает на вопросы, принимает запись, делает рассылки. Работает без выходных.</p>
+            </div>
+          </div>
+
+          <div class="c9-bottom">
+            <div class="c9-bottom-txt">Не знаешь, что именно нужно?<br>Напиши — разберём задачу и предложу формат.</div>
+            <div class="c9-bottom-btn">НАПИСАТЬ →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ КАРТОЧКА 10 — CTA + КОНТАКТЫ ============ -->
+  <div class="card-wrap" data-idx="10">
+    <div class="card-wrap-label">10 · СВЯЗАТЬСЯ</div>
+    <div class="card-scaler">
+      <div class="card c10" id="card-10">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="grain"></div>
+
+        <div class="card-inner">
+          <div class="c10-left">
+            <div class="tag"><div class="tag-pulse"></div>СВЯЗЬ</div>
+            <h1>Расскажи<br>про <span class="accent">свою идею</span> —<br>отвечу за час</h1>
+
+            <div class="c10-channels">
+              <div class="c10-ch">
+                <div class="c10-ch-ic">📞</div>
+                <div>
+                  <div class="c10-ch-h">Позвонить</div>
+                  <div class="c10-ch-v">+7 (902) 254-04-81</div>
+                </div>
+              </div>
+              <div class="c10-ch">
+                <div class="c10-ch-ic">💬</div>
+                <div>
+                  <div class="c10-ch-h">WhatsApp / Telegram</div>
+                  <div class="c10-ch-v">@TRyambov · wa.me/79022540481</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="c10-bonus">
+              <span class="accent">15+ проектов</span> · 3 года в разработке · сделано руками, не на Тильде
+            </div>
+          </div>
+
+          <div class="c10-right">
+            <div class="c10-photo-bg">
+              <div class="c10-photo-grid"></div>
+            </div>
+            <img src="../assets/3N7A2360-Photoroom.png" class="c10-photo" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ОПИСАНИЕ ОБЪЯВЛЕНИЯ -->
+<div class="description-section">
+  <div class="description-box">
+    <h2>📝 Описание для объявления на Авито</h2>
+    <pre id="descText">Создаю сайты руками — без Тильды и других конструкторов.
+
+🎁 ПЕРВЫЙ ЭКРАН — БЕСПЛАТНО
+Сначала покажу макет твоего сайта, потом — оплата. Не зайдёт, оставишь макет себе. Без обязательств.
+
+✅ ЧТО ДЕЛАЮ:
+• Лендинги — одна страница, реклама → заявки (5–7 дней)
+• Многостраничные сайты — под несколько услуг или каталог (2–3 недели)
+• Сайт компании — большой проект на годы
+• Мини-сайт для соцсетей — одна ссылка вместо Taplink
+• Telegram-боты — запись, FAQ, рассылки 24/7 (3–5 дней)
+
+🎯 ПОЧЕМУ КО МНЕ:
+— Уклон на маркетинг: квиз, калькулятор, WhatsApp в 1 клик. Сайт не просто красивый — приводит клиентов.
+— Полная адаптация под телефон. 80% твоих заявок придут с мобильного — там должно быть удобно в первую очередь.
+— Свой код, не конструктор. Сайт выглядит ровно как задумали, без ограничений шаблона. Никакой ежемесячной подписки.
+— Сдаю в срок. Берусь только если успеваю.
+
+🤝 КАК РАБОТАЕМ:
+1. Брифинг — созвон или переписка, разбираю задачу
+2. Дизайн — макет в Figma, согласуем
+3. Сборка + тесты — вёрстка, проверка на всех устройствах
+4. Запуск — хостинг, твой домен, доставка заявок
+
+📋 БЕЗОПАСНО:
+— Работаю по официальному договору (самозанятый, чек)
+— 50% перед стартом, 50% после сдачи
+— 2 недели правок после запуска — бесплатно
+
+📊 ПРО МЕНЯ:
+Тимофей Рямбов, веб-разработчик, Екатеринбург. 15+ проектов под ключ, 3 года в разработке. Пишу на HTML, CSS, JavaScript, React, Next.js.
+
+📲 НАПИШИ В УДОБНЫЙ МЕССЕНДЖЕР — отвечу в течение часа.
+
+Telegram: @TRyambov
+WhatsApp: +7 (902) 254-04-81
+Звонок: +7 (902) 254-04-81</pre>
+    <button onclick="
+      navigator.clipboard.writeText(document.getElementById('descText').innerText);
+      this.innerText='✓ Скопировано';
+      setTimeout(()=>this.innerText='📋 Скопировать описание',1500);
+    ">📋 Скопировать описание</button>
+  </div>
+</div>
+
+<script>
+  const TOTAL = 10;
+  const W = 3628, H = 2721;
+  const progressEl = document.getElementById('progress');
+
+  function setProgress(msg){
+    progressEl.textContent = msg;
+  }
+
+  async function exportCard(idx){
+    const el = document.getElementById('card-' + idx);
+    if (!el) return null;
+    setProgress(`Рендерю карточку ${idx}/${TOTAL}…`);
+    const canvas = await html2canvas(el, {
+      width: W,
+      height: H,
+      windowWidth: W,
+      windowHeight: H,
+      scale: 1,
+      backgroundColor: '#06101E',
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+    });
+    return new Promise(resolve=>{
+      canvas.toBlob(blob=>resolve(blob), 'image/png', 0.95);
+    });
+  }
+
+  function downloadBlob(blob, name){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 100);
+  }
+
+  document.getElementById('downloadAll').addEventListener('click', async ()=>{
+    for (let i=1; i<=TOTAL; i++){
+      const blob = await exportCard(i);
+      if (blob) downloadBlob(blob, `avito-${String(i).padStart(2,'0')}.png`);
+      await new Promise(r=>setTimeout(r, 300));
+    }
+    setProgress('✓ Готово: 10 файлов скачано');
+    setTimeout(()=>setProgress(''), 4000);
+  });
+
+  document.getElementById('downloadSingle').addEventListener('click', async ()=>{
+    const n = prompt('Номер карточки (1–10):', '1');
+    const idx = parseInt(n, 10);
+    if (!idx || idx < 1 || idx > 10) return;
+    const blob = await exportCard(idx);
+    if (blob) downloadBlob(blob, `avito-${String(idx).padStart(2,'0')}.png`);
+    setProgress('✓ Готово');
+    setTimeout(()=>setProgress(''), 2000);
+  });
+
+  // Масштабирование карточек под превью
+  function scaleCards(){
+    document.querySelectorAll('.card-scaler').forEach(scaler=>{
+      const card = scaler.querySelector('.card');
+      if (!card) return;
+      const w = scaler.clientWidth;
+      const scale = w / W;
+      card.style.transform = `scale(${scale})`;
+    });
+  }
+  window.addEventListener('resize', scaleCards);
+  window.addEventListener('load', ()=>{ scaleCards(); setTimeout(scaleCards, 100); });
+  scaleCards();
+</script>
+
+</body>
+</html>

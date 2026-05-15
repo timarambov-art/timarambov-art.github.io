@@ -543,3 +543,225 @@ window.addEventListener('scroll', () => {
   else header.classList.remove('scrolled');
 }, { passive: true });
 
+// ==================== УСЛУГИ: FLIP-OVERLAY ====================
+
+const SERVICE_DATA = {
+  landing: {
+    eyebrow: '01 · Посадочная страница',
+    title: 'Одна страница, чтобы человек <span class="accent">оставил заявку</span>.',
+    lead: 'Короткий сайт под одну услугу или один товар. Человек заходит, за&nbsp;минуту понимает суть и&nbsp;пишет тебе в&nbsp;WhatsApp или Telegram.',
+    cells: [
+      { h: 'Кому подойдёт', body: '<ul><li>Один товар или одна услуга</li><li>Нужно простое место, чтобы рассказать о&nbsp;себе</li><li>Хочешь быстро</li></ul>' },
+      { h: 'Что входит', body: '<ul><li>Одна страница со&nbsp;всем главным</li><li>Дизайн и&nbsp;тексты</li><li>Версия для&nbsp;телефона</li><li>Кнопка в&nbsp;WhatsApp или Telegram</li><li>Свой домен</li></ul>' },
+      { h: 'Срок', body: '3–5 дней.' },
+    ],
+  },
+
+  multipage: {
+    eyebrow: '02 · Сайт из страниц',
+    title: 'Несколько услуг — у&nbsp;каждой <span class="accent">своя страница</span>.',
+    lead: 'Главная знакомит с&nbsp;тобой. Дальше у&nbsp;каждой услуги&nbsp;— своя страница: что это, как проходит, как записаться.',
+    cells: [
+      { h: 'Кому подойдёт', body: '<ul><li>2–5 услуг или направлений</li><li>Каждой нужно своё место</li><li>Хочешь, чтобы клиент сам всё нашёл</li></ul>' },
+      { h: 'Что входит', body: '<ul><li>Главная и&nbsp;3–5 страниц по&nbsp;услугам</li><li>Меню сверху</li><li>Карточки услуг с&nbsp;фото</li><li>Формы связи</li><li>Версия для&nbsp;телефона</li></ul>' },
+      { h: 'Срок', body: '7–10 дней.' },
+    ],
+  },
+
+  corporate: {
+    eyebrow: '03 · Сайт компании',
+    title: 'Большой сайт, <span class="accent">который растёт вместе с&nbsp;тобой</span>.',
+    lead: 'Сайт под компанию: услуги, команда, кейсы, контакты. Со&nbsp;временем можно добавлять страницы без&nbsp;переделок.',
+    cells: [
+      { h: 'Кому подойдёт', body: '<ul><li>У&nbsp;компании есть команда и&nbsp;история</li><li>Нужен сайт надолго</li><li>Хочешь добавлять страницы со&nbsp;временем</li></ul>' },
+      { h: 'Что входит', body: '<ul><li>До&nbsp;10 страниц</li><li>Раздел новостей или блог</li><li>Страницы команды и&nbsp;кейсов</li><li>Формы заявок и&nbsp;вакансий</li><li>Запас на&nbsp;будущее</li></ul>' },
+      { h: 'Срок', body: '2–3 недели.' },
+    ],
+  },
+
+  minisite: {
+    eyebrow: '04 · Мини-сайт',
+    title: 'Одна ссылка — <span class="accent">для всех соцсетей</span>.',
+    lead: 'Короткая страничка с&nbsp;главным: кто ты, что делаешь, как написать. Удобно ставить в&nbsp;шапку Instagram или Telegram. Своя замена Linktree, только на&nbsp;твоём домене.',
+    cells: [
+      { h: 'Кому подойдёт', body: '<ul><li>Нужна одна ссылка в&nbsp;шапку соцсети</li><li>Хочешь свой стиль, а&nbsp;не&nbsp;шаблон</li><li>Сайт нужен быстро</li></ul>' },
+      { h: 'Что входит', body: '<ul><li>Одна страница</li><li>О&nbsp;тебе и&nbsp;услуги</li><li>Кнопки в&nbsp;мессенджеры</li><li>Свой домен (например, твоё имя.ru)</li><li>Версия для&nbsp;телефона на&nbsp;первом месте</li></ul>' },
+      { h: 'Срок', body: '2–3 дня.' },
+    ],
+  },
+
+  bot: {
+    eyebrow: '05 · Бот для Телеграма',
+    title: 'Бот, который <span class="accent">отвечает за&nbsp;тебя</span>.',
+    lead: 'Бот для Telegram: отвечает на&nbsp;частые вопросы, принимает заявки и&nbsp;записывает на&nbsp;услугу. Работает сам, пока ты&nbsp;занят.',
+    cells: [
+      { h: 'Кому подойдёт', body: '<ul><li>Хочешь снять с&nbsp;себя одинаковые сообщения</li><li>Принимаешь записи и&nbsp;заявки</li><li>Нужен помощник, который не&nbsp;спит</li></ul>' },
+      { h: 'Что входит', body: '<ul><li>Меню с&nbsp;кнопками</li><li>Ответы на&nbsp;частые вопросы</li><li>Запись на&nbsp;услугу</li><li>Уведомления тебе в&nbsp;Telegram</li><li>Инструкция, как им&nbsp;управлять</li></ul>' },
+      { h: 'Срок', body: '5–7 дней.' },
+    ],
+  },
+};
+
+// ===== FLIP-ОТКРЫТИЕ МОДАЛКИ УСЛУГИ =====
+const svcModal       = document.getElementById('serviceModal');
+const svcModalInner  = document.getElementById('serviceModalInner');
+const svcModalBody   = document.getElementById('serviceModalBody');
+
+let svcOriginCard = null;
+let svcLastFocused = null;
+
+function renderServiceContent(data) {
+  const cells = data.cells.map((c) =>
+    `<div class="svc-cell">
+      <div class="svc-cell-h">${c.h}</div>
+      <div class="svc-cell-body">${c.body}</div>
+    </div>`
+  ).join('');
+
+  return `
+    <span class="svc-eyebrow">${data.eyebrow}</span>
+    <h2 class="svc-title" id="serviceModalTitle">${data.title}</h2>
+    <p class="svc-lead">${data.lead}</p>
+    <div class="svc-grid">${cells}</div>
+    <button type="button" class="svc-cta" data-svc-cta>
+      Обсудить услугу
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  `;
+}
+
+function openService(card, svcId) {
+  const data = SERVICE_DATA[svcId];
+  if (!data || !svcModal || !svcModalInner || !svcModalBody) return;
+
+  svcOriginCard  = card;
+  svcLastFocused = document.activeElement;
+
+  svcModalBody.innerHTML = renderServiceContent(data);
+
+  // Получаем стартовый прямоугольник плашки
+  const startRect = card.getBoundingClientRect();
+
+  // Открываем модалку, чтобы получить «конечный» размер
+  svcModalInner.style.transition = 'none';
+  svcModalInner.style.transform = '';
+  svcModal.classList.add('is-open');
+  svcModal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+
+  const finalRect = svcModalInner.getBoundingClientRect();
+
+  // Inverse transform — «вернуть» в позицию плашки
+  const dx = startRect.left - finalRect.left;
+  const dy = startRect.top  - finalRect.top;
+  const sx = startRect.width  / finalRect.width;
+  const sy = startRect.height / finalRect.height;
+
+  svcModalInner.style.transformOrigin = '0 0';
+  svcModalInner.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+
+  // Триггерим reflow → запускаем переход к нулевому transform
+  // eslint-disable-next-line no-unused-expressions
+  svcModalInner.offsetWidth;
+
+  svcModalInner.style.transition = 'transform 0.62s cubic-bezier(0.19, 1, 0.22, 1)';
+  svcModalInner.style.transform = 'translate(0px, 0px) scale(1, 1)';
+
+  // Контент проявляется через CSS-класс
+  requestAnimationFrame(() => {
+    svcModal.classList.add('is-revealed');
+  });
+
+  // Фокус на крестик после анимации
+  setTimeout(() => {
+    const closeBtn = svcModal.querySelector('.service-modal-close');
+    if (closeBtn) closeBtn.focus();
+  }, 650);
+}
+
+function closeService() {
+  if (!svcModal || !svcModal.classList.contains('is-open') || !svcModalInner) return;
+
+  svcModal.classList.remove('is-revealed');
+
+  if (svcOriginCard) {
+    const startRect = svcOriginCard.getBoundingClientRect();
+    const finalRect = svcModalInner.getBoundingClientRect();
+    const dx = startRect.left - finalRect.left;
+    const dy = startRect.top  - finalRect.top;
+    const sx = startRect.width  / finalRect.width;
+    const sy = startRect.height / finalRect.height;
+
+    svcModalInner.style.transition = 'transform 0.5s cubic-bezier(0.7, 0, 0.3, 1)';
+    svcModalInner.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+  }
+
+  // Сразу скрываем backdrop / opacity
+  svcModal.style.opacity = '0';
+
+  setTimeout(() => {
+    svcModal.classList.remove('is-open');
+    svcModal.setAttribute('aria-hidden', 'true');
+    svcModal.style.opacity = '';
+    svcModalInner.style.transition = '';
+    svcModalInner.style.transform = '';
+    svcModalBody.innerHTML = '';
+    document.body.classList.remove('modal-open');
+    if (svcLastFocused && typeof svcLastFocused.focus === 'function') {
+      svcLastFocused.focus();
+    }
+    svcOriginCard = null;
+  }, 470);
+}
+
+// Клики по плашкам
+document.querySelectorAll('[data-open-service]').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    openService(btn, btn.dataset.openService);
+  });
+});
+
+// Закрытие модалки услуги
+document.querySelectorAll('[data-svc-close]').forEach((el) => {
+  el.addEventListener('click', closeService);
+});
+
+// CTA внутри модалки → закрываем модалку, потом скроллим к #contact
+if (svcModalBody) {
+  svcModalBody.addEventListener('click', (e) => {
+    const cta = e.target.closest('[data-svc-cta]');
+    if (!cta) return;
+    closeService();
+    setTimeout(() => {
+      const target = document.querySelector('#contact');
+      if (target) {
+        window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+      }
+    }, 500);
+  });
+}
+
+// Esc
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && svcModal && svcModal.classList.contains('is-open')) {
+    closeService();
+  }
+});
+
+// Ховер курсора на интерактив внутри модалки (делегируем — CTA рендерится динамически)
+if (svcModal) {
+  svcModal.addEventListener('mouseover', (e) => {
+    if (e.target.closest('.service-modal-close, .svc-cta')) {
+      cursor && cursor.classList.add('hover');
+    }
+  });
+  svcModal.addEventListener('mouseout', (e) => {
+    if (e.target.closest('.service-modal-close, .svc-cta')) {
+      cursor && cursor.classList.remove('hover');
+    }
+  });
+}
+
