@@ -22,7 +22,7 @@ function animateCursor() {
 }
 animateCursor();
 
-document.querySelectorAll('a, button, .btn, .case-card, .price-card, .channel, .step, .faq-flip')
+document.querySelectorAll('a, button, .btn, .case-card, .price-card, .channel, .step, .faq-item-q')
   .forEach((el) => {
     el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
@@ -152,7 +152,7 @@ function startCounter(el) {
   const target = parseFloat(el.dataset.count);
   if (isNaN(target)) return;
 
-  const duration = 1400;
+  const duration = 900;
   const start = performance.now();
   const isFloat = !Number.isInteger(target);
 
@@ -485,11 +485,94 @@ document.querySelectorAll('.modal-close').forEach((el) => {
   el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
 });
 
-// ==================== FAQ — FLIP ПО ТАПУ (ДЛЯ MOBILE) ====================
-// На десктопе работает CSS hover. На тач-устройствах добавляем класс is-flipped.
-document.querySelectorAll('.faq-flip').forEach((card) => {
-  card.addEventListener('click', () => card.classList.toggle('is-flipped'));
+// ==================== FAQ — АККОРДЕОН ====================
+// Клик по вопросу раскрывает ответ. Одновременно открыт только один пункт.
+document.querySelectorAll('.faq-item').forEach((item) => {
+  const btn = item.querySelector('.faq-item-q');
+  const ans = item.querySelector('.faq-item-a');
+  if (!btn || !ans) return;
+
+  btn.addEventListener('click', () => {
+    const isOpen = item.classList.contains('is-open');
+
+    // Закрываем остальные
+    document.querySelectorAll('.faq-item.is-open').forEach((other) => {
+      if (other === item) return;
+      other.classList.remove('is-open');
+      const oq = other.querySelector('.faq-item-q');
+      const oa = other.querySelector('.faq-item-a');
+      if (oq) oq.setAttribute('aria-expanded', 'false');
+      if (oa) oa.style.maxHeight = null;
+    });
+
+    if (isOpen) {
+      item.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      ans.style.maxHeight = null;
+    } else {
+      item.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      ans.style.maxHeight = ans.scrollHeight + 'px';
+    }
+  });
 });
+
+// Пересчёт высоты открытого пункта при ресайзе (перенос строк меняет высоту)
+window.addEventListener('resize', () => {
+  const open = document.querySelector('.faq-item.is-open .faq-item-a');
+  if (open) open.style.maxHeight = open.scrollHeight + 'px';
+});
+
+// ==================== КЕЙСЫ — 3D-НАКЛОН + СВЕЧЕНИЕ ЗА КУРСОРОМ ====================
+// Только на устройствах с мышью и без запрета анимаций.
+(function () {
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!canHover || reduce) return;
+
+  const MAX_TILT = 5; // градусов
+
+  document.querySelectorAll('.case-card').forEach((card) => {
+    let raf = null;
+
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;   // 0..1
+      const py = (e.clientY - r.top) / r.height;   // 0..1
+      const ry = (px - 0.5) * 2 * MAX_TILT;        // наклон влево/вправо
+      const rx = -(py - 0.5) * 2 * MAX_TILT;       // наклон вверх/вниз
+
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+        card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (raf) cancelAnimationFrame(raf);
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+  });
+
+  // Свечение за курсором на пунктах FAQ и карточках тарифов (без наклона)
+  document.querySelectorAll('.faq-item, .tier').forEach((item) => {
+    let raf = null;
+    item.addEventListener('mousemove', (e) => {
+      const r = item.getBoundingClientRect();
+      const mx = ((e.clientX - r.left) / r.width) * 100;
+      const my = ((e.clientY - r.top) / r.height) * 100;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        item.style.setProperty('--mx', mx.toFixed(1) + '%');
+        item.style.setProperty('--my', my.toFixed(1) + '%');
+      });
+    });
+  });
+})();
 
 // ==================== МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ====================
 const burger     = document.getElementById('burger');
@@ -763,5 +846,13 @@ if (svcModal) {
       cursor && cursor.classList.remove('hover');
     }
   });
+}
+
+// ==================== РЕЖИМ РЕДАКТИРОВАНИЯ ====================
+// editor.js подгружаем только при ?edit — в боевом режиме он не грузится.
+if (new URLSearchParams(location.search).has('edit')) {
+  const s = document.createElement('script');
+  s.src = 'editor.js';
+  document.body.appendChild(s);
 }
 

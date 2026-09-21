@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Коммерческое предложение — Тимофей Рямбов</title>
+  <meta name="description" content="Индивидуальное коммерческое предложение на разработку сайта">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-2: #06101E;
+      --surface: rgba(15, 30, 54, 0.55);
+      --surface-2: rgba(15, 30, 54, 0.35);
+      --border: rgba(255, 255, 255, 0.10);
+      --border-strong: rgba(107, 164, 255, 0.32);
+      --text: #F1F6FF;
+      --text-2: #B8C5DC;
+      --text-3: #7E8DA6;
+      --accent: #6BA4FF;
+      --accent-2: #B48DFF;
+      --accent-warm: #E8946A;
+      --green: #38DC8C;
+      --card-blue: linear-gradient(135deg, #6BA4FF 0%, #8B7CFF 100%);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    .bg-fx { position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at top, #14264C 0%, #0B1A30 55%, #06101E 100%);
+      overflow: hidden;
+    }
+    .blob { position: absolute; border-radius: 50%; filter: blur(140px); }
+    .blob-1 { width: 620px; height: 620px; background: #264880; top: -220px; left: -180px; opacity: 0.5; }
+    .blob-2 { width: 520px; height: 520px; background: #4A3270; top: 35%; right: -160px; opacity: 0.45; }
+    .blob-3 { width: 420px; height: 420px; background: #E8946A; bottom: -180px; left: 28%; opacity: 0.18; }
+    .blob-4 { width: 480px; height: 480px; background: #6BA4FF; bottom: -120px; right: -120px; opacity: 0.30; }
+
+    .deck {
+      position: relative; z-index: 1;
+      height: 100vh; width: 100%;
+      overflow-y: auto; overflow-x: hidden;
+      scroll-snap-type: y mandatory; scroll-behavior: smooth;
+    }
+    .deck::-webkit-scrollbar { width: 0; }
+    .slide {
+      position: relative;
+      min-height: 100vh; width: 100%;
+      scroll-snap-align: start; scroll-snap-stop: always;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 110px 88px 110px;
+    }
+    .slide-inner { width: 100%; max-width: 1280px; margin: 0 auto; }
+
+    /* ===== Шапка ===== */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 56px;
+      background: linear-gradient(180deg, rgba(6, 16, 30, 0.85) 0%, rgba(6, 16, 30, 0) 100%);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+    .topbar > * { pointer-events: auto; }
+    .brand { display: inline-flex; align-items: center; gap: 14px;
+      font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.02em;
+    }
+    .brand-mark {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      color: #061327; font-size: 20px; font-weight: 900;
+      box-shadow: 0 8px 22px rgba(107, 164, 255, 0.35);
+      font-family: 'Inter', sans-serif;
+    }
+    .brand-text { font-size: 12px; line-height: 1.4; color: var(--text-3);
+      font-weight: 500; letter-spacing: 0;
+    }
+    .brand-text b { display: block; color: var(--text); font-size: 12px;
+      font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 2px;
+    }
+    .topbar-phone {
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 8px 22px 8px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700; font-size: 15px;
+      letter-spacing: -0.01em;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .topbar-phone:hover { background: rgba(255,255,255,0.1); border-color: var(--border-strong); }
+    .topbar-phone-ic {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      color: #061327;
+    }
+    .topbar-phone-ic svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.4; }
+
+    /* ===== Навигация ===== */
+    .nav-dots {
+      position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40;
+      display: flex; gap: 8px; padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(10, 22, 40, 0.72);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2);
+      cursor: pointer; transition: background 0.2s, width 0.3s; border: none; padding: 0;
+    }
+    .nav-dot:hover { background: rgba(255,255,255,0.4); }
+    .nav-dot.active { background: var(--accent); width: 22px; border-radius: 999px; }
+    .nav-arrows { position: fixed; right: 24px; bottom: 24px; z-index: 40; display: flex; gap: 8px; }
+    .nav-arr {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(10, 22, 40, 0.72);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .nav-arr:hover { background: rgba(107, 164, 255, 0.18); border-color: var(--border-strong); }
+    .nav-arr:active { transform: scale(0.92); }
+    .nav-arr:disabled { opacity: 0.35; cursor: default; }
+    .nav-arr svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+    .slide-counter {
+      position: fixed; left: 24px; bottom: 32px; z-index: 40;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--text-3);
+    }
+    .slide-counter b { color: var(--text); font-weight: 800; font-size: 16px; }
+
+    /* ===== Типографика ===== */
+    h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(48px, 6.4vw, 96px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.94;
+      text-transform: uppercase;
+      max-width: 920px;
+    }
+    h1 .accent {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(40px, 5vw, 76px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    h2 .accent {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    h2 .small-top {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(14px, 1.2vw, 18px);
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--text-3);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ============ СЛАЙД 1: Титульник ============ */
+    .title-h1 { margin-bottom: 56px; }
+    .utp-row {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      max-width: 920px;
+      margin-bottom: 64px;
+    }
+    .utp {
+      position: relative;
+      padding: 28px 26px 30px;
+      border-radius: 20px;
+      background: var(--card-blue);
+      color: #fff;
+      box-shadow: 0 22px 50px rgba(107, 164, 255, 0.30);
+      overflow: hidden;
+    }
+    .utp::after {
+      content: ''; position: absolute;
+      right: -40px; top: -40px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.10);
+    }
+    .utp-icon {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+      position: relative; z-index: 1;
+    }
+    .utp-icon svg { width: 100%; height: 100%; stroke: #fff; fill: none; stroke-width: 2; }
+    .utp h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 800; letter-spacing: 0.04em;
+      text-transform: uppercase; line-height: 1.3;
+      position: relative; z-index: 1;
+    }
+    .title-meta {
+      display: flex; gap: 56px; align-items: center;
+      margin-top: 10px;
+    }
+    .meta-block {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .meta-circle {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: rgba(107,164,255,0.15);
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .meta-circle svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .meta-text { font-size: 13.5px; color: var(--text-3); line-height: 1.45; max-width: 240px; }
+    .meta-text b { color: var(--text); font-weight: 700; }
+    .meta-sign { font-size: 14.5px; color: var(--text-2); line-height: 1.4; }
+    .meta-sign b { display: block; color: var(--text); font-family: 'Inter', sans-serif;
+      font-size: 17px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 2px;
+    }
+
+    /* ============ СЛАЙД 2: Результат ============ */
+    .center-h { text-align: center; }
+    .pill {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      background: var(--card-blue);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 18px 40px rgba(107,164,255,0.32);
+    }
+    .big-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+      margin-top: 56px;
+    }
+    .big-card {
+      position: relative;
+      border-radius: 22px;
+      background: var(--card-blue);
+      color: #fff;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      box-shadow: 0 28px 60px rgba(107, 164, 255, 0.28);
+    }
+    .big-card-visual {
+      aspect-ratio: 1.2 / 1;
+      position: relative;
+      background: linear-gradient(150deg, #1A2D52 0%, #2C3E70 50%, #3A2D5C 100%);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .big-card-visual::after {
+      content: ''; position: absolute;
+      right: -60px; top: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(107, 164, 255, 0.18);
+    }
+    .big-card-visual::before {
+      content: ''; position: absolute;
+      left: -40px; bottom: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(232, 148, 106, 0.16);
+    }
+    .big-card-icon { position: relative; z-index: 1; color: #fff; width: 110px; height: 110px; }
+    .big-card-icon svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .big-card-body { padding: 28px 30px 32px; text-align: center; }
+    .big-card h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px; font-weight: 800; letter-spacing: 0.04em;
+      text-transform: uppercase; line-height: 1.3;
+      margin-bottom: 14px;
+    }
+    .big-card p { font-size: 14.5px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+
+    /* ============ СЛАЙД 3: Этапы работы (зигзаг 8 точек) ============ */
+    .zigzag-wrap { position: relative; padding: 60px 0 60px; margin-top: 36px; }
+    .zigzag-line {
+      position: absolute;
+      left: 2%; right: 2%;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(107,164,255,0) 0%, var(--accent) 6%, var(--accent) 94%, rgba(107,164,255,0) 100%);
+      opacity: 0.55;
+    }
+    .zigzag {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1fr 1fr;
+      gap: 22px 22px;
+      min-height: 380px;
+    }
+    .zg {
+      position: relative;
+      padding: 22px 22px 22px;
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .zg:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+    .zg.top { grid-row: 1; align-self: end; }
+    .zg.bot { grid-row: 2; align-self: start; }
+    .zg-pic {
+      position: absolute;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(107,164,255,0.18), rgba(180,141,255,0.14));
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      left: 22px;
+    }
+    .zg.top .zg-pic { top: -28px; }
+    .zg.bot .zg-pic { bottom: -28px; }
+    .zg-pic svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .zg-dot {
+      position: absolute;
+      left: 50%;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 18px var(--accent);
+    }
+    .zg.top .zg-dot { bottom: -32px; transform: translate(-50%, 0); }
+    .zg.bot .zg-dot { top: -32px; transform: translate(-50%, 0); }
+    .zg.top::after, .zg.bot::after {
+      content: ''; position: absolute;
+      left: 50%; width: 2px;
+    }
+    .zg.top::after { bottom: -32px; height: 32px; transform: translateX(-50%);
+      background: linear-gradient(180deg, rgba(107,164,255,0.5), rgba(107,164,255,0.1));
+    }
+    .zg.bot::after { top: -32px; height: 32px; transform: translateX(-50%);
+      background: linear-gradient(0deg, rgba(107,164,255,0.5), rgba(107,164,255,0.1));
+    }
+    .zg-num {
+      font-family: 'Inter', sans-serif;
+      font-size: 22px; font-weight: 900; letter-spacing: -0.02em;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .zg-text { font-size: 13.5px; line-height: 1.45; color: var(--text-2); }
+    .zg-text b { color: var(--text); font-weight: 700; }
+
+    /* ============ СЛАЙД 4: Как будет проходить работа ============ */
+    .icon-cards {
+      display: grid; grid-template-columns: 1fr 56px 1fr 56px 1fr;
+      gap: 0; align-items: stretch;
+      padding-top: 60px; margin-top: 32px;
+    }
+    .ic-card {
+      position: relative;
+      padding: 60px 30px 40px;
+      border-radius: 22px;
+      background: var(--card-blue);
+      color: #fff;
+      box-shadow: 0 28px 60px rgba(107, 164, 255, 0.30);
+      overflow: hidden;
+    }
+    .ic-card::after {
+      content: ''; position: absolute;
+      right: -40px; bottom: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+    }
+    .ic-ic {
+      position: absolute;
+      top: -34px; left: 50%; transform: translateX(-50%);
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      box-shadow: 0 12px 30px rgba(107,164,255,0.35);
+    }
+    .ic-ic svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .ic-card h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px; font-weight: 800; letter-spacing: 0.05em;
+      text-transform: uppercase; line-height: 1.4;
+      position: relative; z-index: 1;
+      text-align: center;
+    }
+    .ic-arrow {
+      align-self: center;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(15, 30, 54, 0.85);
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      box-shadow: 0 10px 26px rgba(107,164,255,0.25);
+    }
+    .ic-arrow svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* ============ СЛАЙД 5: Сроки и оплата ============ */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 72px;
+      align-items: start;
+      margin-top: 56px;
+    }
+    .col-h {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      color: var(--accent);
+      text-align: center;
+    }
+    .day-group { margin-bottom: 28px; }
+    .day-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px; font-weight: 900; letter-spacing: 0.01em;
+      color: var(--text); margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .day-list { list-style: none; }
+    .day-list li {
+      display: flex; align-items: center; gap: 14px;
+      padding: 11px 0;
+      font-size: 15px; color: var(--text-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .day-list li:last-child { border-bottom: 0; }
+    .day-list li .ic {
+      width: 26px; height: 26px; flex-shrink: 0;
+      border-radius: 6px;
+      background: rgba(107,164,255,0.12);
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .day-list li .ic svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .pay-col { display: flex; flex-direction: column; gap: 16px; align-items: stretch; }
+    .pay-card {
+      position: relative;
+      padding: 32px 30px;
+      border-radius: 22px;
+      background: var(--card-blue);
+      color: #fff;
+      display: flex; flex-direction: column; align-items: center;
+      box-shadow: 0 24px 56px rgba(107, 164, 255, 0.32);
+      overflow: hidden;
+      aspect-ratio: 1.25 / 1;
+      justify-content: center;
+    }
+    .pay-card::after {
+      content: ''; position: absolute;
+      right: -50px; top: -50px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+    }
+    .pay-card .tag {
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.20);
+      border: 1px solid rgba(255,255,255,0.35);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      position: relative; z-index: 1;
+    }
+    .pay-card .num {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(52px, 5vw, 78px); font-weight: 900;
+      letter-spacing: -0.04em; line-height: 1;
+      text-align: center;
+      position: relative; z-index: 1;
+      margin-bottom: 14px;
+    }
+    .pay-card .lbl {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.4;
+      position: relative; z-index: 1;
+    }
+    .pay-arrow {
+      align-self: center;
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(15, 30, 54, 0.85);
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .pay-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* === Два варианта оплаты на выбор === */
+    .pay-variants { display: flex; flex-direction: column; gap: 16px; }
+    .pay-variant { display: flex; flex-direction: column; gap: 10px; }
+    .pay-variant-h {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.18em;
+      color: var(--text-3); text-transform: uppercase;
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 2px;
+    }
+    .pay-variant-h b { color: var(--accent); font-weight: 900; letter-spacing: 0.08em; }
+    .pay-items { display: flex; flex-direction: column; gap: 10px; }
+    .pay-item {
+      position: relative;
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 22px;
+      border-radius: 14px;
+      background: var(--card-blue);
+      color: #fff;
+      box-shadow: 0 16px 36px rgba(107, 164, 255, 0.28);
+      overflow: hidden;
+    }
+    .pay-item::after {
+      content: ''; position: absolute;
+      right: -30px; top: -30px;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+    }
+    .pay-item .n {
+      font-family: 'Inter', sans-serif;
+      font-size: 34px; font-weight: 900; letter-spacing: -0.03em;
+      line-height: 1;
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+      min-width: 80px;
+    }
+    .pay-item .t {
+      font-family: 'Inter', sans-serif;
+      font-size: 12.5px; font-weight: 800; letter-spacing: 0.10em;
+      text-transform: uppercase;
+      line-height: 1.35;
+      position: relative; z-index: 1;
+    }
+    .pay-or {
+      display: flex; align-items: center; gap: 14px;
+      margin: 4px 0;
+    }
+    .pay-or::before, .pay-or::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+    }
+    .pay-or span {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.24em;
+      color: var(--text-3); text-transform: uppercase;
+    }
+
+    /* === Режим рендера PNG (?print=1&slide=N) === */
+    body.print-mode { overflow: hidden; }
+    body.print-mode .topbar,
+    body.print-mode .nav-dots,
+    body.print-mode .nav-arrows,
+    body.print-mode .slide-counter { display: none !important; }
+    body.print-mode .deck {
+      height: 100vh; overflow: hidden;
+      scroll-snap-type: none;
+    }
+    body.print-mode .slide {
+      min-height: 100vh; height: 100vh;
+      padding-top: 64px; padding-bottom: 64px;
+    }
+    body.print-mode .slide.print-hidden { display: none !important; }
+
+    /* === Адаптив === */
+    @media (max-width: 1100px) {
+      .slide { padding: 96px 40px 110px; }
+      .utp-row, .big-cards { grid-template-columns: 1fr; }
+      .icon-cards { grid-template-columns: 1fr; gap: 30px; padding-top: 50px; }
+      .ic-arrow { transform: rotate(90deg); }
+      .two-col { grid-template-columns: 1fr; gap: 48px; }
+      .title-meta { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .zigzag { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, auto); min-height: auto; }
+      .zigzag-line { display: none; }
+      .zg.top, .zg.bot { align-self: stretch; grid-row: auto; }
+      .zg-dot, .zg.top::after, .zg.bot::after { display: none; }
+      .zg-pic { position: relative; top: 0 !important; bottom: auto !important; left: 0 !important; margin-bottom: 12px; }
+      .topbar { padding: 18px 24px; }
+    }
+    @media (max-width: 640px) {
+      .slide { padding: 90px 22px 100px; }
+      .zigzag { grid-template-columns: 1fr; }
+      h1 { font-size: 42px; }
+      h2 { font-size: 32px; }
+      .topbar-phone span:not(.topbar-phone-ic) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-fx">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">ТР</div>
+      <div class="brand-text">
+        <b>Индивидуальное</b>
+        коммерческое<br>предложение
+      </div>
+    </div>
+    <a href="tel:+79022540481" class="topbar-phone">
+      <span class="topbar-phone-ic">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg>
+      </span>
+      <span>+7 (902) 254-04-81</span>
+    </a>
+  </header>
+
+  <main class="deck" id="deck">
+
+    <!-- ============ Слайд 1: Титульник ============ -->
+    <section class="slide" data-title="Старт">
+      <div class="slide-inner">
+        <h1 class="title-h1">Сделаю продающий <span class="accent">сайт</span> за 3–7 дней</h1>
+
+        <div class="utp-row">
+          <div class="utp">
+            <div class="utp-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="14" width="3" height="4"/></svg>
+            </div>
+            <h3>Ежедневные<br>отчёты</h3>
+          </div>
+          <div class="utp">
+            <div class="utp-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <h3>Оплата<br>за конечный<br>результат</h3>
+          </div>
+          <div class="utp">
+            <div class="utp-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </div>
+            <h3>Строгое соблюдение<br>дедлайнов</h3>
+          </div>
+        </div>
+
+        <div class="title-meta">
+          <div class="meta-block">
+            <div class="meta-circle">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </div>
+            <div class="meta-text">
+              Время, нужное для чтения<br>коммерческого предложения:<br><b>1 минута</b>
+            </div>
+          </div>
+          <div class="meta-sign">
+            <b>Тимофей</b>
+            веб-разработчик
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Слайд 2: Результат ============ -->
+    <section class="slide" data-title="Результат">
+      <div class="slide-inner center-h">
+        <h2>
+          <span class="small-top">Вас ждёт измеримый</span>
+          <span class="accent">Результат</span>
+        </h2>
+        <div class="pill">После разработки сайта</div>
+
+        <div class="big-cards">
+          <div class="big-card">
+            <div class="big-card-visual">
+              <div class="big-card-icon">
+                <svg viewBox="0 0 100 100">
+                  <rect x="28" y="14" width="44" height="72" rx="6"/>
+                  <line x1="38" y1="24" x2="62" y2="24"/>
+                  <rect x="34" y="34" width="32" height="22" rx="3"/>
+                  <line x1="38" y1="64" x2="62" y2="64"/>
+                  <line x1="38" y1="72" x2="56" y2="72"/>
+                  <circle cx="80" cy="34" r="6"/>
+                  <path d="M80 28 v-4 M80 40 v4"/>
+                  <circle cx="22" cy="60" r="6"/>
+                </svg>
+              </div>
+            </div>
+            <div class="big-card-body">
+              <h3>Увеличение числа заявок<br>и аудитории с сайта</h3>
+              <p>Благодаря продающей упаковке и донесению точных смыслов.</p>
+            </div>
+          </div>
+
+          <div class="big-card">
+            <div class="big-card-visual">
+              <div class="big-card-icon">
+                <svg viewBox="0 0 100 100">
+                  <rect x="28" y="14" width="44" height="72" rx="6"/>
+                  <circle cx="50" cy="42" r="14"/>
+                  <path d="M44 42 l4 4 l8 -8"/>
+                  <line x1="36" y1="64" x2="64" y2="64"/>
+                  <line x1="36" y1="72" x2="60" y2="72"/>
+                </svg>
+              </div>
+            </div>
+            <div class="big-card-body">
+              <h3>Полная упаковка<br>сайта под ключ</h3>
+              <p>Беру на себя всё: от разработки и текстов до подключения форм, аналитики и оплат.</p>
+            </div>
+          </div>
+
+          <div class="big-card">
+            <div class="big-card-visual">
+              <div class="big-card-icon">
+                <svg viewBox="0 0 100 100">
+                  <rect x="20" y="14" width="32" height="60" rx="5"/>
+                  <rect x="48" y="22" width="32" height="60" rx="5"/>
+                  <line x1="26" y1="24" x2="46" y2="24"/>
+                  <line x1="26" y1="34" x2="46" y2="34"/>
+                  <line x1="54" y1="32" x2="74" y2="32"/>
+                  <line x1="54" y1="42" x2="74" y2="42"/>
+                  <circle cx="36" cy="58" r="6"/>
+                  <circle cx="64" cy="66" r="6"/>
+                </svg>
+              </div>
+            </div>
+            <div class="big-card-body">
+              <h3>Ваш сайт<br>притягивает взгляд</h3>
+              <p>Уникальный дизайн увеличивает ценность продукта. Вызывает доверие и желание купить.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Слайд 3: Этапы работы (зигзаг 8 точек) ============ -->
+    <section class="slide" data-title="Этапы работы">
+      <div class="slide-inner">
+        <h2><span class="accent">Этапы</span> работы</h2>
+
+        <div class="zigzag-wrap">
+          <div class="zigzag-line"></div>
+          <div class="zigzag">
+
+            <div class="zg top">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">01</div>
+              <div class="zg-text">Провожу с вами часовой <b>бриф</b> в формате разговора.</div>
+            </div>
+
+            <div class="zg bot">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3 v9 l8 3"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">02</div>
+              <div class="zg-text">Провожу <b>SWOT-анализ</b> конкурентов.</div>
+            </div>
+
+            <div class="zg top">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="10" y1="10" x2="10" y2="20"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">03</div>
+              <div class="zg-text">Разрабатываю <b>структуру</b> сайта и утверждаю с вами.</div>
+            </div>
+
+            <div class="zg bot">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">04</div>
+              <div class="zg-text">Создаю полный <b>прототип</b>, при необходимости вношу правки.</div>
+            </div>
+
+            <div class="zg top">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">05</div>
+              <div class="zg-text">Подбираю <b>референсы</b>, цветовую гамму и шрифты.</div>
+            </div>
+
+            <div class="zg bot">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">06</div>
+              <div class="zg-text">Создаю <b>дизайн</b> сайта, вношу правки.</div>
+            </div>
+
+            <div class="zg top">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">07</div>
+              <div class="zg-text">Верстаю на коде, подключаю <b>все кнопки</b> и формы.</div>
+            </div>
+
+            <div class="zg bot">
+              <div class="zg-pic">
+                <svg viewBox="0 0 24 24"><path d="M4 21V4l16 6-8 3-2 8z"/></svg>
+              </div>
+              <div class="zg-dot"></div>
+              <div class="zg-num">08</div>
+              <div class="zg-text">Утверждаем с вами <b>готовый сайт</b>.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Слайд 4: Сроки и оплата ============ -->
+    <section class="slide" data-title="Сроки и оплата">
+      <div class="slide-inner">
+        <h2><span class="accent">Сроки</span> и оплата</h2>
+
+        <div class="two-col">
+          <div>
+            <div class="col-h">Сроки:</div>
+
+            <div class="day-group">
+              <div class="day-title">1–2 день</div>
+              <ul class="day-list">
+                <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></span>Проведение брифа</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 13l3 3 5-7"/></svg></span>Смысловая упаковка</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></span>Написание текстов</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Создание прототипа сайта</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>Сбор медиаматериалов</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="10" cy="20" r="2.5"/></svg></span>Подбор референсов</li>
+              </ul>
+            </div>
+
+            <div class="day-group">
+              <div class="day-title">3–4 день</div>
+              <ul class="day-list">
+                <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M2 12c2-4 6-6 10-6s8 2 10 6c-2 4-6 6-10 6s-8-2-10-6z"/><circle cx="12" cy="12" r="3"/></svg></span>Отрисовка и создание дизайна сайта</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></span>Внесение правок</li>
+              </ul>
+            </div>
+
+            <div class="day-group">
+              <div class="day-title">5–7 день</div>
+              <ul class="day-list">
+                <li><span class="ic"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>Вёрстка сайта на коде</li>
+                <li><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.36.16.66.43.85.78"/></svg></span>Настройка и подключение онлайн-оплаты, рассылки, кнопок</li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="col-h">Оплата:</div>
+            <div class="pay-variants">
+
+              <div class="pay-variant">
+                <div class="pay-variant-h"><b>Вариант 1</b><span>· 50 / 50</span></div>
+                <div class="pay-items">
+                  <div class="pay-item">
+                    <div class="n">50%</div>
+                    <div class="t">При составлении<br>структуры</div>
+                  </div>
+                  <div class="pay-item">
+                    <div class="n">50%</div>
+                    <div class="t">Перед<br>вёрсткой</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pay-or"><span>или</span></div>
+
+              <div class="pay-variant">
+                <div class="pay-variant-h"><b>Вариант 2</b><span>· 30 / 40 / 30</span></div>
+                <div class="pay-items">
+                  <div class="pay-item">
+                    <div class="n">30%</div>
+                    <div class="t">На этапе<br>структуры</div>
+                  </div>
+                  <div class="pay-item">
+                    <div class="n">40%</div>
+                    <div class="t">Перед<br>дизайном</div>
+                  </div>
+                  <div class="pay-item">
+                    <div class="n">30%</div>
+                    <div class="t">Перед<br>вёрсткой</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="slide-counter"><b id="curNum">01</b> <span id="totalNum">/ 05</span></div>
+  <nav class="nav-dots" id="navDots"></nav>
+  <div class="nav-arrows">
+    <button class="nav-arr" id="prevBtn" aria-label="Назад">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button class="nav-arr" id="nextBtn" aria-label="Вперёд">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      const deck = document.getElementById('deck');
+      const slides = Array.from(deck.querySelectorAll('.slide'));
+
+      // Режим рендера PNG: ?print=1&slide=N — показать только указанный слайд
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('print')) {
+        const idx = Math.max(0, Math.min(slides.length - 1, (parseInt(params.get('slide') || '1', 10) - 1)));
+        document.body.classList.add('print-mode');
+        slides.forEach((s, i) => { if (i !== idx) s.classList.add('print-hidden'); });
+        document.title = 'slide-' + (idx + 1);
+        // сигнал для headless Chrome, что готово к снимку
+        window.addEventListener('load', () => {
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => { document.body.dataset.ready = '1'; });
+          } else {
+            document.body.dataset.ready = '1';
+          }
+        });
+        return;
+      }
+
+      const dotsRoot = document.getElementById('navDots');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const curNum = document.getElementById('curNum');
+      const totalNum = document.getElementById('totalNum');
+
+      totalNum.textContent = '/ ' + String(slides.length).padStart(2, '0');
+
+      slides.forEach((slide, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'nav-dot';
+        dot.title = slide.dataset.title || ('Слайд ' + (i + 1));
+        dot.setAttribute('aria-label', dot.title);
+        dot.addEventListener('click', () => goTo(i));
+        dotsRoot.appendChild(dot);
+      });
+
+      let current = 0;
+      function update() {
+        const dots = dotsRoot.querySelectorAll('.nav-dot');
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+        curNum.textContent = String(current + 1).padStart(2, '0');
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === slides.length - 1;
+      }
+      function goTo(i) {
+        if (i < 0 || i >= slides.length) return;
+        current = i;
+        slides[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        update();
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && e.intersectionRatio > 0.55) {
+            current = slides.indexOf(e.target);
+            update();
+          }
+        });
+      }, { root: deck, threshold: [0.55, 0.75] });
+      slides.forEach((s) => io.observe(s));
+
+      prevBtn.addEventListener('click', () => goTo(current - 1));
+      nextBtn.addEventListener('click', () => goTo(current + 1));
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goTo(current - 1); }
+        else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+        else if (e.key === 'End') { e.preventDefault(); goTo(slides.length - 1); }
+      });
+      update();
+    })();
+  </script>
+</body>
+</html>
