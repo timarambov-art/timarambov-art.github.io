@@ -1,4 +1,24 @@
-﻿// ==================== CUSTOM CURSOR ====================
+﻿// ==================== SMOOTH SCROLL (Lenis) ====================
+// Инерционный скролл всей страницы. Отключён при prefers-reduced-motion
+// и если библиотека не загрузилась. На мобиле оставляем нативный тач-скролл.
+let lenis = null;
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof Lenis !== 'undefined') {
+  lenis = new Lenis({
+    duration: 1.15,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 1.6,
+  });
+
+  function lenisRaf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(lenisRaf);
+  }
+  requestAnimationFrame(lenisRaf);
+}
+
+// ==================== CUSTOM CURSOR ====================
 const cursor = document.querySelector('.cursor');
 
 let mouseX = window.innerWidth / 2;
@@ -58,10 +78,14 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
-      window.scrollTo({
-        top: target.offsetTop - 80,
-        behavior: 'smooth',
-      });
+      if (lenis) {
+        lenis.scrollTo(target, { offset: -80 });
+      } else {
+        window.scrollTo({
+          top: target.offsetTop - 80,
+          behavior: 'smooth',
+        });
+      }
     }
   });
 });
@@ -821,7 +845,11 @@ if (svcModalBody) {
     setTimeout(() => {
       const target = document.querySelector('#contact');
       if (target) {
-        window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        if (lenis) {
+          lenis.scrollTo(target, { offset: -80 });
+        } else {
+          window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        }
       }
     }, 500);
   });
