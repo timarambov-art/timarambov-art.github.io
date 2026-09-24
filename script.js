@@ -442,11 +442,11 @@ const CASE_DATA = {
     ],
   },
 
-  raritet: {
-    title: '«Магазинъ раритета»',
+  svarka: {
+    title: 'SvarkaUral196',
     slides: [
       {
-        html: `<iframe src="assets/raritet/index.html" title="Магазин раритета — живое демо" loading="lazy"></iframe>`,
+        html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196 — живое демо" loading="lazy"></iframe>`,
       },
     ],
   },
