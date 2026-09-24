@@ -2265,12 +2265,12 @@ body.menu-open { overflow: hidden; }
 
   .section { padding: 90px 32px; }
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .case-card,
-  .case-card--reversed {
+  .cases-list .case-card,
+  .cases-list .case-card--reversed {
     grid-template-columns: 1fr;
   }
-  .case-card--reversed .case-preview { order: 0; }
-  .case-preview { min-height: 340px; }
+  .cases-list .case-card--reversed .case-preview { order: 0; }
+  .cases-list .case-preview { min-height: 340px; }
   .case-body { padding: 36px; }
 
   .steps { grid-template-columns: repeat(2, 1fr); }
@@ -2391,19 +2391,31 @@ body.menu-open { overflow: hidden; }
   .stack-tags span { font-size: 11px; padding: 6px 12px; }
 
   /* ===== КЕЙСЫ ===== */
-  .case-preview { min-height: 260px; }
-  .case-body { padding: 24px 22px 28px; }
-  .case-title { font-size: 24px; }
-  .case-desc { font-size: 14px; }
-  .case-meta { gap: 10px; flex-wrap: wrap; }
+  .cases-list { gap: 20px; }
+  .cases-list .case-card,
+  .cases-list .case-card--reversed {
+    grid-template-columns: 1fr;
+    border-radius: 20px;
+  }
+  .cases-list .case-card--reversed .case-preview { order: 0; }
+  .cases-list .case-preview {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+  .case-body { padding: 22px 20px 26px; }
+  .case-title { font-size: 22px; margin-bottom: 10px; }
+  .case-desc { font-size: 14px; margin-bottom: 20px; line-height: 1.55; }
+  .case-meta { gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
   .case-tag { font-size: 10px; padding: 5px 10px; }
   .case-type { font-size: 11px; }
   .case-facts {
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 12px;
+    padding: 14px 0;
+    margin-bottom: 20px;
   }
-  .fact { flex: 1 1 calc(50% - 7px); min-width: 0; }
-  .fact-value { font-size: 14px; }
+  .fact { flex: 1 1 calc(50% - 6px); min-width: 0; }
+  .fact-value { font-size: 15px; }
   .fact-label { font-size: 10.5px; }
 
   /* Уменьшаем мокапы внутри превью */
@@ -2445,6 +2457,7 @@ body.menu-open { overflow: hidden; }
 
   /* ===== УСЛУГИ ===== */
   .services-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .services-grid .service-mini:last-child { grid-column: 1 / -1; }
   .service-mini { padding: 20px 18px 18px; border-radius: 16px; gap: 12px; }
   .service-mini-ic { width: 38px; height: 38px; }
   .service-mini-ic svg { width: 19px; height: 19px; }
