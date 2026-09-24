@@ -492,6 +492,15 @@ document.querySelectorAll('[data-open-case]').forEach((btn) => {
   });
 });
 
+// Вся карточка кейса кликабельна
+document.querySelectorAll('.case-card[data-case]').forEach((card) => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('[data-open-case]')) return;
+    openCase(card.dataset.case);
+  });
+});
+
 // Закрытие
 document.querySelectorAll('[data-modal-close]').forEach((el) => {
   el.addEventListener('click', closeCase);
