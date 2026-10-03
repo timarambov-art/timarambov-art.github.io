@@ -28,7 +28,7 @@ function initCinematic() {
     smoother = ScrollSmoother.create({
       wrapper: '#smooth-wrapper',
       content: '#smooth-content',
-      smooth: 1.5,              // секунды catchup (ощущение «теку»)
+      smooth: 2,              // секунды catchup (ощущение «теку»)
       effects: true,            // data-speed, data-lag работают из коробки
       smoothTouch: 0,           // на touch — нативный скролл
       normalizeScroll: true,    // гасит разницу между браузерами и тачпадами
