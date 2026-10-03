@@ -17,13 +17,13 @@ function initCinematic() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   cinematicInited = true;
 
-  // Lenis — мягкий, короткий duration, быстрая реакция на wheel
+  // Lenis — lerp-режим: каждый кадр плавно догоняет цель (не фиксированная
+  // длительность). Ощущение «теку по сайту», нет резкого старта/прыжков.
   if (typeof Lenis !== 'undefined') {
     lenis = new Lenis({
-      duration: 0.7,
-      easing: (t) => 1 - Math.pow(1 - t, 3),  // ease-out cubic — быстрый старт, мягкий финиш
+      lerp: 0.08,              // 8% catch-up в кадр = плавно, но без вязкости
       smoothWheel: true,
-      wheelMultiplier: 1.0,
+      wheelMultiplier: 0.9,    // одно колесо тянет чуть мягче, не рывком
       touchMultiplier: 1.5,
       syncTouch: false,
     });
