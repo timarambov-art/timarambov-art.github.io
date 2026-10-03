@@ -35,6 +35,16 @@ function initCinematic() {
     });
   }
 
+  // Пересчёт размеров после загрузки шрифтов — убирает race, когда hero
+  // headline рендерится fallback-шрифтом, потом свапается на Bodoni Moda
+  // и ScrollSmoother с кэшем ломает позиции.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh();
+      if (smoother) smoother.refresh();
+    });
+  }
+
     // Hero ghost '26 — scrubbed parallax + scale при проходе hero
     gsap.to('.hero-ghost', {
       scale: 1.25,
