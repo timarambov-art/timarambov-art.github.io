@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
   <title>Тимофей Рямбов, веб-разработчик в Екатеринбурге, сайты под ключ</title>
   <meta name="description" content="Делаю сайты, лендинги, Taplink и Telegram-ботов под ключ в Екатеринбурге. Чистый код, без конструкторов и Тильды. От первой встречи до запуска на вашем домене. Первый экран бесплатно.">
   <link rel="canonical" href="https://trwebstudio.ru/">
@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
   <meta name="theme-color" content="#0A1628">
 
-  <!-- Open Graph (превью в мессенджерах и соцсетях) -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://trwebstudio.ru/">
   <meta property="og:title" content="Тимофей Рямбов, веб-разработчик в Екатеринбурге">
@@ -28,7 +28,7 @@
   <meta name="twitter:description" content="Сайты, лендинги и Telegram-боты под ключ. Чистый код, без конструкторов. Первый экран бесплатно.">
   <meta name="twitter:image" content="https://trwebstudio.ru/assets/about.jpg">
 
-  <!-- Schema.org: Person + услуги -->
+  <!-- Schema.org: Person -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -51,10 +51,29 @@
     ]
   }
   </script>
+
+  <!-- Fonts: Bodoni Moda (display) + Public Sans (body) + IBM Plex Mono (numerals) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Cinematic stack: GSAP 3.13 + ScrollTrigger + ScrollSmoother (free с 2024) + Split-type -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js" defer></script>
+  <script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js" defer></script>
+
+  <!-- Three.js (ES module via importmap) — ink/amber warp shader в hero-ambient.
+       Если не загрузится — hero-ambient CSS gradient остаётся как fallback. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js"
+    }
+  }
+  </script>
 
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
@@ -71,27 +90,40 @@
 </head>
 <body>
 
-  <div class="gradient-bg">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="blob blob-4"></div>
-    <div class="grain"></div>
-  </div>
+  <!-- SVG filter definitions: film grain, warp. Используются как backdrop-filter / background. -->
+  <svg class="svg-defs" aria-hidden="true" width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
+        <feColorMatrix values="0 0 0 0 0.93  0 0 0 0 0.90  0 0 0 0 0.80  0 0 0 0.5 0"/>
+      </filter>
+    </defs>
+  </svg>
 
-  <header class="header">
+  <!-- Film grain overlay — fixed, pointer-events-none, подмешивается ко всему контенту -->
+  <div class="grain-layer" aria-hidden="true"></div>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="header" id="header">
     <a href="#" class="logo">
-      <span class="logo-dot"></span>
-      <span class="logo-text">Тимофей Рямбов</span>
+      <em>Тимофей Рямбов</em>
     </a>
+
     <nav class="nav">
-      <a href="#services">Услуги</a>
+      <a href="#offer">Оффер</a>
       <a href="#cases">Работы</a>
-      <a href="#process">Как работаю</a>
+      <a href="#services">Услуги</a>
       <a href="#pricing">Цены</a>
       <a href="#about">Обо мне</a>
     </nav>
-    <a href="#contact" class="btn btn-primary btn-sm header-cta">Написать</a>
+
+    <div class="right">
+      <a href="#offer" class="btn-link">Написать</a>
+    </div>
+
     <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -99,716 +131,619 @@
 
   <!-- Мобильное меню -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <nav class="mobile-menu-nav">
-      <a href="#services">Услуги</a>
+    <nav>
+      <a href="#offer">Оффер</a>
       <a href="#cases">Работы</a>
+      <a href="#services">Услуги</a>
       <a href="#process">Как работаю</a>
       <a href="#pricing">Цены</a>
       <a href="#faq">Вопросы</a>
       <a href="#about">Обо мне</a>
       <a href="#contact">Связаться</a>
     </nav>
-    <div class="mobile-menu-channels">
+    <div class="channels">
       <a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a>
       <a href="https://t.me/TRyambov" target="_blank" rel="noopener">Telegram</a>
       <a href="https://wa.me/79022540481" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </div>
 
+  <!-- ==================== SMOOTH SCROLL WRAPPER ====================
+       ScrollSmoother wraps всё scrollable (hero + sections + footer).
+       header, mobile-menu, case-modal, grain-layer, scroll-progress — fixed,
+       живут ВНЕ wrapper. -->
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+
   <!-- ==================== HERO ==================== -->
-  <section class="hero">
-    <div class="hero-photo" data-reveal="scale-in">
-      <div class="photo-backdrop">
-        <div class="backdrop-grid"></div>
-      </div>
-      <div class="photo-stage"></div>
-      <div class="photo-glow"></div>
-      <img src="assets/3N7A2360-Photoroom.png" alt="Тимофей Рямбов" class="hero-img">
-      <div class="photo-floor"></div>
-    </div>
-
-    <div class="hero-content">
-      <div class="hero-tag" data-reveal="fade-right" data-delay="100">
-        <span class="tag-pulse"></span>
-        ВЕБ-РАЗРАБОТЧИК · ЕКАТЕРИНБУРГ
+  <!-- Cinematic staging: .hero-stage высокий, .hero внутри pinned sticky, scroll-scrubbing фон/ghost/words. -->
+  <div class="hero-stage">
+    <section class="hero">
+      <div class="hero-ghost" aria-hidden="true">’26</div>
+      <div class="hero-ambient" aria-hidden="true"></div>
+      <div class="container">
+      <div class="eyebrow-row" data-reveal>
+        <span class="dot"></span>
+        <span class="eyebrow">Веб-разработчик · Екатеринбург · 2026</span>
       </div>
 
-      <h1 class="hero-title split-words" data-reveal="words" data-delay="200">
-        Перестань терять<br>
-        <span class="accent">клиентов</span> в&nbsp;директе.
+      <h1 class="hero-title" data-hero-reveal data-split>
+        <span class="line">Сайт, который сам</span>
+        <span class="line">закрывает <span class="accent">сделки</span>.</span>
       </h1>
 
-      <p class="hero-subtitle" data-reveal="fade-up" data-delay="350">
-        Сделаю сайт, который сам отвечает на&nbsp;вопросы о&nbsp;ценах, услугах
-        и&nbsp;записи. Лендинги для салонов, студий и&nbsp;мастеров Екатеринбурга.
-        От&nbsp;3&nbsp;дней, от&nbsp;6&nbsp;000&nbsp;₽.
-      </p>
-
-      <div class="hero-actions" data-reveal="fade-up" data-delay="500">
-        <a href="#pricing" class="btn btn-primary btn-lg">
-          Первый экран, бесплатно
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-        <a href="#cases" class="btn btn-ghost btn-lg">Посмотреть работы</a>
-      </div>
-
-      <div class="hero-stats" data-reveal="fade-up" data-delay="600">
-        <div class="stat">
-          <div class="stat-value"><span data-count="15">0</span>+</div>
-          <div class="stat-label">завершённых проектов</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <div class="stat-value">3&nbsp;года</div>
-          <div class="stat-label">опыта в&nbsp;разработке</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <div class="stat-value"><span data-count="6">0</span>&nbsp;дней</div>
-          <div class="stat-label">в&nbsp;среднем на&nbsp;сайт</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== ЧЕМ МОГУ ПОМОЧЬ ==================== -->
-  <section id="services" class="section services">
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>УСЛУГИ</div>
-        <h2 class="section-title split-words" data-reveal="words">
-          Что <span class="accent">делаю</span>.
-        </h2>
-        <p class="section-lead" data-reveal="fade-up" data-delay="200">
-          Выбери формат под&nbsp;свой случай. Если не&nbsp;уверен, напиши: подскажу.
+      <div class="sub">
+        <p data-reveal>
+          Делаю лендинги и сайты для салонов, студий и мастеров Екатеринбурга.
+          Чистый код, без Тильды и подписок. От&nbsp;3&nbsp;дней, от&nbsp;6&nbsp;000&nbsp;₽.
         </p>
+        <a href="#offer" class="cta" data-reveal data-magnetic>
+          <span>Начать с бесплатного экрана</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
 
-      <div class="services-grid services-grid--mini">
+      <div class="hero-stats" data-reveal>
+        <div class="stat">
+          <div class="n"><span data-count="15">0</span>+</div>
+          <div class="l">завершённых проектов за&nbsp;три года</div>
+        </div>
+        <div class="stat">
+          <div class="n"><span data-count="6">0</span></div>
+          <div class="l">дней в среднем на один лендинг</div>
+        </div>
+        <div class="stat">
+          <div class="n">1&nbsp;ч</div>
+          <div class="l">отвечу на заявку в мессенджер</div>
+        </div>
+      </div>
 
-        <button type="button" class="service-mini" data-open-service="landing" data-reveal="fade-up" data-delay="0">
-          <span class="svc-front">
-            <span class="service-mini-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <line x1="3" y1="9" x2="21" y2="9"/>
-                <path d="M8 14h8"/><path d="M8 17h5"/>
-              </svg>
-            </span>
-            <span class="service-mini-tag">01 · Лендинг</span>
-            <span class="service-mini-h">Для одной услуги или акции</span>
-            <span class="service-mini-term">Срок 3-5&nbsp;дней</span>
-          </span>
-          <span class="svc-back" aria-hidden="true">
-            <span class="svc-back-desc">Одна страница под&nbsp;одну услугу. Клиент заходит с&nbsp;рекламы или сторис и&nbsp;сразу пишет тебе.</span>
-            <span class="svc-back-term">Срок 3-5 дней</span>
-            <span class="svc-back-more">Подробнее <span class="svc-back-arrow">→</span></span>
-          </span>
-        </button>
+      <!-- Marquee ticker -->
+      <div class="marquee" aria-hidden="true" data-reveal>
+        <div class="marquee-track">
+          <div class="marquee-item">Лендинги</div>
+          <div class="marquee-item">Многостраничники</div>
+          <div class="marquee-item">Telegram-боты</div>
+          <div class="marquee-item">Taplink</div>
+          <div class="marquee-item">Сайты компаний</div>
+          <div class="marquee-item">Квизы</div>
+          <div class="marquee-item">Онлайн-запись</div>
+          <div class="marquee-item">Видео-hero</div>
+          <div class="marquee-item">Анимации</div>
+          <div class="marquee-item">React / Next.js</div>
+          <!-- дубликат для бесшовной петли -->
+          <div class="marquee-item">Лендинги</div>
+          <div class="marquee-item">Многостраничники</div>
+          <div class="marquee-item">Telegram-боты</div>
+          <div class="marquee-item">Taplink</div>
+          <div class="marquee-item">Сайты компаний</div>
+          <div class="marquee-item">Квизы</div>
+          <div class="marquee-item">Онлайн-запись</div>
+          <div class="marquee-item">Видео-hero</div>
+          <div class="marquee-item">Анимации</div>
+          <div class="marquee-item">React / Next.js</div>
+        </div>
+      </div>
+      </div>
+    </section>
+  </div>
 
-        <button type="button" class="service-mini" data-open-service="multipage" data-reveal="fade-up" data-delay="80">
-          <span class="svc-front">
-            <span class="service-mini-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                <line x1="9" y1="3" x2="9" y2="21"/>
-                <path d="M13 8h5"/><path d="M13 12h5"/><path d="M13 16h3"/>
-              </svg>
-            </span>
-            <span class="service-mini-tag">02 · Многостраничник</span>
-            <span class="service-mini-h">Когда услуг больше одной</span>
-            <span class="service-mini-term">Срок 7-10&nbsp;дней</span>
-          </span>
-          <span class="svc-back" aria-hidden="true">
-            <span class="svc-back-desc">Главная и&nbsp;3-5 страниц. У&nbsp;каждой услуги своя страница с&nbsp;ценами и&nbsp;фото.</span>
-            <span class="svc-back-term">Срок 7-10 дней</span>
-            <span class="svc-back-more">Подробнее <span class="svc-back-arrow">→</span></span>
-          </span>
-        </button>
+  <!-- ==================== LEAD MAGNET ==================== -->
+  <section id="offer" class="section leadmag">
+    <div class="container">
+      <div class="section-head">
+        <div class="num">01</div>
+        <div>
+          <h2 data-reveal>
+            Сделаю первый экран сайта <span class="accent">бесплатно</span>, за&nbsp;3&nbsp;дня.
+          </h2>
+        </div>
+      </div>
 
-        <button type="button" class="service-mini" data-open-service="corporate" data-reveal="fade-up" data-delay="160">
-          <span class="svc-front">
-            <span class="service-mini-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/>
-                <path d="M9 21v-6h6v6"/>
-              </svg>
-            </span>
-            <span class="service-mini-tag">03 · Сайт компании</span>
-            <span class="service-mini-h">Услуги, команда, кейсы, новости</span>
-            <span class="service-mini-term">Срок 2-3&nbsp;недели</span>
-          </span>
-          <span class="svc-back" aria-hidden="true">
-            <span class="svc-back-desc">Большой сайт на&nbsp;годы: услуги, команда, кейсы, блог. С&nbsp;понятной структурой и&nbsp;SEO.</span>
-            <span class="svc-back-term">Срок 2-3 недели</span>
-            <span class="svc-back-more">Подробнее <span class="svc-back-arrow">→</span></span>
-          </span>
-        </button>
+      <div class="leadmag-grid">
+        <div class="leadmag-left">
+          <p class="lead" data-reveal>
+            Увидишь подход, стиль и качество до того, как заплатишь рубль.
+            Зайдёт, продолжим и соберём сайт целиком. Не зайдёт, просто оставишь
+            макет себе. Никто никому ничего не должен.
+          </p>
+        </div>
 
-        <button type="button" class="service-mini" data-open-service="minisite" data-reveal="fade-up" data-delay="240">
-          <span class="svc-front">
-            <span class="service-mini-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="2" width="12" height="20" rx="2.5"/>
-                <line x1="12" y1="18" x2="12.01" y2="18"/>
-                <line x1="9" y1="6" x2="15" y2="6"/>
-                <line x1="9" y1="10" x2="15" y2="10"/>
-              </svg>
-            </span>
-            <span class="service-mini-tag">04 · Taplink</span>
-            <span class="service-mini-h">Твоя ссылка вместо Linktree</span>
-            <span class="service-mini-term">Срок 2-3&nbsp;дня</span>
-          </span>
-          <span class="svc-back" aria-hidden="true">
-            <span class="svc-back-desc">Короткая страница для&nbsp;шапки инстаграма. На&nbsp;твоём домене и&nbsp;в&nbsp;твоём стиле, не&nbsp;Linktree.</span>
-            <span class="svc-back-term">Срок 2-3 дня</span>
-            <span class="svc-back-more">Подробнее <span class="svc-back-arrow">→</span></span>
-          </span>
-        </button>
+        <div class="leadmag-right">
+          <ul class="lm-points">
+            <li data-reveal>
+              <div class="n">01</div>
+              <span class="lm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="12" rx="1.5"/>
+                  <path d="M8 20h8M10 16v4M14 16v4"/>
+                  <path d="M7 8h6M7 11h4"/>
+                </svg>
+              </span>
+              <div>
+                <h4>Готовый главный экран сайта</h4>
+                <p>Заголовок, кнопка, картинка, живьём в&nbsp;браузере по своей ссылке. Не статичный скрин из Фигмы, а настоящий сайт, который можно открыть и показать партнёру.</p>
+              </div>
+            </li>
+            <li data-reveal>
+              <div class="n">02</div>
+              <span class="lm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="2" width="10" height="20" rx="2"/>
+                  <circle cx="12" cy="18.5" r="0.8" fill="currentColor"/>
+                  <path d="M10 6h4M9 10h6M10 14h4"/>
+                </svg>
+              </span>
+              <div>
+                <h4>Версия для телефона</h4>
+                <p>Открой с iPhone и посмотри глазами клиента, который перешёл по ссылке из&nbsp;сторис. Там, где решается запись.</p>
+              </div>
+            </li>
+            <li data-reveal>
+              <div class="n">03</div>
+              <span class="lm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3l9 4v4c0 5-3.5 9-9 10-5.5-1-9-5-9-10V7l9-4z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              </span>
+              <div>
+                <h4>Точная цена за весь сайт</h4>
+                <p>Зайдёт, назову сумму и срок, запускаем. Не зайдёт, забираешь макет и ссылку себе. Без обязательств.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-        <button type="button" class="service-mini" data-open-service="bot" data-reveal="fade-up" data-delay="320">
-          <span class="svc-front">
-            <span class="service-mini-ic" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/>
-                <circle cx="9" cy="11" r="1" fill="currentColor"/>
-                <circle cx="13" cy="11" r="1" fill="currentColor"/>
-                <circle cx="17" cy="11" r="1" fill="currentColor"/>
-              </svg>
-            </span>
-            <span class="service-mini-tag">05 · Telegram-бот</span>
-            <span class="service-mini-h">Записывает клиентов, пока ты&nbsp;работаешь</span>
-            <span class="service-mini-term">Срок 5-7&nbsp;дней</span>
-          </span>
-          <span class="svc-back" aria-hidden="true">
-            <span class="svc-back-desc">Отвечает на&nbsp;типовые вопросы и&nbsp;принимает записи прямо в&nbsp;Telegram. Пока ты&nbsp;с&nbsp;клиентом, бот ведёт следующих.</span>
-            <span class="svc-back-term">Срок 5-7 дней</span>
-            <span class="svc-back-more">Подробнее <span class="svc-back-arrow">→</span></span>
-          </span>
-        </button>
+      <div class="paper-card" data-reveal data-tilt data-tilt-max="4">
+        <div class="pc-head">
+          <div class="eyebrow">0&nbsp;₽ · без предоплаты · 3&nbsp;дня</div>
+          <h3>Напиши пару строк о&nbsp;проекте, отвечу в&nbsp;течение часа.</h3>
+        </div>
 
+        <div class="pc-actions">
+          <a href="https://wa.me/79022540481?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B1%D0%B5%D1%81%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D1%8B%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%20%D0%B4%D0%BB%D1%8F%20%D1%81%D0%B2%D0%BE%D0%B5%D0%B3%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0." target="_blank" rel="noopener" class="pc-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://t.me/TRyambov" target="_blank" rel="noopener" class="pc-btn pc-btn--ghost">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Telegram
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== КЕЙСЫ ==================== -->
+  <!-- ==================== CASES ==================== -->
   <section id="cases" class="section cases">
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>РАБОТЫ</div>
-        <h2 class="section-title split-words" data-reveal="words">
-          Проекты, которые<br>
-          <span class="accent">уже работают</span>.
-        </h2>
+    <div class="container">
+      <div class="section-head">
+        <div class="num">02</div>
+        <div>
+          <h2 data-reveal>Проекты, которые <span class="accent">уже работают</span>.</h2>
+        </div>
       </div>
+    </div>
 
-      <div class="cases-list">
+    <div class="cases-wrap">
+      <div class="cases-track">
 
-        <article class="case-card" data-reveal="rise" data-case="alexandra">
-          <div class="case-preview">
-            <img src="assets/case-alexandra.png" alt="Лендинг Александры" data-parallax="0.12">
-            <div class="case-preview-grid"></div>
+      <article class="case" data-case="alexandra">
+        <div class="case-grid">
+          <div class="case-shot" data-reveal data-tilt data-tilt-max="6">
+            <img src="assets/case-alexandra.png" alt="Лендинг Александры, LED-наращивание" loading="lazy">
           </div>
-          <div class="case-body">
+          <div class="case-body" data-reveal>
             <div class="case-meta">
-              <span class="case-tag">Одностраничный сайт</span>
-              <span class="case-type">LED-наращивание · Екатеринбург</span>
+              <span class="num">A01</span>
+              <span class="tag">Лендинг · 2025 · Екатеринбург</span>
             </div>
-            <h3 class="case-title">Александра</h3>
+            <h2>Александра</h2>
             <p class="case-desc">
-              Один мастер, одна услуга. Задача была собрать лендинг, который
-              с&nbsp;первого экрана отвечает на&nbsp;три вопроса: что это&nbsp;за&nbsp;технология,
-              сколько стоит и&nbsp;как записаться. Тёмная тема с&nbsp;жёлтым акцентом,
-              выглядит премиально, но&nbsp;не&nbsp;перегружает глаз.
+              Один мастер, одна услуга. Собрал лендинг, который с&nbsp;первого экрана отвечает на&nbsp;три
+              вопроса: что за технология, сколько стоит, как записаться. Тёмная тема с&nbsp;жёлтым акцентом,
+              выглядит премиально и не перегружает глаз.
             </p>
             <div class="case-facts">
-              <div class="fact"><div class="fact-value">12&nbsp;секций</div><div class="fact-label">в одну страницу</div></div>
-              <div class="fact"><div class="fact-value">Квиз</div><div class="fact-label">подбор услуги</div></div>
-              <div class="fact"><div class="fact-value">WhatsApp</div><div class="fact-label">запись в&nbsp;один клик</div></div>
+              <div class="f"><div class="v">12</div><div class="l">секций на одной странице</div></div>
+              <div class="f"><div class="v">Квиз</div><div class="l">подбор услуги</div></div>
+              <div class="f"><div class="v">WhatsApp</div><div class="l">запись в один клик</div></div>
             </div>
             <button type="button" class="case-link" data-open-case="alexandra">
               Посмотреть сайт
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="case-card case-card--reversed" data-reveal="rise" data-case="pilipilit">
-          <div class="case-preview case-preview--pilipilit">
-            <div class="mockup mockup--pilipilit">
-              <div class="mockup-bar">
-                <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
-                <span class="mockup-url">pilipilit.ru</span>
-              </div>
-              <img class="mockup-screenshot" src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран">
-            </div>
-          </div>
-          <div class="case-body">
+      <article class="case case--reverse" data-case="pilipilit">
+        <div class="case-grid">
+          <div class="case-body" data-reveal>
             <div class="case-meta">
-              <span class="case-tag">Сайт заведения</span>
-              <span class="case-type">Ногтевая студия&nbsp;· Екатеринбург</span>
+              <span class="num">A02</span>
+              <span class="tag">Сайт студии · 2025 · Екатеринбург</span>
             </div>
-            <h3 class="case-title">Салон «ПилиПилить»</h3>
+            <h2>ПилиПилить</h2>
             <p class="case-desc">
-              Многостраничный сайт для&nbsp;ногтевой студии в&nbsp;центре Екатеринбурга.
-              Видео-герой из&nbsp;трёх колонок с&nbsp;живыми процессами, портфолио работ,
-              карточки мастеров, отзывы и&nbsp;онлайн-запись. Задача: передать атмосферу
-              студии ещё до&nbsp;визита и&nbsp;провести гостя от&nbsp;интереса до&nbsp;записи
-              без&nbsp;звонков.
-            </p>
-            <p class="case-desc" style="margin-top: 12px;">
-              Уточнённая палитра: изумруд, золото, нюд. Заголовки на&nbsp;Cormorant Garamond,
-              женская эстетика без&nbsp;визуального шума. Полностью адаптивный, mobile-first.
+              Многостраничный сайт для ногтевой студии в&nbsp;центре Екатеринбурга. Видео-герой из&nbsp;трёх
+              колонок с живыми процессами, портфолио работ, карточки мастеров и&nbsp;онлайн-запись.
+              Задача: передать атмосферу студии до визита и провести гостя от&nbsp;интереса к&nbsp;записи
+              без звонков.
             </p>
             <div class="case-facts">
-              <div class="fact"><div class="fact-value">Видео-hero</div><div class="fact-label">3 колонки живого видео</div></div>
-              <div class="fact"><div class="fact-value">4 мастера</div><div class="fact-label">карточки с портфолио</div></div>
-              <div class="fact"><div class="fact-value">Онлайн-запись</div><div class="fact-label">форма без звонков</div></div>
+              <div class="f"><div class="v">Видео</div><div class="l">3 колонки живого видео в hero</div></div>
+              <div class="f"><div class="v">4</div><div class="l">мастера с портфолио</div></div>
+              <div class="f"><div class="v">Онлайн</div><div class="l">запись без звонков</div></div>
             </div>
             <button type="button" class="case-link" data-open-case="pilipilit">
               Посмотреть сайт
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
           </div>
-        </article>
-
-        <article class="case-card" data-reveal="rise" data-case="svarka">
-          <div class="case-preview case-preview--svarka">
-            <div class="mockup mockup--svarka">
-              <div class="mockup-bar">
-                <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
-                <span class="mockup-url">svarkaural196.ru</span>
-              </div>
-              <img class="mockup-screenshot" src="assets/svarka-hero.webp" alt="SvarkaUral196, главный экран">
-            </div>
+          <div class="case-shot" data-reveal data-tilt data-tilt-max="6">
+            <img src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран сайта" loading="lazy">
           </div>
-          <div class="case-body">
+        </div>
+      </article>
+
+      <article class="case" data-case="svarka">
+        <div class="case-grid">
+          <div class="case-shot" data-reveal data-tilt data-tilt-max="6">
+            <img src="assets/svarka-hero.webp" alt="SvarkaUral196, главный экран сайта" loading="lazy">
+          </div>
+          <div class="case-body" data-reveal>
             <div class="case-meta">
-              <span class="case-tag">Лендинг</span>
-              <span class="case-type">Сварочные работы · промышленный сервис</span>
+              <span class="num">A03</span>
+              <span class="tag">Лендинг · 2025 · Екатеринбург</span>
             </div>
-            <h3 class="case-title">SvarkaUral196</h3>
+            <h2>SvarkaUral196</h2>
             <p class="case-desc">
-              Лендинг для&nbsp;сварщика с&nbsp;13-летним стажем и&nbsp;собственным цехом
-              в&nbsp;Екатеринбурге. Главная задача: конвертировать посетителя
-              в&nbsp;заявку: trust-сигналы (стаж, ИП, цех), видео-герой, форма
-              мгновенного расчёта, портфолио из&nbsp;34 реальных фотографий работ.
-            </p>
-            <p class="case-desc" style="margin-top: 12px;">
-              Mobile-first адаптив, оптимизация конверсии, промышленная
-              эстетика: тёмный фон, оранжевые акценты, крупная типографика.
+              Лендинг для сварщика с 13-летним стажем и собственным цехом в&nbsp;Екатеринбурге.
+              Задача: конвертировать посетителя в&nbsp;заявку. Trust-сигналы (стаж, ИП, цех),
+              видео-герой, мгновенный расчёт, портфолио из 34 реальных фотографий работ.
             </p>
             <div class="case-facts">
-              <div class="fact"><div class="fact-value">7 секций</div><div class="fact-label">конверсионный лендинг</div></div>
-              <div class="fact"><div class="fact-value">34 фото</div><div class="fact-label">портфолио работ</div></div>
-              <div class="fact"><div class="fact-value">Адаптив</div><div class="fact-label">телефон → десктоп</div></div>
+              <div class="f"><div class="v">7</div><div class="l">секций в конверсионной сборке</div></div>
+              <div class="f"><div class="v">34</div><div class="l">фото реальных работ</div></div>
+              <div class="f"><div class="v">Mobile</div><div class="l">адаптив от телефона</div></div>
             </div>
             <button type="button" class="case-link" data-open-case="svarka">
               Посмотреть сайт
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
           </div>
-        </article>
+        </div>
+      </article>
 
       </div>
     </div>
   </section>
 
-  <!-- ==================== ПРОЦЕСС ==================== -->
+  <!-- ==================== SERVICES ==================== -->
+  <section id="services" class="section services">
+    <div class="container">
+      <div class="section-head">
+        <div class="num">03</div>
+        <div>
+          <h2 data-reveal>Что <span class="accent">делаю</span>.</h2>
+        </div>
+      </div>
+
+      <div class="svc-list">
+        <a href="#offer" class="svc-row" data-reveal>
+          <span class="svc-num">01</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="3" width="14" height="18" rx="1.5"/>
+              <path d="M8 8h8M8 12h8M8 16h5"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/>
+              <path d="M13 6l6 6-6 6"/>
+            </svg>
+          </span>
+          <span class="svc-name">Лендинг</span>
+          <span class="svc-desc">Одна страница под одну услугу или акцию.</span>
+          <span class="svc-meta"><span class="term">3–5 дней</span></span>
+          <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+
+        <a href="#offer" class="svc-row" data-reveal>
+          <span class="svc-num">02</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="6" width="14" height="15" rx="1.5"/>
+              <path d="M7 3h14v15"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7h16M4 12h16M4 17h16"/>
+            </svg>
+          </span>
+          <span class="svc-name">Многостраничник</span>
+          <span class="svc-desc">Когда услуг больше одной, каждой нужна своя страница.</span>
+          <span class="svc-meta"><span class="term">7–10 дней</span></span>
+          <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+
+        <a href="#offer" class="svc-row" data-reveal>
+          <span class="svc-num">03</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21V9l9-5 9 5v12"/>
+              <path d="M10 21v-5h4v5"/>
+              <path d="M7 11h2M7 15h2M15 11h2M15 15h2"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20V8M10 20v-7M16 20v-5M22 20V4"/>
+            </svg>
+          </span>
+          <span class="svc-name">Сайт компании</span>
+          <span class="svc-desc">Услуги, команда, кейсы, новости. На годы вперёд.</span>
+          <span class="svc-meta"><span class="term">2–3 недели</span></span>
+          <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+
+        <a href="#offer" class="svc-row" data-reveal>
+          <span class="svc-num">04</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="7" y="2" width="10" height="20" rx="2"/>
+              <circle cx="12" cy="18" r="0.8" fill="currentColor"/>
+              <path d="M10 7h4M10 10h4M11 13h2"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 14a4 4 0 0 1 0-5.6l3-3a4 4 0 0 1 5.6 5.6l-1.5 1.5"/>
+              <path d="M14 10a4 4 0 0 1 0 5.6l-3 3a4 4 0 0 1-5.6-5.6l1.5-1.5"/>
+            </svg>
+          </span>
+          <span class="svc-name">Taplink</span>
+          <span class="svc-desc">Твоя ссылка для шапки инстаграма, вместо Linktree.</span>
+          <span class="svc-meta"><span class="term">2–3 дня</span></span>
+          <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+
+        <a href="#offer" class="svc-row" data-reveal>
+          <span class="svc-num">05</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5h16v12H9l-5 4V5z"/>
+              <circle cx="9" cy="11" r="0.8" fill="currentColor"/>
+              <circle cx="12" cy="11" r="0.8" fill="currentColor"/>
+              <circle cx="15" cy="11" r="0.8" fill="currentColor"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="8" width="14" height="12" rx="2"/>
+              <path d="M12 4v4M9 14h.01M15 14h.01"/>
+              <path d="M3 14v2M21 14v2"/>
+            </svg>
+          </span>
+          <span class="svc-name">Telegram-бот</span>
+          <span class="svc-desc">Записывает клиентов, пока ты работаешь с другими.</span>
+          <span class="svc-meta"><span class="term">5–7 дней</span></span>
+          <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROCESS ==================== -->
   <section id="process" class="section process">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title split-words" data-reveal="words">
-          Работаем по&nbsp;этапам:<br>
-          <span class="accent">прозрачно и&nbsp;без&nbsp;сюрпризов</span>.
-        </h2>
+    <div class="process-numeral" aria-hidden="true">01</div>
+    <div class="container">
+      <div class="section-head">
+        <div class="num">04</div>
+        <div>
+          <h2 data-reveal>Как <span class="accent">работаю</span>.</h2>
+        </div>
       </div>
 
-      <div class="steps">
-
-        <div class="step" data-reveal="fade-up" data-delay="0">
-          <div class="step-illu" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="stepg1" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#6BA4FF"/>
-                  <stop offset="100%" stop-color="#B48DFF"/>
-                </linearGradient>
-              </defs>
-              <!-- Бабл-1 побольше -->
-              <path d="M18 38 q0 -14 14 -14 h36 q14 0 14 14 v18 q0 14 -14 14 h-22 l-12 12 v-12 h-2 q-14 0 -14 -14 z"
-                    fill="url(#stepg1)" opacity="0.9"/>
-              <circle cx="38" cy="47" r="3" fill="#061327"/>
-              <circle cx="50" cy="47" r="3" fill="#061327"/>
-              <circle cx="62" cy="47" r="3" fill="#061327"/>
-              <!-- Бабл-2 поменьше, справа сверху -->
-              <path d="M62 78 q0 -10 10 -10 h26 q10 0 10 10 v12 q0 10 -10 10 h-18 l-8 8 v-8 q-10 0 -10 -10 z"
-                    fill="rgba(255,255,255,0.92)"/>
-              <rect x="73" y="83" width="22" height="2.5" rx="1" fill="#3D2B5C"/>
-              <rect x="73" y="89" width="16" height="2.5" rx="1" fill="#3D2B5C"/>
+      <div class="process-list">
+        <div class="proc-step" data-reveal>
+          <div class="num">01</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5h12v9H9l-5 4V5z"/>
+              <path d="M8 20h11a1 1 0 0 0 1-1v-9"/>
             </svg>
-          </div>
-          <div class="step-num">01</div>
-          <h3 class="step-title">Обсуждаем задачу</h3>
-          <p>Созваниваемся или общаемся в&nbsp;мессенджере. Разбираю, что&nbsp;за&nbsp;продукт, кто&nbsp;аудитория, какие задачи должен решать сайт. Фиксирую всё в&nbsp;одном документе: структура, тексты, референсы.</p>
+          </span>
+          <h3>Обсуждаем задачу</h3>
+          <p>Созваниваемся или общаемся в&nbsp;мессенджере. Разбираю, что за&nbsp;продукт, кто аудитория, какие задачи должен решать сайт. Фиксирую структуру, тексты и&nbsp;референсы в одном документе.</p>
         </div>
-
-        <div class="step" data-reveal="fade-up" data-delay="100">
-          <div class="step-illu" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="stepg2" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#6BA4FF"/>
-                  <stop offset="100%" stop-color="#B48DFF"/>
-                </linearGradient>
-              </defs>
-              <!-- Большой макет (десктоп) -->
-              <rect x="14" y="22" width="74" height="58" rx="6" fill="url(#stepg2)" opacity="0.92"/>
-              <rect x="20" y="28" width="62" height="6" rx="2" fill="rgba(255,255,255,0.6)"/>
-              <rect x="20" y="38" width="34" height="4" rx="1.5" fill="rgba(255,255,255,0.4)"/>
-              <rect x="20" y="46" width="44" height="4" rx="1.5" fill="rgba(255,255,255,0.4)"/>
-              <rect x="20" y="58" width="22" height="14" rx="3" fill="rgba(255,255,255,0.85)"/>
-              <rect x="48" y="58" width="34" height="14" rx="3" fill="rgba(255,255,255,0.5)"/>
-              <!-- Подставка десктопа -->
-              <rect x="42" y="80" width="18" height="4" rx="1" fill="#3D2B5C" opacity="0.55"/>
-              <!-- Маленький мобильный макет, справа -->
-              <rect x="78" y="50" width="26" height="46" rx="5" fill="rgba(255,255,255,0.95)"/>
-              <rect x="83" y="56" width="16" height="2.5" rx="1" fill="#6BA4FF"/>
-              <rect x="83" y="62" width="12" height="2" rx="1" fill="#3D2B5C" opacity="0.5"/>
-              <rect x="83" y="68" width="16" height="8" rx="2" fill="#B48DFF" opacity="0.5"/>
-              <rect x="83" y="80" width="14" height="2" rx="1" fill="#3D2B5C" opacity="0.4"/>
-              <rect x="83" y="85" width="10" height="2" rx="1" fill="#3D2B5C" opacity="0.4"/>
-              <circle cx="91" cy="92" r="1.5" fill="#3D2B5C" opacity="0.4"/>
+        <div class="proc-step" data-reveal>
+          <div class="num">02</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20l5-14 6 11 3-5 2 8"/>
+              <circle cx="4.5" cy="20" r="0.8" fill="currentColor"/>
+              <path d="M14 4l6 6"/>
             </svg>
-          </div>
-          <div class="step-num">02</div>
-          <h3 class="step-title">Показываю дизайн</h3>
-          <p>Рисую макет в&nbsp;Figma: главный экран, ключевые блоки, версия для&nbsp;телефона. Согласуем цвета, типографику, переходы. Этап итеративный: правлю, пока результат не&nbsp;устроит обе стороны.</p>
+          </span>
+          <h3>Показываю дизайн</h3>
+          <p>Рисую макет в&nbsp;Figma: главный экран, ключевые блоки, версия для телефона. Согласуем цвета, типографику и&nbsp;переходы. Этап итеративный, правлю, пока результат не устроит обе стороны.</p>
         </div>
-
-        <div class="step" data-reveal="fade-up" data-delay="200">
-          <div class="step-illu" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="stepg3" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#6BA4FF"/>
-                  <stop offset="100%" stop-color="#B48DFF"/>
-                </linearGradient>
-              </defs>
-              <!-- Окно редактора -->
-              <rect x="14" y="22" width="92" height="76" rx="8" fill="url(#stepg3)" opacity="0.92"/>
-              <!-- Шапка с тремя кружочками -->
-              <circle cx="22" cy="32" r="2.5" fill="#FF5F56"/>
-              <circle cx="30" cy="32" r="2.5" fill="#FFBD2E"/>
-              <circle cx="38" cy="32" r="2.5" fill="#27C93F"/>
-              <line x1="14" y1="40" x2="106" y2="40" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
-              <!-- Скобки кода -->
-              <text x="22" y="58" font-family="monospace" font-size="9" font-weight="700" fill="rgba(255,255,255,0.95)">&lt;div&gt;</text>
-              <text x="32" y="72" font-family="monospace" font-size="9" font-weight="700" fill="rgba(255,255,255,0.95)">&lt;h1&gt;Hi&lt;/h1&gt;</text>
-              <text x="32" y="84" font-family="monospace" font-size="9" font-weight="700" fill="rgba(255,255,255,0.7)">&lt;p&gt;...&lt;/p&gt;</text>
-              <text x="22" y="94" font-family="monospace" font-size="9" font-weight="700" fill="rgba(255,255,255,0.95)">&lt;/div&gt;</text>
-              <!-- Курсор -->
-              <rect x="78" y="76" width="2" height="9" fill="rgba(255,255,255,0.95)">
-                <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-              </rect>
+        <div class="proc-step" data-reveal>
+          <div class="num">03</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 6l-5 6 5 6"/>
+              <path d="M16 6l5 6-5 6"/>
+              <path d="M14 4l-4 16"/>
             </svg>
-          </div>
-          <div class="step-num">03</div>
-          <h3 class="step-title">Собираю</h3>
-          <p>Вёрстка точно по&nbsp;макету: HTML, CSS, JavaScript. Сайт корректно работает на&nbsp;компьютере, планшете и&nbsp;телефоне. На&nbsp;одностраничник уходит 5-7&nbsp;дней, на&nbsp;многостраничный, 2-3&nbsp;недели.</p>
+          </span>
+          <h3>Собираю</h3>
+          <p>Вёрстка точно по&nbsp;макету: HTML, CSS, JavaScript. Сайт корректно работает на&nbsp;компьютере, планшете и&nbsp;телефоне. На&nbsp;лендинг уходит 5–7 дней, на&nbsp;многостраничный 2–3 недели.</p>
         </div>
-
-        <div class="step" data-reveal="fade-up" data-delay="300">
-          <div class="step-illu" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="stepg4" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#6BA4FF"/>
-                  <stop offset="100%" stop-color="#B48DFF"/>
-                </linearGradient>
-              </defs>
-              <!-- Браузерная страница на фоне -->
-              <rect x="22" y="22" width="68" height="56" rx="6" fill="url(#stepg4)" opacity="0.85"/>
-              <rect x="28" y="30" width="32" height="4" rx="1.5" fill="rgba(255,255,255,0.7)"/>
-              <rect x="28" y="40" width="56" height="3" rx="1" fill="rgba(255,255,255,0.4)"/>
-              <rect x="28" y="48" width="46" height="3" rx="1" fill="rgba(255,255,255,0.4)"/>
-              <rect x="28" y="56" width="50" height="3" rx="1" fill="rgba(255,255,255,0.4)"/>
-              <!-- Чек-листы успеха -->
-              <circle cx="80" cy="68" r="4" fill="#38DC8C"/>
-              <path d="M77.5 68 l2 2 l3 -3.5" stroke="#061327" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <!-- Лупа поверх -->
-              <circle cx="78" cy="80" r="18" fill="rgba(10,22,40,0.9)" stroke="url(#stepg4)" stroke-width="3"/>
-              <circle cx="78" cy="80" r="11" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
-              <line x1="91" y1="93" x2="100" y2="102" stroke="url(#stepg4)" stroke-width="5" stroke-linecap="round"/>
-              <!-- Маленькая «галочка» в лупе -->
-              <path d="M73 80 l3.5 3.5 l6.5 -7" stroke="#38DC8C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <div class="proc-step" data-reveal>
+          <div class="num">04</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="M20 20l-3.5-3.5"/>
+              <path d="M8 11l2.5 2.5L14 9"/>
             </svg>
-          </div>
-          <div class="step-num">04</div>
-          <h3 class="step-title">Тестирую</h3>
-          <p>Проверяю на&nbsp;реальных устройствах и&nbsp;в&nbsp;разных браузерах: iPhone, Android, медленный интернет, старый ноут. Фикшу всё, что&nbsp;съезжает, тормозит или&nbsp;отображается иначе.</p>
+          </span>
+          <h3>Тестирую</h3>
+          <p>Проверяю на реальных устройствах и&nbsp;в&nbsp;разных браузерах: iPhone, Android, медленный интернет, старый ноутбук. Фикшу всё, что съезжает, тормозит или отображается иначе.</p>
         </div>
-
-        <div class="step" data-reveal="fade-up" data-delay="400">
-          <div class="step-illu" aria-hidden="true">
-            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="stepg5" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#6BA4FF"/>
-                  <stop offset="100%" stop-color="#B48DFF"/>
-                </linearGradient>
-                <linearGradient id="stepg5flame" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#FFB088"/>
-                  <stop offset="100%" stop-color="#E8946A" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              <!-- Облачка пускаемые ракетой -->
-              <ellipse cx="28" cy="92" rx="12" ry="6" fill="rgba(180,141,255,0.25)"/>
-              <ellipse cx="92" cy="98" rx="14" ry="6" fill="rgba(107,164,255,0.25)"/>
-              <ellipse cx="60" cy="104" rx="20" ry="6" fill="rgba(255,255,255,0.1)"/>
-              <!-- Пламя -->
-              <path d="M52 78 q4 14 8 16 q4 -2 8 -16 q-4 6 -8 4 q-4 2 -8 -4 z" fill="url(#stepg5flame)"/>
-              <!-- Корпус ракеты -->
-              <path d="M50 30 q10 -22 20 0 v44 q0 4 -4 4 h-12 q-4 0 -4 -4 z" fill="url(#stepg5)"/>
-              <!-- Иллюминатор -->
-              <circle cx="60" cy="44" r="6" fill="#0A1628"/>
-              <circle cx="60" cy="44" r="4" fill="rgba(107,164,255,0.6)"/>
-              <!-- Боковые крылья -->
-              <path d="M50 60 l-10 14 l10 0 z" fill="url(#stepg5)" opacity="0.85"/>
-              <path d="M70 60 l10 14 l-10 0 z" fill="url(#stepg5)" opacity="0.85"/>
-              <!-- Звёздочки сбоку -->
-              <circle cx="20" cy="34" r="2" fill="#fff" opacity="0.85"/>
-              <circle cx="100" cy="42" r="1.5" fill="#fff" opacity="0.7"/>
-              <circle cx="14" cy="62" r="1.5" fill="#fff" opacity="0.7"/>
-              <circle cx="106" cy="68" r="2" fill="#fff" opacity="0.85"/>
+        <div class="proc-step" data-reveal>
+          <div class="num">05</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 15c-3-1-5-3-5-7a5 5 0 0 1 10 0c0 4-2 6-5 7z"/>
+              <circle cx="12" cy="8" r="1.5"/>
+              <path d="M9 19l-2 2M15 19l2 2M12 20v2"/>
             </svg>
-          </div>
-          <div class="step-num">05</div>
-          <h3 class="step-title">Запускаю</h3>
-          <p>Размещаю сайт на&nbsp;хостинге, подключаю ваш домен (<i>yoursite.ru</i>), настраиваю доставку заявок. В&nbsp;комплекте: короткая инструкция по&nbsp;самостоятельному обновлению текстов и&nbsp;цен.</p>
+          </span>
+          <h3>Запускаю</h3>
+          <p>Размещаю сайт на&nbsp;хостинге, подключаю твой домен (<em>yoursite.ru</em>), настраиваю доставку заявок. В комплекте: короткая инструкция по&nbsp;самостоятельному обновлению текстов и&nbsp;цен.</p>
         </div>
+      </div>
 
+      <div class="terminal terminal--wide" data-reveal>
+        <div class="bar">
+          <span class="path">~ / тебе / после-сдачи</span>
+        </div>
+<pre><span class="comment"># что получишь в итоге</span>
+<span class="prompt">$</span> <span class="cmd">ls</span> ./твой-проект
+<span class="prompt">├─</span> index.html         <span class="comment">// живой сайт по твоему домену</span>
+<span class="prompt">├─</span> mobile/             <span class="comment">// адаптив, работает с iPhone</span>
+<span class="prompt">├─</span> admin.md            <span class="comment">// как самому поменять тексты и цены</span>
+<span class="prompt">├─</span> домен подключён     <span class="comment">// yoursite.ru → твой сайт</span>
+<span class="prompt">└─</span> заявки → мессенджер <span class="comment">// WhatsApp / Telegram сразу в чат</span>
+
+<span class="comment"># две недели правок бесплатно, дальше по договорённости</span>
+<span class="prompt">$</span> <span class="cmd">_</span><span class="caret"></span></pre>
       </div>
     </div>
   </section>
 
-  <!-- ==================== ЦЕНЫ. БЕСПЛАТНЫЙ ПЕРВЫЙ ЭКРАН ==================== -->
-  <section id="pricing" class="section lead-magnet">
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-tag" data-reveal="fade-up"><span class="tag-pulse"></span>ЦЕНЫ</div>
-        <h2 class="section-title split-words" data-reveal="words">
-          Сколько стоит <span class="accent">твой сайт</span>.
-        </h2>
-        <p class="section-lead" data-reveal="fade-up" data-delay="150">
-          Без&nbsp;абонентки и&nbsp;скрытых доплат. Платишь один раз — сайт твой навсегда.
-          Вот от&nbsp;чего отталкиваться:
-        </p>
-      </div>
-
-      <div class="tiers">
-        <div class="tier" data-reveal="fade-up" data-delay="0">
-          <div class="tier-top">
-            <span class="tier-name">Мини-сайт</span>
-            <span class="tier-term">2-3&nbsp;дня</span>
-          </div>
-          <div class="tier-price"><span class="tier-from">от</span>&nbsp;6&nbsp;000&nbsp;₽</div>
-          <p class="tier-desc">Одна ссылка для&nbsp;соцсетей вместо Linktree.</p>
-        </div>
-
-        <div class="tier tier--featured" data-reveal="fade-up" data-delay="80">
-          <span class="tier-badge">Хит</span>
-          <div class="tier-top">
-            <span class="tier-name">Лендинг</span>
-            <span class="tier-term">3-5&nbsp;дней</span>
-          </div>
-          <div class="tier-price"><span class="tier-from">от</span>&nbsp;12&nbsp;000&nbsp;₽</div>
-          <p class="tier-desc">Одна страница под&nbsp;одну услугу. Человек заходит и&nbsp;пишет.</p>
-        </div>
-
-        <div class="tier" data-reveal="fade-up" data-delay="160">
-          <div class="tier-top">
-            <span class="tier-name">Бот для&nbsp;Телеграма</span>
-            <span class="tier-term">5-7&nbsp;дней</span>
-          </div>
-          <div class="tier-price"><span class="tier-from">от</span>&nbsp;15&nbsp;000&nbsp;₽</div>
-          <p class="tier-desc">Отвечает и&nbsp;принимает заявки 24/7.</p>
-        </div>
-
-        <div class="tier" data-reveal="fade-up" data-delay="240">
-          <div class="tier-top">
-            <span class="tier-name">Сайт из&nbsp;страниц</span>
-            <span class="tier-term">7-10&nbsp;дней</span>
-          </div>
-          <div class="tier-price"><span class="tier-from">от</span>&nbsp;30&nbsp;000&nbsp;₽</div>
-          <p class="tier-desc">Несколько услуг, у&nbsp;каждой свой раздел.</p>
-        </div>
-
-        <div class="tier" data-reveal="fade-up" data-delay="320">
-          <div class="tier-top">
-            <span class="tier-name">Сайт компании</span>
-            <span class="tier-term">2-3&nbsp;недели</span>
-          </div>
-          <div class="tier-price"><span class="tier-from">от</span>&nbsp;50&nbsp;000&nbsp;₽</div>
-          <p class="tier-desc">Большой сайт на&nbsp;годы: услуги, команда, кейсы.</p>
+  <!-- ==================== PRICING ==================== -->
+  <section id="pricing" class="section pricing">
+    <div class="container">
+      <div class="section-head">
+        <div class="num">05</div>
+        <div>
+          <h2 data-reveal>Сколько стоит <span class="accent">твой сайт</span>.</h2>
         </div>
       </div>
 
-      <p class="tiers-note" data-reveal="fade-up">Точную сумму назову после короткого разговора — расскажешь, что&nbsp;за&nbsp;проект, и&nbsp;сразу посчитаю.</p>
-
-      <div class="section-header tiers-divider">
-        <h2 class="section-title split-words" data-reveal="words">
-          Сделаю первый экран<br>
-          твоего сайта <span class="accent">бесплатно</span>.
-        </h2>
-        <p class="section-lead" data-reveal="fade-up" data-delay="150">
-          Увидишь подход, стиль и&nbsp;качество до&nbsp;того, как заплатишь рубль. Зайдёт —
-          продолжим и&nbsp;соберём сайт целиком. Не&nbsp;зайдёт — просто оставишь макет себе.
-        </p>
-      </div>
-
-      <div class="lm-offer" data-reveal="fade-up">
-        <div class="lm-offer-badge">
-          <span class="lm-offer-pulse"></span>
-          0&nbsp;₽ · без предоплаты · 3&nbsp;дня
+      <div class="pricing-list">
+        <div class="price-row" data-reveal>
+          <span class="pr-name">Taplink</span>
+          <span class="pr-desc">Короткая страница для соцсетей</span>
+          <span class="pr-term">2–3 дня</span>
+          <span class="pr-price"><span class="from">от</span>6&nbsp;000&nbsp;₽</span>
         </div>
-
-        <h3 class="lm-offer-title">Что увидишь через 3&nbsp;дня</h3>
-
-        <ul class="lm-offer-list">
-          <li>
-            <span class="lm-offer-num">1</span>
-            <div>
-              <strong>Готовый главный экран сайта</strong>
-              <span>Заголовок, кнопка, картинка — живьём в&nbsp;браузере по&nbsp;своей ссылке. Не&nbsp;статичный скрин из&nbsp;Фигмы, а&nbsp;настоящий сайт, который можно открыть и&nbsp;показать партнёру.</span>
-            </div>
-          </li>
-          <li>
-            <span class="lm-offer-num">2</span>
-            <div>
-              <strong>Версия для&nbsp;телефона</strong>
-              <span>Открой с&nbsp;iPhone и&nbsp;посмотри глазами клиента, который перешёл по&nbsp;ссылке из&nbsp;сторис. Там же, где решается запись.</span>
-            </div>
-          </li>
-          <li>
-            <span class="lm-offer-num">3</span>
-            <div>
-              <strong>Точная цена за&nbsp;весь сайт</strong>
-              <span>Зайдёт — назову сумму и&nbsp;срок, запускаем. Не&nbsp;зайдёт — забираешь макет и&nbsp;ссылку себе. Никто никому ничего не&nbsp;должен.</span>
-            </div>
-          </li>
-        </ul>
-
-        <div class="lm-offer-meta">
-          <div class="lm-meta-item">
-            <span class="lm-meta-num">3</span>
-            <span class="lm-meta-label">дня<br>на&nbsp;первый экран</span>
-          </div>
-          <div class="lm-meta-item">
-            <span class="lm-meta-num">1ч</span>
-            <span class="lm-meta-label">отвечу<br>на&nbsp;заявку</span>
-          </div>
-          <div class="lm-meta-item">
-            <span class="lm-meta-num">0₽</span>
-            <span class="lm-meta-label">стоит<br>попробовать</span>
-          </div>
+        <div class="price-row" data-reveal>
+          <span class="pr-name">Лендинг</span>
+          <span class="pr-desc">Одна страница под одну услугу</span>
+          <span class="pr-term">3–5 дней</span>
+          <span class="pr-price"><span class="from">от</span>12&nbsp;000&nbsp;₽</span>
         </div>
-
-        <div class="lm-cta">
-          <div class="lm-cta-text">
-            <span class="lm-cta-tag">ЗАЯВКА</span>
-            <span class="lm-cta-line">Напиши пару строк о&nbsp;проекте — отвечу в&nbsp;течение часа</span>
-          </div>
-          <div class="lm-cta-buttons">
-            <a href="https://wa.me/79022540481?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B1%D0%B5%D1%81%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D1%8B%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%20%D0%B4%D0%BB%D1%8F%20%D1%81%D0%B2%D0%BE%D0%B5%D0%B3%D0%BE%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0." target="_blank" rel="noopener" class="lm-cta-btn lm-cta-btn--wa">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              <span>Написать в&nbsp;WhatsApp</span>
-            </a>
-            <a href="https://t.me/TRyambov" target="_blank" rel="noopener" class="lm-cta-btn lm-cta-btn--tg">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-              <span>Написать в&nbsp;Telegram</span>
-            </a>
-          </div>
+        <div class="price-row" data-reveal>
+          <span class="pr-name">Telegram-бот</span>
+          <span class="pr-desc">Отвечает и принимает заявки 24/7</span>
+          <span class="pr-term">5–7 дней</span>
+          <span class="pr-price"><span class="from">от</span>15&nbsp;000&nbsp;₽</span>
+        </div>
+        <div class="price-row" data-reveal>
+          <span class="pr-name">Сайт из страниц</span>
+          <span class="pr-desc">Несколько услуг, у каждой свой раздел</span>
+          <span class="pr-term">7–10 дней</span>
+          <span class="pr-price"><span class="from">от</span>30&nbsp;000&nbsp;₽</span>
+        </div>
+        <div class="price-row" data-reveal>
+          <span class="pr-name">Сайт компании</span>
+          <span class="pr-desc">Большой сайт на годы: услуги, команда, кейсы</span>
+          <span class="pr-term">2–3 недели</span>
+          <span class="pr-price"><span class="from">от</span>50&nbsp;000&nbsp;₽</span>
         </div>
       </div>
+
+      <p class="price-note" data-reveal>
+        Без абонентки и скрытых доплат. Платишь один раз, сайт твой навсегда. Точную сумму назову после короткого разговора о проекте.
+      </p>
     </div>
   </section>
 
   <!-- ==================== FAQ ==================== -->
   <section id="faq" class="section faq">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title split-words" data-reveal="words">
-          Отвечаю на&nbsp;то,<br>
-          о&nbsp;чём <span class="accent">чаще всего спрашивают</span>.
-        </h2>
+    <div class="container">
+      <div class="section-head">
+        <div class="num">06</div>
+        <div>
+          <h2 data-reveal>Что <span class="accent">спрашивают</span>.</h2>
+        </div>
       </div>
 
-      <div class="faq-grid">
+      <div class="faq-list">
 
-        <div class="faq-item" data-reveal="fade-up" data-delay="0">
-          <button type="button" class="faq-item-q" aria-expanded="false">
-            <span class="faq-item-num" aria-hidden="true">01</span>
-            <span class="faq-item-text">А&nbsp;долго делать?</span>
-            <span class="faq-item-ic" aria-hidden="true"></span>
+        <div class="faq-item" data-reveal>
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span class="num">01</span>
+            <span class="q-text">А долго делать?</span>
+            <span class="q-ic" aria-hidden="true"></span>
           </button>
-          <div class="faq-item-a">
-            <p>Лендинг — 3-5&nbsp;дней, многостраничник — 7-10, большой сайт — 2-3&nbsp;недели. Точный срок назову после первого разговора. Дедлайны не&nbsp;срываю.</p>
+          <div class="faq-a">
+            <div class="faq-a-body"><p>Лендинг: 3–5 дней. Многостраничник: 7–10. Большой сайт: 2–3 недели. Точный срок назову после первого разговора. Дедлайны не срываю.</p></div>
           </div>
         </div>
 
-        <div class="faq-item" data-reveal="fade-up" data-delay="60">
-          <button type="button" class="faq-item-q" aria-expanded="false">
-            <span class="faq-item-num" aria-hidden="true">02</span>
-            <span class="faq-item-text">Что входит в&nbsp;цену?</span>
-            <span class="faq-item-ic" aria-hidden="true"></span>
+        <div class="faq-item" data-reveal>
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span class="num">02</span>
+            <span class="q-text">Что входит в цену?</span>
+            <span class="q-ic" aria-hidden="true"></span>
           </button>
-          <div class="faq-item-a">
-            <p>Всё под&nbsp;ключ: обсуждение задачи, макет в&nbsp;Figma, вёрстка, проверка на&nbsp;устройствах, размещение на&nbsp;хостинге и&nbsp;подключение домена. Плюс две недели бесплатных правок после запуска.</p>
+          <div class="faq-a">
+            <div class="faq-a-body"><p>Всё под ключ: обсуждение задачи, макет в&nbsp;Figma, вёрстка, проверка на устройствах, размещение на хостинге и подключение домена. Плюс две недели бесплатных правок после запуска.</p></div>
           </div>
         </div>
 
-        <div class="faq-item" data-reveal="fade-up" data-delay="120">
-          <button type="button" class="faq-item-q" aria-expanded="false">
-            <span class="faq-item-num" aria-hidden="true">03</span>
-            <span class="faq-item-text">А&nbsp;ты делаешь на&nbsp;Тильде?</span>
-            <span class="faq-item-ic" aria-hidden="true"></span>
+        <div class="faq-item" data-reveal>
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span class="num">03</span>
+            <span class="q-text">А ты делаешь на Тильде?</span>
+            <span class="q-ic" aria-hidden="true"></span>
           </button>
-          <div class="faq-item-a">
-            <p>Нет. Пишу руками на&nbsp;чистом коде: сайт грузится быстрее, выглядит точно как&nbsp;на&nbsp;макете и&nbsp;не&nbsp;требует ежемесячной подписки. Тильда — не&nbsp;мой инструмент.</p>
+          <div class="faq-a">
+            <div class="faq-a-body"><p>Нет. Пишу руками на&nbsp;чистом коде: сайт грузится быстрее, выглядит точно как на макете и&nbsp;не требует ежемесячной подписки. Тильда это не мой инструмент.</p></div>
           </div>
         </div>
 
-        <div class="faq-item" data-reveal="fade-up" data-delay="180">
-          <button type="button" class="faq-item-q" aria-expanded="false">
-            <span class="faq-item-num" aria-hidden="true">04</span>
-            <span class="faq-item-text">На&nbsp;телефоне будет нормально работать?</span>
-            <span class="faq-item-ic" aria-hidden="true"></span>
+        <div class="faq-item" data-reveal>
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span class="num">04</span>
+            <span class="q-text">На телефоне будет нормально работать?</span>
+            <span class="q-ic" aria-hidden="true"></span>
           </button>
-          <div class="faq-item-a">
-            <p>Обязательно. Проверяю на&nbsp;iPhone, Android и&nbsp;планшетах. Твои клиенты заходят с&nbsp;телефона — там сайт должен открываться первым делом и&nbsp;удобно работать.</p>
+          <div class="faq-a">
+            <div class="faq-a-body"><p>Обязательно. Проверяю на&nbsp;iPhone, Android и&nbsp;планшетах. Твои клиенты заходят с&nbsp;телефона, там сайт должен открываться первым делом и&nbsp;удобно работать.</p></div>
           </div>
         </div>
 
-        <div class="faq-item" data-reveal="fade-up" data-delay="240">
-          <button type="button" class="faq-item-q" aria-expanded="false">
-            <span class="faq-item-num" aria-hidden="true">05</span>
-            <span class="faq-item-text">А&nbsp;если что-то сломается потом?</span>
-            <span class="faq-item-ic" aria-hidden="true"></span>
+        <div class="faq-item" data-reveal>
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span class="num">05</span>
+            <span class="q-text">А если что-то сломается потом?</span>
+            <span class="q-ic" aria-hidden="true"></span>
           </button>
-          <div class="faq-item-a">
-            <p>Две недели после запуска — любые правки бесплатно. Дальше: обновить цены, добавить фото, поменять блок — по&nbsp;договорённости, обычно в&nbsp;тот&nbsp;же день.</p>
+          <div class="faq-a">
+            <div class="faq-a-body"><p>Две недели после запуска любые правки бесплатно. Дальше: обновить цены, добавить фото, поменять блок, по&nbsp;договорённости, обычно в&nbsp;тот же день.</p></div>
           </div>
         </div>
 
-        <div class="faq-item" data-reveal="fade-up" data-delay="300">
-          <button type="button" class="faq-item-q" aria-expanded="false">
-            <span class="faq-item-num" aria-hidden="true">06</span>
-            <span class="faq-item-text">Как платить?</span>
-            <span class="faq-item-ic" aria-hidden="true"></span>
+        <div class="faq-item" data-reveal>
+          <button type="button" class="faq-q" aria-expanded="false">
+            <span class="num">06</span>
+            <span class="q-text">Как платить?</span>
+            <span class="q-ic" aria-hidden="true"></span>
           </button>
-          <div class="faq-item-a">
-            <p>50% до&nbsp;старта, 50% после сдачи. Большие проекты разбиваем на&nbsp;этапы. Принимаю на&nbsp;карту или через СБП, без&nbsp;бумажек.</p>
+          <div class="faq-a">
+            <div class="faq-a-body"><p>50% до старта, 50% после сдачи. Большие проекты разбиваем на этапы. Принимаю на карту или через СБП, без бумажек.</p></div>
           </div>
         </div>
 
@@ -816,45 +751,34 @@
     </div>
   </section>
 
-  <!-- ==================== ОБО МНЕ ==================== -->
+  <!-- ==================== ABOUT (фото здесь) ==================== -->
   <section id="about" class="section about">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2 class="section-title split-words" data-reveal="words">
-          Привет.<br>
-          Я&nbsp;Тимофей. <span class="accent">Пишу сайты с&nbsp;нуля</span>.
-        </h2>
+    <div class="container">
+      <div class="section-head">
+        <div class="num">07</div>
+        <div>
+          <h2 data-reveal>Привет. Я <span class="accent">Тимофей</span>.</h2>
+        </div>
       </div>
 
       <div class="about-grid">
-        <div class="about-photo" data-reveal="fade-right">
-          <div class="about-photo-frame">
-            <img src="assets/about.jpg" alt="Тимофей Рямбов">
-          </div>
-          <div class="about-photo-glow"></div>
-        </div>
-
         <div class="about-text">
-          <p class="about-lead" data-reveal="fade-up" data-delay="100">
-            Живу в&nbsp;Екатеринбурге, сайты — моё основное занятие, а&nbsp;не&nbsp;подработка
-            между парами. Сажусь за&nbsp;код каждый день, как&nbsp;на&nbsp;обычную работу.
+          <p data-reveal>
+            Живу в&nbsp;Екатеринбурге. Сайты это моё основное занятие, а&nbsp;не подработка между парами. Сажусь за код каждый день, как на обычную работу.
           </p>
-          <p data-reveal="fade-up" data-delay="200">
-            Большинство моих клиентов — салоны красоты, студии и&nbsp;частные мастера.
-            За&nbsp;пару лет насмотрелся, как у&nbsp;них устроен поток заявок: клиент
-            листает сторис, ищет цены, не&nbsp;находит, уходит. Поэтому делаю сайты,
-            которые закрывают три вопроса сразу: что&nbsp;за&nbsp;услуга, сколько стоит,
-            как записаться. Без&nbsp;лишних экранов «о&nbsp;нашей миссии».
+          <p data-reveal>
+            Большинство моих клиентов это салоны красоты, студии и&nbsp;частные мастера. За пару лет насмотрелся, как у&nbsp;них устроен поток заявок: клиент листает сторис, ищет цены, не&nbsp;находит, уходит.
           </p>
-          <p data-reveal="fade-up" data-delay="300">
-            Если нужен сайт — от&nbsp;мини-страницы до&nbsp;полноценного каталога —
-            расскажи о&nbsp;задаче. Продумаю структуру, предложу решение,
-            договоримся по&nbsp;срокам и&nbsp;бюджету.
+          <p data-reveal>
+            Поэтому делаю сайты, которые закрывают три вопроса сразу: что за услуга, сколько стоит, как записаться. Без лишних экранов «о&nbsp;нашей миссии».
+          </p>
+          <p data-reveal>
+            Если нужен сайт от&nbsp;мини-страницы до полноценного каталога, расскажи о&nbsp;задаче. Продумаю структуру, предложу решение, договоримся по&nbsp;срокам и&nbsp;бюджету.
           </p>
 
-          <div class="stack" data-reveal="fade-up" data-delay="400">
-            <div class="stack-label">Инструменты</div>
-            <div class="stack-tags">
+          <div class="about-stack" data-reveal>
+            <div class="label">Инструменты</div>
+            <div class="tags">
               <span>HTML</span>
               <span>CSS</span>
               <span>JavaScript</span>
@@ -866,144 +790,288 @@
               <span>Анимации</span>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ==================== КОНТАКТЫ ==================== -->
-  <section id="contact" class="section contact">
-    <div class="section-inner">
-      <div class="contact-center">
+          <div class="terminal" data-reveal>
+            <div class="bar">
+              <span class="path">~ / tim / about.sh</span>
+            </div>
+<pre><span class="comment"># что я делаю руками, без Тильды и конструкторов</span>
+<span class="prompt">$</span> <span class="cmd">tim --build</span> <span class="str">"сайт, который отвечает за тебя"</span>
+<span class="prompt">→</span> макет в Figma
+<span class="prompt">→</span> вёрстка на HTML / CSS / JS
+<span class="prompt">→</span> проверка на iPhone, Android, медленном 3G
+<span class="prompt">→</span> домен, хостинг, доставка заявок
 
-        <div class="contact-info">
-          <h2 class="section-title contact-title split-words" data-reveal="words">
-            Расскажи<br>
-            про <span class="accent">свой проект</span>.
-          </h2>
-          <p class="contact-lead" data-reveal="fade-up" data-delay="200">
-            Напиши в&nbsp;удобный мессенджер — отвечу в&nbsp;течение часа.
-            Даже если это час ночи (тогда, может, утром, но&nbsp;точно сегодня).
-          </p>
-
-          <div class="contact-channels">
-            <a href="tel:+79022540481" class="channel" data-reveal="fade-right" data-delay="0">
-              <div class="channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              </div>
-              <div class="channel-body">
-                <div class="channel-title">Позвонить</div>
-                <div class="channel-value">+7&nbsp;(902)&nbsp;254-04-81</div>
-              </div>
-            </a>
-
-            <a href="https://wa.me/79022540481" target="_blank" rel="noopener" class="channel" data-reveal="fade-right" data-delay="100">
-              <div class="channel-icon channel-icon--wa">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </div>
-              <div class="channel-body">
-                <div class="channel-title">WhatsApp</div>
-                <div class="channel-value">Написать сообщение</div>
-              </div>
-            </a>
-
-            <a href="https://t.me/TRyambov" target="_blank" rel="noopener" class="channel" data-reveal="fade-right" data-delay="200">
-              <div class="channel-icon channel-icon--tg">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-              </div>
-              <div class="channel-body">
-                <div class="channel-title">Telegram</div>
-                <div class="channel-value">@TRyambov</div>
-              </div>
-            </a>
-
-            <a href="https://vk.com/ryambov" target="_blank" rel="noopener" class="channel" data-reveal="fade-right" data-delay="300">
-              <div class="channel-icon channel-icon--vk">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.15 14.27h-1.46c-.55 0-.72-.44-1.71-1.43-.86-.83-1.23-.94-1.45-.94-.3 0-.39.09-.39.5v1.31c0 .36-.11.57-1.05.57-1.56 0-3.29-.95-4.51-2.7-1.83-2.57-2.34-4.51-2.34-4.9 0-.22.09-.42.5-.42h1.46c.37 0 .51.17.65.56.72 2.08 1.91 3.9 2.4 3.9.18 0 .27-.09.27-.55v-2.15c-.06-.99-.58-1.07-.58-1.42 0-.17.14-.34.36-.34h2.29c.31 0 .42.17.42.54v2.9c0 .31.14.42.22.42.18 0 .33-.11.66-.44 1.02-1.14 1.75-2.9 1.75-2.9.09-.2.25-.38.62-.38h1.46c.44 0 .54.22.44.54-.18.86-1.97 3.39-1.97 3.39-.15.25-.22.37 0 .65.16.2.68.66 1.03 1.06.65.73 1.14 1.34 1.28 1.76.13.43-.09.65-.52.65z"/></svg>
-              </div>
-              <div class="channel-body">
-                <div class="channel-title">ВКонтакте</div>
-                <div class="channel-value">vk.com/ryambov</div>
-              </div>
-            </a>
+<span class="comment"># отвечу в течение часа в WhatsApp или Telegram</span>
+<span class="prompt">$</span> <span class="cmd">_</span><span class="caret"></span></pre>
           </div>
         </div>
 
+        <div class="about-photo" data-reveal>
+          <img src="assets/about.jpg" alt="Тимофей Рямбов, веб-разработчик">
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ==================== ФУТЕР ==================== -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <a href="#" class="logo">
-          <span class="logo-dot"></span>
-          <span>Тимофей Рямбов</span>
+  <!-- ==================== CONTACT ==================== -->
+  <section id="contact" class="section contact">
+    <div class="container">
+      <div class="contact-head">
+        <div class="num">08</div>
+        <div>
+          <h2 data-reveal>Расскажи про <span class="accent">свой проект</span>.</h2>
+          <p class="lead" data-reveal>Напиши в&nbsp;удобный мессенджер, отвечу в&nbsp;течение часа. Даже если это час ночи, тогда может утром, но&nbsp;точно сегодня.</p>
+        </div>
+      </div>
+
+      <div class="channels-list">
+        <a href="https://wa.me/79022540481" target="_blank" rel="noopener" class="channel" data-reveal>
+          <span class="ch-num">01</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 20l1.6-4.5a9 9 0 1 1 3.4 3.3L3 20z"/>
+              <path d="M8.5 10.5c.4 2 2 3.6 4 4l1.3-1.2 2.2 1.3c-.3 1-1.2 1.9-2.5 1.9-2.5 0-6.5-4-6.5-6.5 0-1.3.9-2.2 1.9-2.5l1.3 2.2-1.7 1.3"/>
+            </svg>
+          </span>
+          <span class="ch-name">WhatsApp</span>
+          <span class="ch-val">Написать сообщение</span>
+          <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
-        <p class="footer-tag">Делаю сайты в&nbsp;Екатеринбурге</p>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">Разделы</div>
-        <a href="#services">Услуги</a>
-        <a href="#cases">Работы</a>
-        <a href="#process">Как работаю</a>
-        <a href="#pricing">Цены</a>
-        <a href="#about">Обо мне</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">Связь</div>
-        <a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a>
-        <a href="https://t.me/TRyambov" target="_blank" rel="noopener">Telegram</a>
-        <a href="https://wa.me/79022540481" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="https://vk.com/ryambov" target="_blank" rel="noopener">ВКонтакте</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">Документы</div>
-        <a href="privacy.html">Политика конфиденциальности</a>
-        <a href="offer.html">Договор-оферта</a>
+        <a href="https://t.me/TRyambov" target="_blank" rel="noopener" class="channel" data-reveal>
+          <span class="ch-num">02</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 4L2 11l6 2.5L17 7l-7 8 1 5 3.5-4 5 3L21 4z"/>
+            </svg>
+          </span>
+          <span class="ch-name">Telegram</span>
+          <span class="ch-val">@TRyambov</span>
+          <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a href="tel:+79022540481" class="channel" data-reveal>
+          <span class="ch-num">03</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/>
+            </svg>
+          </span>
+          <span class="ch-name">Телефон</span>
+          <span class="ch-val">+7&nbsp;(902)&nbsp;254-04-81</span>
+          <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
+        <a href="https://vk.com/ryambov" target="_blank" rel="noopener" class="channel" data-reveal>
+          <span class="ch-num">04</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="3"/>
+              <path d="M7 9v3c0 1.5 1 3 3 3h1v-2.5"/>
+              <path d="M11 9v6"/>
+              <path d="M15 9c0 2.5 1 4 2 6h-2l-2-2.5"/>
+            </svg>
+          </span>
+          <span class="ch-name">ВКонтакте</span>
+          <span class="ch-val">vk.com/ryambov</span>
+          <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </a>
       </div>
     </div>
+  </section>
 
-    <div class="footer-bottom">
-      <div>© 2026 · Тимофей Рямбов</div>
-      <div>Сделано руками, не&nbsp;на&nbsp;Тильде</div>
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">Тимофей Рямбов</a>
+          <p>Делаю сайты в&nbsp;Екатеринбурге, по&nbsp;чистому коду.</p>
+        </div>
+        <div class="footer-col">
+          <div class="ttl">Разделы</div>
+          <a href="#cases">Работы</a>
+          <a href="#services">Услуги</a>
+          <a href="#process">Как работаю</a>
+          <a href="#pricing">Цены</a>
+          <a href="#about">Обо мне</a>
+        </div>
+        <div class="footer-col">
+          <div class="ttl">Связь</div>
+          <a href="tel:+79022540481">+7&nbsp;(902)&nbsp;254-04-81</a>
+          <a href="https://t.me/TRyambov" target="_blank" rel="noopener">Telegram</a>
+          <a href="https://wa.me/79022540481" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://vk.com/ryambov" target="_blank" rel="noopener">ВКонтакте</a>
+        </div>
+        <div class="footer-col">
+          <div class="ttl">Документы</div>
+          <a href="privacy.html">Политика конфиденциальности</a>
+          <a href="offer.html">Договор-оферта</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026, Тимофей Рямбов</div>
+        <div>Сделано руками, не на Тильде</div>
+      </div>
     </div>
   </footer>
 
-  <!-- ==================== МОДАЛКА «ПОСМОТРЕТЬ САЙТ» ==================== -->
-  <div class="case-modal" id="caseModal" aria-hidden="true">
-    <div class="case-modal-backdrop" data-modal-close></div>
+    </div><!-- /#smooth-content -->
+  </div><!-- /#smooth-wrapper -->
 
-    <div class="case-modal-inner">
-      <div class="modal-head">
-        <div class="modal-title" id="modalTitle">Проект</div>
-        <button class="modal-close" type="button" data-modal-close aria-label="Закрыть">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  <!-- ==================== CASE MODAL ==================== -->
+  <div class="case-modal" id="caseModal" aria-hidden="true">
+    <div class="cm-backdrop" data-modal-close></div>
+    <div class="cm-inner">
+      <div class="cm-head">
+        <div class="cm-title" id="modalTitle">Проект</div>
+        <button class="cm-close" type="button" data-modal-close aria-label="Закрыть">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-
-      <div class="modal-scroll" id="modalScroll"><!-- секции рендерит JS --></div>
+      <div class="cm-scroll" id="modalScroll"></div>
     </div>
   </div>
 
-  <!-- ==================== МОДАЛКА УСЛУГ (FLIP) ==================== -->
-  <div class="service-modal" id="serviceModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle">
-    <div class="service-modal-backdrop" data-svc-close></div>
-
-    <div class="service-modal-inner" id="serviceModalInner">
-      <button class="service-modal-close" type="button" data-svc-close aria-label="Закрыть">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-
-      <div class="service-modal-body" id="serviceModalBody"><!-- рендерит JS --></div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
   <script src="script.js"></script>
+
+  <!-- Hero shader: ink-amber warp через Three.js. ES module, не блокирует,
+       если importmap/CDN не работает — hero-ambient остаётся с CSS gradient. -->
+  <script type="module">
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceTransparency = window.matchMedia('(prefers-reduced-transparency: reduce)').matches;
+    const ambient = document.querySelector('.hero-ambient');
+    if (ambient && !reduceMotion && !reduceTransparency) {
+      try {
+        const THREE = await import('three');
+
+        const canvas = document.createElement('canvas');
+        canvas.className = 'hero-shader-canvas';
+        ambient.appendChild(canvas);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        const sizeOf = () => ({ w: ambient.clientWidth, h: ambient.clientHeight });
+        let { w, h } = sizeOf();
+        renderer.setSize(w, h, false);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+        const uniforms = {
+          uTime: { value: 0 },
+          uRes:  { value: new THREE.Vector2(w, h) },
+          uScroll: { value: 0 },
+          uMouse:  { value: new THREE.Vector2(0.6, 0.5) },
+        };
+
+        const material = new THREE.ShaderMaterial({
+          uniforms,
+          transparent: true,
+          vertexShader: /* glsl */`
+            void main() { gl_Position = vec4(position, 1.0); }
+          `,
+          fragmentShader: /* glsl */`
+            precision mediump float;
+            uniform float uTime;
+            uniform vec2  uRes;
+            uniform float uScroll;
+            uniform vec2  uMouse;
+
+            // Classic simplex-noise, Ashima Arts (public domain)
+            vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+            float snoise(vec2 v) {
+              const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                                 -0.577350269189626, 0.024390243902439);
+              vec2 i  = floor(v + dot(v, C.yy));
+              vec2 x0 = v - i + dot(i, C.xx);
+              vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+              vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1;
+              i = mod(i, 289.0);
+              vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+              vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+              m = m*m; m = m*m;
+              vec3 x = 2.0 * fract(p * C.www) - 1.0;
+              vec3 h = abs(x) - 0.5;
+              vec3 ox = floor(x + 0.5);
+              vec3 a0 = x - ox;
+              m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+              vec3 g;
+              g.x  = a0.x  * x0.x  + h.x  * x0.y;
+              g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+              return 130.0 * dot(m, g);
+            }
+
+            void main() {
+              vec2 uv = gl_FragCoord.xy / uRes.xy;
+              vec2 p = uv * 2.0 - 1.0;
+              p.x *= uRes.x / uRes.y;
+
+              // slow organic time + scroll offsets flow deeper
+              float t = uTime * 0.07 + uScroll * 0.8;
+
+              // domain-warp
+              vec2 q = vec2(snoise(p * 1.1 + t), snoise(p * 1.1 - t * 0.9));
+              vec2 r = vec2(
+                snoise(p * 2.0 + q * 0.9 + t * 0.3),
+                snoise(p * 2.0 + q * 0.9 - t * 0.35)
+              );
+              float n = snoise(p + r * 1.1 + t * 0.2);
+              float v = smoothstep(-0.5, 0.9, n);
+
+              // ink base + warm amber highlights (один акцент)
+              vec3 ink   = vec3(0.055, 0.085, 0.135);     // deep ink
+              vec3 amber = vec3(0.95, 0.60, 0.25);        // amber brass
+              float accent = pow(max(v - 0.55, 0.0) * 2.2, 1.8);
+              vec3 color = ink + amber * accent * 0.55;
+
+              // soft vignette
+              float vg = smoothstep(1.5, 0.3, length(p));
+              color *= vg;
+
+              // alpha — plate полупрозрачная, bg ink всё равно под ней
+              float alpha = smoothstep(0.0, 0.4, length(p)) * 0.75;
+              gl_FragColor = vec4(color, alpha);
+            }
+          `,
+        });
+
+        scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+        ambient.classList.add('has-shader');
+
+        const clock = new THREE.Clock();
+        let visible = true;
+        const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 });
+        io.observe(ambient);
+
+        function tick() {
+          if (visible) {
+            uniforms.uTime.value = clock.getElapsedTime();
+            // ScrollSmoother может подменять scroll — используем его scrollTop если доступен
+            const smoother = (typeof ScrollSmoother !== 'undefined' && ScrollSmoother.get()) ? ScrollSmoother.get() : null;
+            const scrollY = smoother ? smoother.scrollTop() : window.scrollY;
+            uniforms.uScroll.value = Math.min(1, Math.max(0, scrollY / (window.innerHeight || 1)));
+            renderer.render(scene, camera);
+          }
+          requestAnimationFrame(tick);
+        }
+        tick();
+
+        window.addEventListener('resize', () => {
+          const s = sizeOf();
+          renderer.setSize(s.w, s.h, false);
+          uniforms.uRes.value.set(s.w, s.h);
+        });
+
+        ambient.addEventListener('pointermove', (e) => {
+          const rect = ambient.getBoundingClientRect();
+          uniforms.uMouse.value.set(
+            (e.clientX - rect.left) / rect.width,
+            1.0 - (e.clientY - rect.top) / rect.height
+          );
+        });
+      } catch (err) {
+        // Three.js не загрузился — ambient остаётся с CSS gradient. Молча.
+      }
+    }
+  </script>
 </body>
 </html>

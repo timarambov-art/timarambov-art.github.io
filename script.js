@@ -1,148 +1,467 @@
-﻿// ==================== SMOOTH SCROLL (Lenis) ====================
-// Инерционный скролл всей страницы. Отключён при prefers-reduced-motion
-// и если библиотека не загрузилась. На мобиле оставляем нативный тач-скролл.
-let lenis = null;
-if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof Lenis !== 'undefined') {
-  lenis = new Lenis({
-    duration: 1.15,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 1.6,
-  });
+/* ============================================================
+   Тимофей Рямбов, лендинг
+   JS: GSAP ScrollSmoother (free since GSAP 3.13) + ScrollTrigger
+       cinematic + SplitType char-reveal, reveal, FAQ, case modal,
+       burger, counter.
+   CDN-зависимости: gsap, ScrollTrigger, ScrollSmoother, SplitType.
+   ============================================================ */
 
-  function lenisRaf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(lenisRaf);
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+/* -------------------- GSAP + ScrollSmoother boot --------------------
+   ScrollSmoother делает плавный «плыву по сайту» скролл и сам
+   интегрируется со ScrollTrigger. Lenis больше не нужен. */
+let cinematicInited = false;
+let smoother = null;
+function initCinematic() {
+  if (cinematicInited || reduceMotion) return;
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  cinematicInited = true;
+
+  const plugins = [ScrollTrigger];
+  if (typeof ScrollSmoother !== 'undefined') plugins.push(ScrollSmoother);
+  gsap.registerPlugin(...plugins);
+
+  // ScrollSmoother — физический momentum скролл, premium ощущение
+  if (typeof ScrollSmoother !== 'undefined' && document.getElementById('smooth-wrapper')) {
+    smoother = ScrollSmoother.create({
+      wrapper: '#smooth-wrapper',
+      content: '#smooth-content',
+      smooth: 2.0,              // секунды catchup (ощущение «плыву по сайту»)
+      effects: true,            // data-speed, data-lag работают из коробки
+      smoothTouch: 0,           // на touch — нативный скролл
+      normalizeScroll: true,    // гасит разницу между браузерами и тачпадами
+    });
   }
-  requestAnimationFrame(lenisRaf);
-}
 
-// ==================== 3D TILT ON HERO TITLE ====================
-// Работает только на десктопе с мышью, на тач-устройствах бесполезен и может тормозить
-const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-const title = document.querySelector('.hero-title');
-const heroImg = document.querySelector('.hero-img');
+  // Пересчёт размеров после загрузки шрифтов — убирает race, когда hero
+  // headline рендерится fallback-шрифтом, потом свапается на Bodoni Moda
+  // и ScrollSmoother с кэшем ломает позиции.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh();
+      if (smoother) smoother.refresh();
+    });
+  }
 
-if (!isTouchDevice) {
-  document.addEventListener('mousemove', (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 6;
-    const y = (e.clientY / window.innerHeight - 0.5) * 4;
+    // Hero ghost '26 — scrubbed parallax + scale при проходе hero
+    gsap.to('.hero-ghost', {
+      scale: 1.25,
+      yPercent: -30,
+      opacity: 0.07,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
 
-    if (title) {
-      title.style.setProperty('--tilt-x', `${x}deg`);
-      title.style.setProperty('--tilt-y', `${-y}deg`);
+    // Hero stats — subtle lift при выходе из viewport
+    gsap.to('.hero-stats', {
+      yPercent: -15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero-stats',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
+
+  // Marquee speed-up: при scroll через hero marquee ускоряется
+  const marqueeTrack = document.querySelector('.marquee-track');
+  if (marqueeTrack) {
+    let marqueeSpeed = { v: 1 };
+    gsap.to(marqueeSpeed, {
+      v: 2.2,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.marquee',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: () => {
+          marqueeTrack.style.animationDuration = (42 / marqueeSpeed.v).toFixed(2) + 's';
+        },
+      },
+    });
+  }
+
+  const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+
+  /* ---------- Horizontal scroll hijack: cases (desktop only) ---------- */
+  if (isDesktop) {
+    const casesTrack = document.querySelector('.cases-track');
+    const casesWrap = document.querySelector('.cases-wrap');
+    if (casesTrack && casesWrap) {
+      gsap.to(casesTrack, {
+        x: () => -(casesTrack.scrollWidth - window.innerWidth),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: casesWrap,
+          start: 'top top',
+          end: () => '+=' + (casesTrack.scrollWidth - window.innerWidth),
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
+      });
     }
-    if (heroImg) {
-      heroImg.style.setProperty('--mx', `${x * 0.6}px`);
-      heroImg.style.setProperty('--my', `${y * 0.6}px`);
-    }
-  });
-}
+  }
 
-// ==================== SMOOTH ANCHOR SCROLL OFFSET ====================
-document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-  anchor.addEventListener('click', (e) => {
-    const href = anchor.getAttribute('href');
-    if (href === '#' || href.length < 2) return;
-    const target = document.querySelector(href);
-    if (target) {
-      e.preventDefault();
-      if (lenis) {
-        lenis.scrollTo(target, { offset: -80 });
+  /* Services pinned через CSS sticky (см. styles.css) — JS не нужен.
+     Service rows при scroll получают scrubbed-fade: приглушённые пока
+     внизу viewport, активные к центру, снова приглушённые при уходе. */
+  if (isDesktop) {
+    gsap.utils.toArray('.svc-row').forEach((row) => {
+      gsap.fromTo(row,
+        { opacity: 0.35, xPercent: 2 },
+        {
+          opacity: 1,
+          xPercent: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 85%',
+            end: 'top 45%',
+            scrub: 1,
+          },
+        },
+      );
+    });
+  }
+
+  /* ---------- Pricing active row: ряд в центре viewport получает
+     amber glow + лёгкий scale. Делает прайс «кинематографичным». ---------- */
+  if (isDesktop) {
+    gsap.utils.toArray('.price-row').forEach((row) => {
+      ScrollTrigger.create({
+        trigger: row,
+        start: 'top 65%',
+        end: 'bottom 35%',
+        toggleClass: { targets: row, className: 'is-active' },
+      });
+    });
+  }
+
+  /* ---------- Process giant backdrop numeral: за степами проезжает
+     огромная цифра 01→02→03→04→05, scrub по scroll ---------- */
+  const procNumeral = document.querySelector('.process-numeral');
+  if (procNumeral && isDesktop) {
+    const steps = gsap.utils.toArray('.proc-step');
+    steps.forEach((step, i) => {
+      ScrollTrigger.create({
+        trigger: step,
+        start: 'top 70%',
+        end: 'bottom 30%',
+        onToggle: (self) => {
+          if (self.isActive) {
+            procNumeral.textContent = String(i + 1).padStart(2, '0');
+            procNumeral.classList.add('is-visible');
+          }
+        },
+      });
+    });
+    // Параллакс самой цифры при прокрутке через process section
+    gsap.to(procNumeral, {
+      yPercent: -20,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#process',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
+  }
+
+  /* ---------- Scrubbed About: слова параграфов разгораются из dim в full
+     по мере прокрутки viewport через about-text (Apple-style) ---------- */
+  const aboutParas = document.querySelectorAll('.about-text p');
+  aboutParas.forEach((p) => {
+    // Разбиваем на слова, оборачиваем в .about-w
+    const text = p.textContent;
+    p.textContent = '';
+    text.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        p.appendChild(document.createTextNode(part));
       } else {
-        window.scrollTo({
-          top: target.offsetTop - 80,
-          behavior: 'smooth',
-        });
+        const w = document.createElement('span');
+        w.className = 'about-w';
+        w.textContent = part;
+        p.appendChild(w);
       }
-    }
+    });
+    gsap.fromTo(
+      p.querySelectorAll('.about-w'),
+      { opacity: 0.22 },
+      {
+        opacity: 1,
+        stagger: 0.015,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: p,
+          start: 'top 85%',
+          end: 'top 30%',
+          scrub: 1,
+        },
+      },
+    );
   });
-});
+}
 
-// ==================== SPLIT WORDS ====================
-// Разбиваем текст заголовков на слова, для анимации по словам.
-// Правила:
-//  • .accent НЕ трогаем вообще, остаётся обычным inline с градиентом,
-//    чтобы знаки после него не переносились на новую строку.
-//  • Одиночные знаки препинания (.,!?;:,…) оставляем текстом, иначе
-//    inline-block с точкой улетает на новую строку после длинного .accent.
-function splitWords(root) {
-  root.querySelectorAll('.split-words').forEach((el) => {
-    if (el.dataset.split === 'done') return;
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCinematic);
+} else {
+  initCinematic();
+}
+// GSAP/Lenis грузятся с defer — дадим им кадр осесть
+window.addEventListener('load', () => { setTimeout(initCinematic, 50); });
 
-    const wrap = (node) => {
+
+/* -------------------- Scroll progress fallback --------------------
+   Основной progress — через CSS animation-timeline: scroll().
+   Этот rAF-фолбэк остаётся ТОЛЬКО для браузеров без scroll-timeline. */
+const progress = document.getElementById('scrollProgress');
+const supportsScrollTimeline = CSS.supports('animation-timeline', 'scroll()');
+
+if (progress && !supportsScrollTimeline) {
+  let scrollRaf = null;
+  const update = () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const p = docH > 0 ? Math.min(1, Math.max(0, window.scrollY / docH)) : 0;
+    progress.style.transform = `scaleX(${p.toFixed(4)})`;
+    scrollRaf = null;
+  };
+  window.addEventListener('scroll', () => {
+    if (!scrollRaf) scrollRaf = requestAnimationFrame(update);
+  }, { passive: true });
+  update();
+}
+
+
+/* -------------------- Word-mask reveal — hero + все section headlines -------------------- */
+function splitWords(root, { wrapLines = false } = {}) {
+  // Оборачиваем каждое слово в .w, пробелы оставляем текстом
+  const scopes = wrapLines ? root.querySelectorAll('.line') : [root];
+  scopes.forEach((scope) => {
+    const walk = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const frag = document.createDocumentFragment();
-        const text = node.nodeValue;
-        const parts = text.split(/(\s+)/);
-        parts.forEach((part) => {
+        node.nodeValue.split(/(\s+)/).forEach((part) => {
           if (!part) return;
           if (/^\s+$/.test(part)) {
             frag.appendChild(document.createTextNode(part));
-          } else if (/^[.,!?;:…,-\-]+$/.test(part)) {
-            // Знак препинания сам по себе, не оборачиваем
-            frag.appendChild(document.createTextNode(part));
           } else {
-            const span = document.createElement('span');
-            span.className = 'word';
-            span.textContent = part;
-            frag.appendChild(span);
+            const w = document.createElement('span');
+            w.className = 'w';
+            w.textContent = part;
+            frag.appendChild(w);
           }
         });
         node.parentNode.replaceChild(frag, node);
       } else if (node.nodeType === Node.ELEMENT_NODE) {
-        if (node.tagName === 'BR') return;
-        // .accent оставляем как есть, пусть остаётся inline
-        if (node.classList && node.classList.contains('accent')) return;
-        Array.from(node.childNodes).forEach(wrap);
+        // .accent само становится «словом», не трогаем его потроха
+        // (иначе gradient на background-clip: text ломается)
+        if (node.classList.contains('accent')) {
+          node.classList.add('w');
+          return;
+        }
+        Array.from(node.childNodes).forEach(walk);
       }
     };
-
-    Array.from(el.childNodes).forEach(wrap);
-
-    const words = el.querySelectorAll('.word');
-    words.forEach((w, i) => {
-      w.style.transitionDelay = `${i * 60}ms`;
-    });
-
-    el.dataset.split = 'done';
+    Array.from(scope.childNodes).forEach(walk);
   });
 }
-splitWords(document);
 
-// ==================== REVEAL ON SCROLL ====================
-const revealObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
+/* Hero: SplitType + GSAP character-level (если доступны), иначе CSS word fallback.
+   Guard: вызываем до тех пор пока не inited; если CDN отвалился — через 1.5с CSS-путь. */
+let heroInited = false;
+function initHeroReveal() {
+  if (heroInited) return;
+  const title = document.querySelector('[data-hero-reveal]');
+  if (!title) return;
 
-      const el = entry.target;
-      const delay = parseInt(el.dataset.delay || '0', 10);
+  if (reduceMotion) {
+    title.classList.add('is-visible');
+    heroInited = true;
+    return;
+  }
 
-      setTimeout(() => {
-        el.classList.add('is-visible', 'visible');
-
-        // Запустить счётчики, если это контейнер со статистикой
-        el.querySelectorAll('[data-count]').forEach(startCounter);
-
-        // Если элемент сам, data-count
-        if (el.hasAttribute('data-count')) startCounter(el);
-      }, delay);
-
-      revealObserver.unobserve(el);
+  // GSAP + SplitType path: character-level reveal с blur + rotateX
+  if (typeof gsap !== 'undefined' && typeof SplitType !== 'undefined') {
+    title.querySelectorAll('.accent').forEach(a => a.classList.add('splittype-ignore'));
+    new SplitType(title, {
+      types: 'lines,words,chars',
+      tagName: 'span',
+      lineClass: 'line',
+      wordClass: 'w',
+      charClass: 'ch',
     });
-  },
-  { threshold: 0.14, rootMargin: '0px 0px -50px 0px' }
-);
+    gsap.from(title.querySelectorAll('.ch, .splittype-ignore'), {
+      opacity: 0,
+      yPercent: 110,
+      rotateX: -70,
+      filter: 'blur(8px)',
+      transformOrigin: '50% 100%',
+      stagger: { amount: 0.9, from: 'start' },
+      duration: 1.1,
+      ease: 'power3.out',
+      delay: 0.15,
+    });
+    title.classList.add('is-visible');
+    heroInited = true;
+  }
+}
 
-document.querySelectorAll('[data-reveal], .reveal').forEach((el) => revealObserver.observe(el));
+function heroFallback() {
+  if (heroInited) return;
+  const title = document.querySelector('[data-hero-reveal]');
+  if (!title) return;
+  splitWords(title, { wrapLines: true });
+  title.querySelectorAll('.w').forEach((w, i) => { w.style.transitionDelay = (i * 70) + 'ms'; });
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => title.classList.add('is-visible'));
+  });
+  heroInited = true;
+}
 
-// ==================== NUMBER COUNTER ====================
-function startCounter(el) {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeroReveal);
+} else {
+  initHeroReveal();
+}
+window.addEventListener('load', () => { setTimeout(initHeroReveal, 60); });
+// Если CDN отвалился — через 1.5с запускаем CSS-путь, чтобы hero не остался пустым
+setTimeout(heroFallback, 1500);
+
+/* Если GSAP не загрузился за 2 секунды — переключаем всё в no-cinematic режим,
+   чтобы horizontal cases и pinned services не оставались сломанными. */
+setTimeout(() => {
+  if (!cinematicInited) {
+    document.body.classList.add('no-cinematic');
+  }
+}, 2000);
+
+/* Section headlines: разбить и анимировать при входе в viewport */
+(function () {
+  const headlines = document.querySelectorAll('.section-head h2, .contact-head h2');
+  if (!headlines.length) return;
+  headlines.forEach((h) => {
+    splitWords(h);
+    h.querySelectorAll('.w').forEach((w, i) => { w.style.transitionDelay = (i * 50) + 'ms'; });
+  });
+  if (reduceMotion) {
+    headlines.forEach((h) => h.classList.add('is-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-visible');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+  headlines.forEach((h) => io.observe(h));
+})();
+
+
+/* -------------------- Case screenshots: clip reveal on enter -------------------- */
+const caseShotIO = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-in');
+      caseShotIO.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(shot));
+
+
+/* -------------------- 3D tilt (data-tilt) — mouse-tracking perspective ---
+   При движении курсора карточка наклоняется под перспективой, следит
+   за курсором. На touch и reduce-motion отключается через CSS. */
+if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('[data-tilt]').forEach((el) => {
+    const max = parseFloat(el.dataset.tiltMax) || 6;
+    let raf = null;
+    let targetRX = 0, targetRY = 0, curRX = 0, curRY = 0;
+    let targetMX = 0.5, targetMY = 0.5, curMX = 0.5, curMY = 0.5;
+
+    function loop() {
+      curRX += (targetRX - curRX) * 0.12;
+      curRY += (targetRY - curRY) * 0.12;
+      curMX += (targetMX - curMX) * 0.12;
+      curMY += (targetMY - curMY) * 0.12;
+      el.style.setProperty('--rx', curRX.toFixed(2) + 'deg');
+      el.style.setProperty('--ry', curRY.toFixed(2) + 'deg');
+      el.style.setProperty('--mx', curMX.toFixed(3));
+      el.style.setProperty('--my', curMY.toFixed(3));
+      if (Math.abs(targetRX - curRX) > 0.01 || Math.abs(targetRY - curRY) > 0.01) {
+        raf = requestAnimationFrame(loop);
+      } else { raf = null; }
+    }
+    function schedule() { if (!raf) raf = requestAnimationFrame(loop); }
+
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      targetMX = x; targetMY = y;
+      targetRY = (x - 0.5) * 2 * max;     // горизонтальная мышь → rotateY
+      targetRX = -(y - 0.5) * 2 * max;    // вертикальная мышь → rotateX (инвертированно)
+      schedule();
+    });
+    el.addEventListener('mouseleave', () => {
+      targetRX = 0; targetRY = 0; targetMX = 0.5; targetMY = 0.5;
+      schedule();
+    });
+  });
+}
+
+
+/* -------------------- Magnetic hover (только [data-magnetic], не трогаем .pc-btn/.case-link
+   у которых свой hover-transform — иначе два transition дерутся за transform и дёргают) -------- */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const magnets = document.querySelectorAll('[data-magnetic]');
+  magnets.forEach((el) => {
+    const strength = 0.3;
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - (r.left + r.width / 2)) * strength;
+      const y = (e.clientY - (r.top + r.height / 2)) * strength;
+      el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
+}
+
+
+/* -------------------- Reveal on scroll -------------------- */
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('is-visible');
+    entry.target.querySelectorAll('[data-count]').forEach(runCounter);
+    revealIO.unobserve(entry.target);
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('[data-reveal]').forEach((el) => revealIO.observe(el));
+
+
+/* -------------------- Number counter -------------------- */
+function runCounter(el) {
   if (el.dataset.counted === 'yes') return;
   el.dataset.counted = 'yes';
-
   const target = parseFloat(el.dataset.count);
   if (isNaN(target)) return;
 
@@ -150,157 +469,40 @@ function startCounter(el) {
   const start = performance.now();
   const isFloat = !Number.isInteger(target);
 
-  function tick(now) {
-    const elapsed = now - start;
-    const p = Math.min(elapsed / duration, 1);
-    // easeOutCubic
+  const tick = (now) => {
+    const p = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - p, 3);
     const value = target * eased;
     el.textContent = isFloat ? value.toFixed(1) : Math.round(value);
     if (p < 1) requestAnimationFrame(tick);
     else el.textContent = isFloat ? target.toFixed(1) : target;
-  }
+  };
   requestAnimationFrame(tick);
 }
 
-// ==================== PARALLAX ON SCROLL ====================
-// Отключаем parallax на мобильных, на телефоне это только создаёт нагрузку
-const parallaxEls = document.querySelectorAll('[data-parallax]');
-let ticking = false;
 
-function updateParallax() {
-  if (window.innerWidth <= 720) {
-    // На мобильных сбрасываем трансформ и выходим
-    parallaxEls.forEach((el) => { el.style.transform = ''; });
-    ticking = false;
-    return;
-  }
-  const vh = window.innerHeight;
-  parallaxEls.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    // Считаем сдвиг: центр экрана минус центр элемента
-    const progress = (rect.top + rect.height / 2 - vh / 2) / vh;
-    const speed = parseFloat(el.dataset.parallax) || 0.1;
-    const offset = -progress * speed * 100;
-    el.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
-  });
-  ticking = false;
-}
-
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(updateParallax);
-    ticking = true;
-  }
-}, { passive: true });
-updateParallax();
-
-// ==================== МОДАЛКА «ПОСМОТРЕТЬ САЙТ» ====================
-const CASE_DATA = {
-  alexandra: {
-    title: 'Александра, LED-наращивание',
-    slides: [
-      {
-        html: `<iframe src="assets/alexandra-demo.html" title="Сайт Александры, живое демо" loading="lazy"></iframe>`,
-      },
-    ],
-  },
-
-  pilipilit: {
-    title: 'Салон «ПилиПилить»',
-    slides: [
-      {
-        html: `<img src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран" style="width:100%;display:block;border-radius:12px">`,
-      },
-    ],
-  },
-
-  svarka: {
-    title: 'SvarkaUral196',
-    slides: [
-      {
-        html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" loading="lazy"></iframe>`,
-      },
-    ],
-  },
-};
-
-const modal        = document.getElementById('caseModal');
-const modalScroll  = document.getElementById('modalScroll');
-const modalTitle   = document.getElementById('modalTitle');
-
-function openCase(caseId) {
-  const data = CASE_DATA[caseId];
-  if (!data || !modal || !modalScroll) return;
-
-  modalTitle.textContent = data.title;
-
-  // Рендерим все секции стопкой, пользователь скроллит вертикально, как на настоящем сайте
-  modalScroll.innerHTML = data.slides
-    .map((s) => {
-      const cap = s.caption ? `<div class="modal-section-caption">${s.caption}</div>` : '';
-      return `<div class="modal-section">${cap}<div class="modal-section-frame">${s.html}</div></div>`;
-    })
-    .join('');
-
-  modalScroll.scrollTop = 0;
-
-  modal.classList.add('is-open');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('modal-open');
-}
-
-function closeCase() {
-  if (!modal) return;
-  modal.classList.remove('is-open');
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('modal-open');
-}
-
-// Кнопки «Посмотреть сайт»
-document.querySelectorAll('[data-open-case]').forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    openCase(btn.dataset.openCase);
+/* -------------------- Anchor nav: закрыть моб-меню после клика -------------------- */
+document.querySelectorAll('a[href^="#"]').forEach((a) => {
+  a.addEventListener('click', () => {
+    closeMobileMenu();
   });
 });
 
-// Вся карточка кейса кликабельна
-document.querySelectorAll('.case-card[data-case]').forEach((card) => {
-  card.style.cursor = 'pointer';
-  card.addEventListener('click', (e) => {
-    if (e.target.closest('[data-open-case]')) return;
-    openCase(card.dataset.case);
-  });
-});
 
-// Закрытие
-document.querySelectorAll('[data-modal-close]').forEach((el) => {
-  el.addEventListener('click', closeCase);
-});
-
-// Закрытие по Escape
-document.addEventListener('keydown', (e) => {
-  if (!modal || !modal.classList.contains('is-open')) return;
-  if (e.key === 'Escape') closeCase();
-});
-
-// ==================== FAQ, АККОРДЕОН ====================
-// Клик по вопросу раскрывает ответ. Одновременно открыт только один пункт.
+/* -------------------- FAQ accordion -------------------- */
 document.querySelectorAll('.faq-item').forEach((item) => {
-  const btn = item.querySelector('.faq-item-q');
-  const ans = item.querySelector('.faq-item-a');
+  const btn = item.querySelector('.faq-q');
+  const ans = item.querySelector('.faq-a');
   if (!btn || !ans) return;
 
   btn.addEventListener('click', () => {
     const isOpen = item.classList.contains('is-open');
 
-    // Закрываем остальные
     document.querySelectorAll('.faq-item.is-open').forEach((other) => {
       if (other === item) return;
       other.classList.remove('is-open');
-      const oq = other.querySelector('.faq-item-q');
-      const oa = other.querySelector('.faq-item-a');
+      const oq = other.querySelector('.faq-q');
+      const oa = other.querySelector('.faq-a');
       if (oq) oq.setAttribute('aria-expanded', 'false');
       if (oa) oa.style.maxHeight = null;
     });
@@ -317,75 +519,82 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   });
 });
 
-// Пересчёт высоты открытого пункта при ресайзе (перенос строк меняет высоту)
 window.addEventListener('resize', () => {
-  const open = document.querySelector('.faq-item.is-open .faq-item-a');
+  const open = document.querySelector('.faq-item.is-open .faq-a');
   if (open) open.style.maxHeight = open.scrollHeight + 'px';
 });
 
-// ==================== КЕЙСЫ, 3D-НАКЛОН + СВЕЧЕНИЕ ЗА КУРСОРОМ ====================
-// Только на устройствах с мышью и без запрета анимаций.
-(function () {
-  const canHover = window.matchMedia('(hover: hover)').matches;
-  const reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!canHover || reduce) return;
 
-  const MAX_TILT = 5; // градусов
+/* -------------------- Case modal -------------------- */
+const CASE_DATA = {
+  alexandra: {
+    title: 'Александра, LED-наращивание',
+    html: `<iframe src="assets/alexandra-demo.html" title="Сайт Александры, живое демо" loading="lazy"></iframe>`,
+  },
+  pilipilit: {
+    title: 'Салон ПилиПилить',
+    html: `<img src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран">`,
+  },
+  svarka: {
+    title: 'SvarkaUral196',
+    html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" loading="lazy"></iframe>`,
+  },
+};
 
-  document.querySelectorAll('.case-card').forEach((card) => {
-    let raf = null;
+const modal       = document.getElementById('caseModal');
+const modalScroll = document.getElementById('modalScroll');
+const modalTitle  = document.getElementById('modalTitle');
 
-    card.addEventListener('mousemove', (e) => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;   // 0..1
-      const py = (e.clientY - r.top) / r.height;   // 0..1
-      const ry = (px - 0.5) * 2 * MAX_TILT;        // наклон влево/вправо
-      const rx = -(py - 0.5) * 2 * MAX_TILT;       // наклон вверх/вниз
+function openCase(id) {
+  const data = CASE_DATA[id];
+  if (!data || !modal || !modalScroll) return;
 
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
-        card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
-        card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-        card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-      });
-    });
+  modalTitle.textContent = data.title;
+  modalScroll.innerHTML = `<div class="cm-frame">${data.html}</div>`;
+  modalScroll.scrollTop = 0;
 
-    card.addEventListener('mouseleave', () => {
-      if (raf) cancelAnimationFrame(raf);
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-    });
-  });
-
-  // Свечение за курсором на пунктах FAQ и карточках тарифов (без наклона)
-  document.querySelectorAll('.faq-item, .tier').forEach((item) => {
-    let raf = null;
-    item.addEventListener('mousemove', (e) => {
-      const r = item.getBoundingClientRect();
-      const mx = ((e.clientX - r.left) / r.width) * 100;
-      const my = ((e.clientY - r.top) / r.height) * 100;
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        item.style.setProperty('--mx', mx.toFixed(1) + '%');
-        item.style.setProperty('--my', my.toFixed(1) + '%');
-      });
-    });
-  });
-})();
-
-// ==================== МОБИЛЬНОЕ МЕНЮ (БУРГЕР) ====================
-const burger     = document.getElementById('burger');
-const mobileMenu = document.getElementById('mobileMenu');
-
-function closeMobileMenu() {
-  if (!burger || !mobileMenu) return;
-  burger.classList.remove('is-open');
-  burger.setAttribute('aria-expanded', 'false');
-  mobileMenu.classList.remove('is-open');
-  mobileMenu.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('menu-open');
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('scroll-lock');
 }
+
+function closeCase() {
+  if (!modal) return;
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('scroll-lock');
+  setTimeout(() => { if (modalScroll) modalScroll.innerHTML = ''; }, 320);
+}
+
+document.querySelectorAll('[data-open-case]').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openCase(btn.dataset.openCase);
+  });
+});
+
+document.querySelectorAll('.case[data-case]').forEach((card) => {
+  const shot = card.querySelector('.case-shot');
+  if (shot) {
+    shot.style.cursor = 'pointer';
+    shot.addEventListener('click', () => openCase(card.dataset.case));
+  }
+});
+
+document.querySelectorAll('[data-modal-close]').forEach((el) => {
+  el.addEventListener('click', closeCase);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (!modal || !modal.classList.contains('is-open')) return;
+  if (e.key === 'Escape') closeCase();
+});
+
+
+/* -------------------- Burger / mobile menu -------------------- */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
 
 function openMobileMenu() {
   if (!burger || !mobileMenu) return;
@@ -393,256 +602,21 @@ function openMobileMenu() {
   burger.setAttribute('aria-expanded', 'true');
   mobileMenu.classList.add('is-open');
   mobileMenu.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('menu-open');
+  document.body.classList.add('scroll-lock');
 }
 
-if (burger) {
+function closeMobileMenu() {
+  if (!burger || !mobileMenu) return;
+  burger.classList.remove('is-open');
+  burger.setAttribute('aria-expanded', 'false');
+  mobileMenu.classList.remove('is-open');
+  mobileMenu.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('scroll-lock');
+}
+
+if (burger && mobileMenu) {
   burger.addEventListener('click', () => {
     if (mobileMenu.classList.contains('is-open')) closeMobileMenu();
     else openMobileMenu();
   });
 }
-
-// Закрываем меню при клике по ссылке
-if (mobileMenu) {
-  mobileMenu.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('click', closeMobileMenu);
-  });
-}
-
-// Закрываем меню при Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && mobileMenu && mobileMenu.classList.contains('is-open')) {
-    closeMobileMenu();
-  }
-});
-
-// ==================== HEADER BG ON SCROLL ====================
-const header = document.querySelector('.header');
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  if (!header) return;
-  if (y > 50) header.classList.add('scrolled');
-  else header.classList.remove('scrolled');
-}, { passive: true });
-
-// ==================== УСЛУГИ: FLIP-OVERLAY ====================
-
-const SERVICE_DATA = {
-  landing: {
-    eyebrow: '01 · Посадочная страница',
-    title: 'Одна страница, чтобы человек <span class="accent">оставил заявку</span>.',
-    lead: 'Короткий сайт под одну услугу или один товар. Человек заходит, за&nbsp;минуту понимает суть и&nbsp;пишет тебе в&nbsp;WhatsApp или Telegram.',
-    cells: [
-      { h: 'Кому подойдёт', body: '<ul><li>Один товар или одна услуга</li><li>Нужно простое место, чтобы рассказать о&nbsp;себе</li><li>Хочешь быстро</li></ul>' },
-      { h: 'Что входит', body: '<ul><li>Одна страница со&nbsp;всем главным</li><li>Дизайн и&nbsp;тексты</li><li>Версия для&nbsp;телефона</li><li>Кнопка в&nbsp;WhatsApp или Telegram</li><li>Свой домен</li></ul>' },
-      { h: 'Срок', body: '3-5 дней.' },
-    ],
-  },
-
-  multipage: {
-    eyebrow: '02 · Сайт из страниц',
-    title: 'Несколько услуг, у&nbsp;каждой <span class="accent">своя страница</span>.',
-    lead: 'Главная знакомит с&nbsp;тобой. Дальше у&nbsp;каждой услуги, своя страница: что это, как проходит, как записаться.',
-    cells: [
-      { h: 'Кому подойдёт', body: '<ul><li>2-5 услуг или направлений</li><li>Каждой нужно своё место</li><li>Хочешь, чтобы клиент сам всё нашёл</li></ul>' },
-      { h: 'Что входит', body: '<ul><li>Главная и&nbsp;3-5 страниц по&nbsp;услугам</li><li>Меню сверху</li><li>Карточки услуг с&nbsp;фото</li><li>Формы связи</li><li>Версия для&nbsp;телефона</li></ul>' },
-      { h: 'Срок', body: '7-10 дней.' },
-    ],
-  },
-
-  corporate: {
-    eyebrow: '03 · Сайт компании',
-    title: 'Большой сайт, <span class="accent">который растёт вместе с&nbsp;тобой</span>.',
-    lead: 'Сайт под компанию: услуги, команда, кейсы, контакты. Со&nbsp;временем можно добавлять страницы без&nbsp;переделок.',
-    cells: [
-      { h: 'Кому подойдёт', body: '<ul><li>У&nbsp;компании есть команда и&nbsp;история</li><li>Нужен сайт надолго</li><li>Хочешь добавлять страницы со&nbsp;временем</li></ul>' },
-      { h: 'Что входит', body: '<ul><li>До&nbsp;10 страниц</li><li>Раздел новостей или блог</li><li>Страницы команды и&nbsp;кейсов</li><li>Формы заявок и&nbsp;вакансий</li><li>Запас на&nbsp;будущее</li></ul>' },
-      { h: 'Срок', body: '2-3 недели.' },
-    ],
-  },
-
-  minisite: {
-    eyebrow: '04 · Мини-сайт',
-    title: 'Одна ссылка, <span class="accent">для всех соцсетей</span>.',
-    lead: 'Короткая страничка с&nbsp;главным: кто ты, что делаешь, как написать. Удобно ставить в&nbsp;шапку Instagram или Telegram. Своя замена Linktree, только на&nbsp;твоём домене.',
-    cells: [
-      { h: 'Кому подойдёт', body: '<ul><li>Нужна одна ссылка в&nbsp;шапку соцсети</li><li>Хочешь свой стиль, а&nbsp;не&nbsp;шаблон</li><li>Сайт нужен быстро</li></ul>' },
-      { h: 'Что входит', body: '<ul><li>Одна страница</li><li>О&nbsp;тебе и&nbsp;услуги</li><li>Кнопки в&nbsp;мессенджеры</li><li>Свой домен (например, твоё имя.ru)</li><li>Версия для&nbsp;телефона на&nbsp;первом месте</li></ul>' },
-      { h: 'Срок', body: '2-3 дня.' },
-    ],
-  },
-
-  bot: {
-    eyebrow: '05 · Бот для Телеграма',
-    title: 'Бот, который <span class="accent">отвечает за&nbsp;тебя</span>.',
-    lead: 'Бот для Telegram: отвечает на&nbsp;частые вопросы, принимает заявки и&nbsp;записывает на&nbsp;услугу. Работает сам, пока ты&nbsp;занят.',
-    cells: [
-      { h: 'Кому подойдёт', body: '<ul><li>Хочешь снять с&nbsp;себя одинаковые сообщения</li><li>Принимаешь записи и&nbsp;заявки</li><li>Нужен помощник, который не&nbsp;спит</li></ul>' },
-      { h: 'Что входит', body: '<ul><li>Меню с&nbsp;кнопками</li><li>Ответы на&nbsp;частые вопросы</li><li>Запись на&nbsp;услугу</li><li>Уведомления тебе в&nbsp;Telegram</li><li>Инструкция, как им&nbsp;управлять</li></ul>' },
-      { h: 'Срок', body: '5-7 дней.' },
-    ],
-  },
-};
-
-// ===== FLIP-ОТКРЫТИЕ МОДАЛКИ УСЛУГИ =====
-const svcModal       = document.getElementById('serviceModal');
-const svcModalInner  = document.getElementById('serviceModalInner');
-const svcModalBody   = document.getElementById('serviceModalBody');
-
-let svcOriginCard = null;
-let svcLastFocused = null;
-
-function renderServiceContent(data) {
-  const cells = data.cells.map((c) =>
-    `<div class="svc-cell">
-      <div class="svc-cell-h">${c.h}</div>
-      <div class="svc-cell-body">${c.body}</div>
-    </div>`
-  ).join('');
-
-  return `
-    <span class="svc-eyebrow">${data.eyebrow}</span>
-    <h2 class="svc-title" id="serviceModalTitle">${data.title}</h2>
-    <p class="svc-lead">${data.lead}</p>
-    <div class="svc-grid">${cells}</div>
-    <button type="button" class="svc-cta" data-svc-cta>
-      Обсудить услугу
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-      </svg>
-    </button>
-  `;
-}
-
-function openService(card, svcId) {
-  const data = SERVICE_DATA[svcId];
-  if (!data || !svcModal || !svcModalInner || !svcModalBody) return;
-
-  svcOriginCard  = card;
-  svcLastFocused = document.activeElement;
-
-  svcModalBody.innerHTML = renderServiceContent(data);
-
-  // Получаем стартовый прямоугольник плашки
-  const startRect = card.getBoundingClientRect();
-
-  // Открываем модалку, чтобы получить «конечный» размер
-  svcModalInner.style.transition = 'none';
-  svcModalInner.style.transform = '';
-  svcModal.classList.add('is-open');
-  svcModal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('modal-open');
-
-  const finalRect = svcModalInner.getBoundingClientRect();
-
-  // Inverse transform, «вернуть» в позицию плашки
-  const dx = startRect.left - finalRect.left;
-  const dy = startRect.top  - finalRect.top;
-  const sx = startRect.width  / finalRect.width;
-  const sy = startRect.height / finalRect.height;
-
-  svcModalInner.style.transformOrigin = '0 0';
-  svcModalInner.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
-
-  // Триггерим reflow → запускаем переход к нулевому transform
-  // eslint-disable-next-line no-unused-expressions
-  svcModalInner.offsetWidth;
-
-  svcModalInner.style.transition = 'transform 0.62s cubic-bezier(0.19, 1, 0.22, 1)';
-  svcModalInner.style.transform = 'translate(0px, 0px) scale(1, 1)';
-
-  // Контент проявляется через CSS-класс
-  requestAnimationFrame(() => {
-    svcModal.classList.add('is-revealed');
-  });
-
-  // Фокус на крестик после анимации
-  setTimeout(() => {
-    const closeBtn = svcModal.querySelector('.service-modal-close');
-    if (closeBtn) closeBtn.focus();
-  }, 650);
-}
-
-function closeService() {
-  if (!svcModal || !svcModal.classList.contains('is-open') || !svcModalInner) return;
-
-  svcModal.classList.remove('is-revealed');
-
-  if (svcOriginCard) {
-    const startRect = svcOriginCard.getBoundingClientRect();
-    const finalRect = svcModalInner.getBoundingClientRect();
-    const dx = startRect.left - finalRect.left;
-    const dy = startRect.top  - finalRect.top;
-    const sx = startRect.width  / finalRect.width;
-    const sy = startRect.height / finalRect.height;
-
-    svcModalInner.style.transition = 'transform 0.5s cubic-bezier(0.7, 0, 0.3, 1)';
-    svcModalInner.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
-  }
-
-  // Сразу скрываем backdrop / opacity
-  svcModal.style.opacity = '0';
-
-  setTimeout(() => {
-    svcModal.classList.remove('is-open');
-    svcModal.setAttribute('aria-hidden', 'true');
-    svcModal.style.opacity = '';
-    svcModalInner.style.transition = '';
-    svcModalInner.style.transform = '';
-    svcModalBody.innerHTML = '';
-    document.body.classList.remove('modal-open');
-    if (svcLastFocused && typeof svcLastFocused.focus === 'function') {
-      svcLastFocused.focus();
-    }
-    svcOriginCard = null;
-  }, 470);
-}
-
-// Клики по плашкам
-document.querySelectorAll('[data-open-service]').forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    openService(btn, btn.dataset.openService);
-  });
-});
-
-// Закрытие модалки услуги
-document.querySelectorAll('[data-svc-close]').forEach((el) => {
-  el.addEventListener('click', closeService);
-});
-
-// CTA внутри модалки → закрываем модалку, потом скроллим к #contact
-if (svcModalBody) {
-  svcModalBody.addEventListener('click', (e) => {
-    const cta = e.target.closest('[data-svc-cta]');
-    if (!cta) return;
-    closeService();
-    setTimeout(() => {
-      const target = document.querySelector('#contact');
-      if (target) {
-        if (lenis) {
-          lenis.scrollTo(target, { offset: -80 });
-        } else {
-          window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
-        }
-      }
-    }, 500);
-  });
-}
-
-// Esc
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && svcModal && svcModal.classList.contains('is-open')) {
-    closeService();
-  }
-});
-
-// ==================== РЕЖИМ РЕДАКТИРОВАНИЯ ====================
-// editor.js подгружаем только при ?edit, в боевом режиме он не грузится.
-if (new URLSearchParams(location.search).has('edit')) {
-  const s = document.createElement('script');
-  s.src = 'editor.js';
-  document.body.appendChild(s);
-}
-
