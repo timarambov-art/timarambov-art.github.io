@@ -59,7 +59,15 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Запас сверху, чтобы фиксированный хедер не перекрывал якорь */
+section[id] { scroll-margin-top: 80px; }
 
 html, body { margin: 0; padding: 0; }
 

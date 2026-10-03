@@ -1,25 +1,10 @@
 /* ============================================================
    Тимофей Рямбов, лендинг
-   JS: smooth scroll, reveal, anchor offset, FAQ, case modal, burger, counter
-   Простой и короткий. Никакого 3D-tilt и mousemove-glow.
+   JS: reveal, header shrink, FAQ, case modal, burger, counter
+   Нативный скролл, без Lenis.
    ============================================================ */
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-
-/* -------------------- Lenis smooth scroll -------------------- */
-let lenis = null;
-if (!reduceMotion && typeof Lenis !== 'undefined') {
-  lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    wheelMultiplier: 1,
-    touchMultiplier: 1.6,
-  });
-  const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-  requestAnimationFrame(raf);
-}
 
 
 /* -------------------- Header shrink on scroll -------------------- */
@@ -34,31 +19,11 @@ if (header) {
 }
 
 
-/* -------------------- Anchor smooth scroll with offset -------------------- */
-document.querySelectorAll('a[href^="#"]').forEach((a) => {
-  a.addEventListener('click', (e) => {
-    const href = a.getAttribute('href');
-    if (!href || href === '#' || href.length < 2) return;
-    const target = document.querySelector(href);
-    if (!target) return;
-    e.preventDefault();
-    if (lenis) {
-      lenis.scrollTo(target, { offset: -72 });
-    } else {
-      window.scrollTo({ top: target.offsetTop - 72, behavior: 'smooth' });
-    }
-    // Закрываем моб-меню, если открыто
-    closeMobileMenu();
-  });
-});
-
-
 /* -------------------- Reveal on scroll -------------------- */
 const revealIO = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     entry.target.classList.add('is-visible');
-    // Если есть счётчики внутри, запустим
     entry.target.querySelectorAll('[data-count]').forEach(runCounter);
     revealIO.unobserve(entry.target);
   });
@@ -90,6 +55,14 @@ function runCounter(el) {
 }
 
 
+/* -------------------- Anchor nav: закрыть моб-меню после клика -------------------- */
+document.querySelectorAll('a[href^="#"]').forEach((a) => {
+  a.addEventListener('click', () => {
+    closeMobileMenu();
+  });
+});
+
+
 /* -------------------- FAQ accordion -------------------- */
 document.querySelectorAll('.faq-item').forEach((item) => {
   const btn = item.querySelector('.faq-q');
@@ -99,7 +72,6 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   btn.addEventListener('click', () => {
     const isOpen = item.classList.contains('is-open');
 
-    // Закрываем остальные
     document.querySelectorAll('.faq-item.is-open').forEach((other) => {
       if (other === item) return;
       other.classList.remove('is-open');
@@ -121,7 +93,6 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   });
 });
 
-// Пересчёт высоты открытого пункта при ресайзе
 window.addEventListener('resize', () => {
   const open = document.querySelector('.faq-item.is-open .faq-a');
   if (open) open.style.maxHeight = open.scrollHeight + 'px';
@@ -159,7 +130,6 @@ function openCase(id) {
   modal.classList.add('is-open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('scroll-lock');
-  if (lenis) lenis.stop();
 }
 
 function closeCase() {
@@ -167,8 +137,6 @@ function closeCase() {
   modal.classList.remove('is-open');
   modal.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('scroll-lock');
-  if (lenis) lenis.start();
-  // чуть позже чистим содержимое
   setTimeout(() => { if (modalScroll) modalScroll.innerHTML = ''; }, 320);
 }
 
@@ -209,7 +177,6 @@ function openMobileMenu() {
   mobileMenu.classList.add('is-open');
   mobileMenu.setAttribute('aria-hidden', 'false');
   document.body.classList.add('scroll-lock');
-  if (lenis) lenis.stop();
 }
 
 function closeMobileMenu() {
@@ -219,7 +186,6 @@ function closeMobileMenu() {
   mobileMenu.classList.remove('is-open');
   mobileMenu.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('scroll-lock');
-  if (lenis) lenis.start();
 }
 
 if (burger && mobileMenu) {
