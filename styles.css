@@ -1306,6 +1306,20 @@ p  { margin: 0; }
   z-index: 0;
 }
 
+/* Параллакс ghost-numeral: при скролле уходит вверх медленнее, чем контент.
+   Native scroll-driven, GPU-ускорено. */
+@supports (animation-timeline: scroll()) {
+  .hero-ghost {
+    animation: ghost-parallax linear;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+  }
+  @keyframes ghost-parallax {
+    from { transform: translateY(-50%) translate3d(0, 0, 0); }
+    to   { transform: translateY(-50%) translate3d(0, -40%, 0); }
+  }
+}
+
 .hero > .container { position: relative; z-index: 1; }
 
 .hero h1 .line { display: block; line-height: 1.08; }
@@ -1451,6 +1465,8 @@ p  { margin: 0; }
   font-family: var(--f-mono);
   overflow: hidden;
 }
+.terminal--wide { margin-top: clamp(48px, 7vw, 96px); }
+.terminal--wide pre { padding: clamp(20px, 3vw, 32px) clamp(22px, 3vw, 36px); font-size: 14px; }
 .terminal .bar {
   display: flex;
   align-items: center;
@@ -1524,6 +1540,64 @@ p  { margin: 0; }
 @media (hover: hover) and (pointer: fine) {
   .case-link:hover::after { transform: scaleX(1); }
 }
+
+
+/* --- 18.11 scroll-driven: section-numbers scaleUp при входе в viewport --- */
+@supports (animation-timeline: view()) {
+  .section-head .num {
+    animation: numeral-in linear;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+    transform-origin: left center;
+  }
+  @keyframes numeral-in {
+    from { opacity: 0; transform: translateY(12px); letter-spacing: 0.12em; }
+    to   { opacity: 1; transform: translateY(0);    letter-spacing: 0.04em; }
+  }
+}
+
+/* --- 18.12 scroll-driven: subtle parallax на case-shot изображениях ---
+   image уходит медленнее, чем container → ощущение глубины */
+@supports (animation-timeline: view()) {
+  .case-shot.is-in img {
+    animation: case-parallax linear;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+  @keyframes case-parallax {
+    from { transform: scale(1.06) translateY(-3%); }
+    to   { transform: scale(1.06) translateY(3%); }
+  }
+  /* Чтобы hover-scale(1.04) не ломал parallax — hover приоритет через ::after */
+  @media (hover: hover) and (pointer: fine) {
+    .case-shot:hover img {
+      animation-play-state: paused;
+      transform: scale(1.04) !important;
+    }
+  }
+}
+
+/* --- 18.13 Fade-mask под sticky header: контент плавно уходит под шапку,
+   без hard border. Dорогое ощущение, как на apple.com --- */
+.header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  top: 100%;
+  height: 24px;
+  background: linear-gradient(180deg, rgba(10, 22, 40, 0.65) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* --- 18.14 Scroll-driven: section headlines medley reveal --- */
+.section-head h2 .w {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  will-change: opacity, transform;
+}
+.section-head h2.is-visible .w { opacity: 1; transform: translateY(0); }
 
 
 /* --- 18.10 svc-row: animate line fill on hover (transform-only, GPU) --- */

@@ -28,13 +28,11 @@ if (progress && !supportsScrollTimeline) {
 }
 
 
-/* -------------------- Hero: word-mask reveal -------------------- */
-(function () {
-  const title = document.querySelector('[data-hero-reveal]');
-  if (!title) return;
-
+/* -------------------- Word-mask reveal — hero + все section headlines -------------------- */
+function splitWords(root, { wrapLines = false } = {}) {
   // Оборачиваем каждое слово в .w, пробелы оставляем текстом
-  title.querySelectorAll('.line').forEach((line) => {
+  const scopes = wrapLines ? root.querySelectorAll('.line') : [root];
+  scopes.forEach((scope) => {
     const walk = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const frag = document.createDocumentFragment();
@@ -60,22 +58,42 @@ if (progress && !supportsScrollTimeline) {
         Array.from(node.childNodes).forEach(walk);
       }
     };
-    Array.from(line.childNodes).forEach(walk);
+    Array.from(scope.childNodes).forEach(walk);
   });
+}
 
-  const words = title.querySelectorAll('.w');
-  words.forEach((w, i) => { w.style.transitionDelay = (i * 70) + 'ms'; });
-
-  // Фолбэк на reduced-motion
-  if (reduceMotion) {
-    title.classList.add('is-visible');
-    return;
-  }
-
-  // Запускаем сразу после первого фрейма
+/* Hero: сразу после загрузки */
+(function () {
+  const title = document.querySelector('[data-hero-reveal]');
+  if (!title) return;
+  splitWords(title, { wrapLines: true });
+  title.querySelectorAll('.w').forEach((w, i) => { w.style.transitionDelay = (i * 70) + 'ms'; });
+  if (reduceMotion) { title.classList.add('is-visible'); return; }
   requestAnimationFrame(() => {
     requestAnimationFrame(() => title.classList.add('is-visible'));
   });
+})();
+
+/* Section headlines: разбить и анимировать при входе в viewport */
+(function () {
+  const headlines = document.querySelectorAll('.section-head h2, .contact-head h2');
+  if (!headlines.length) return;
+  headlines.forEach((h) => {
+    splitWords(h);
+    h.querySelectorAll('.w').forEach((w, i) => { w.style.transitionDelay = (i * 50) + 'ms'; });
+  });
+  if (reduceMotion) {
+    headlines.forEach((h) => h.classList.add('is-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-visible');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+  headlines.forEach((h) => io.observe(h));
 })();
 
 
