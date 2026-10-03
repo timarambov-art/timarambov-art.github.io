@@ -286,6 +286,8 @@ p  { margin: 0; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   transform: translateY(-100%);
   transition: transform 0.5s var(--ease);
 }
