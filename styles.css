@@ -2313,3 +2313,162 @@ body { background: var(--ink-0); position: relative; }
   border-radius: inherit;
   z-index: 2;
 }
+
+
+/* ============================================================
+   20 · CASE CARD DECORATIONS
+   Обогащение cards: browser-chrome на фото, watermark с номером
+   в фоне body, chip-tags тех-стека.
+   ============================================================ */
+
+/* --- 20.1 Browser-chrome сверху .case-shot — узкий top bar внутри фото
+   с macOS-style 3 dots слева, url в центре, LIVE badge справа.
+   Делает скриншот живым, узнаваемым, не плоским. */
+.case-shot {
+  border-radius: clamp(8px, 1vw, 14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 24px 60px -20px rgba(0, 0, 0, 0.5);
+}
+.shot-chrome {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(14, 24, 44, 0.95), rgba(14, 24, 44, 0.85));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  user-select: none;
+  pointer-events: none;
+}
+.shot-dots {
+  display: inline-flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.shot-dots i {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: block;
+}
+.shot-dots i:nth-child(1) { background: oklch(68% 0.16 25); }   /* red */
+.shot-dots i:nth-child(2) { background: oklch(78% 0.14 85); }   /* yellow */
+.shot-dots i:nth-child(3) { background: oklch(72% 0.14 150); }  /* green */
+.shot-url {
+  flex: 1;
+  text-align: center;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+  margin: 0 auto;
+}
+.shot-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: oklch(28% 0.08 150 / 0.6);
+  border: 1px solid oklch(60% 0.14 150 / 0.4);
+  border-radius: 999px;
+  color: oklch(85% 0.1 150);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+.shot-live .pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: oklch(72% 0.18 150);
+  box-shadow: 0 0 0 0 oklch(72% 0.18 150 / 0.6);
+  animation: live-pulse 1.8s ease-out infinite;
+}
+@keyframes live-pulse {
+  0%   { box-shadow: 0 0 0 0 oklch(72% 0.18 150 / 0.6); }
+  70%  { box-shadow: 0 0 0 8px oklch(72% 0.18 150 / 0); }
+  100% { box-shadow: 0 0 0 0 oklch(72% 0.18 150 / 0); }
+}
+/* Image внутри .case-shot сдвигаем вниз на высоту chrome */
+.case-shot img { padding-top: 36px; box-sizing: border-box; }
+@media (prefers-reduced-motion: reduce) {
+  .shot-live .pulse { animation: none; }
+}
+
+
+/* --- 20.2 Watermark с крупным номером кейса в фоне .case-body ---
+   A01/A02/A03 огромным Bodoni-italic, едва видимый, уходит за правый
+   верхний угол. Добавляет визуальный вес и editorial-stamp подпись. */
+.case-body { position: relative; }
+.case-watermark {
+  position: absolute;
+  top: -40px;
+  right: -20px;
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: clamp(140px, 18vw, 260px);
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+}
+.case-body > *:not(.case-watermark) { position: relative; z-index: 1; }
+
+
+/* --- 20.3 Chip-tags тех-стек ---
+   Pills с технологиями проекта. Сжимают "пустое место" в карточке,
+   добавляют конкретику — что именно сделано, какие инструменты. */
+.case-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+  margin-top: -8px;
+}
+.case-stack .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), background 0.2s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .case-stack .chip:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: var(--accent-soft);
+  }
+}
+
+@media (max-width: 720px) {
+  .case-watermark { font-size: 100px; top: -20px; right: -10px; }
+  .shot-url { max-width: 140px; font-size: 10px; }
+  .shot-live { font-size: 9px; padding: 2px 8px; }
+  .case-shot img { padding-top: 32px; }
+}
