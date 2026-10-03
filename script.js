@@ -356,16 +356,21 @@ setTimeout(() => {
 
 
 /* -------------------- Case screenshots: clip reveal on enter -------------------- */
-const caseShotIO = new IntersectionObserver((entries) => {
+/* Observer наблюдает всю .case (article) — entrance теперь spiral 3D для
+   целой карточки (shot + body двигаются как один объект). Внутри shot тоже
+   получает .is-in, чтобы clip-path reveal на img по-прежнему работал. */
+const caseIO = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add('is-in');
-      caseShotIO.unobserve(entry.target);
+      const shot = entry.target.querySelector('.case-shot');
+      if (shot) shot.classList.add('is-in');
+      caseIO.unobserve(entry.target);
     }
   });
-}, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(shot));
+document.querySelectorAll('.cases-track > .case').forEach((c) => caseIO.observe(c));
 
 
 /* -------------------- 3D tilt (data-tilt) — mouse-tracking perspective ---

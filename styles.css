@@ -737,22 +737,116 @@ p  { margin: 0; }
   perspective-origin: 50% 40%;
 }
 
+/* .case теперь ЦЕЛЬНАЯ стеклянная карточка (shot + body в одном блоке).
+   Entrance spiral: rotateX+rotateY+rotateZ одновременно + translate3d с
+   глубиной Z, карточка влетает слева снизу из глубины, вращаясь по
+   объёмной спирали, выпрямляется в финальное положение. */
 .case {
-  padding: clamp(72px, 10vw, 128px) 0;
-  border-top: 1px solid var(--rule);
-  padding-left: var(--gutter);
-  padding-right: var(--gutter);
-  max-width: var(--max-w);
-  margin: 0 auto;
-  width: 100%;
+  position: relative;
+  width: calc(100% - 2 * var(--gutter));
+  max-width: calc(var(--max-w) - 2 * var(--gutter));
+  margin: clamp(40px, 7vw, 96px) auto;
+  padding: clamp(32px, 5vw, 72px);
+  border-radius: clamp(20px, 2.4vw, 32px);
+  background: linear-gradient(170deg, rgba(21, 35, 57, 0.55), rgba(14, 28, 50, 0.75));
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 50px 140px -40px rgba(0, 0, 0, 0.75),
+    0 2px 0 rgba(255, 255, 255, 0.02);
+  transform-style: preserve-3d;
+  isolation: isolate;
+
+  /* Compose: все entrance-поворотов + translate3d в одном transform */
+  transform:
+    perspective(1600px)
+    rotateX(var(--c-rx, 0deg))
+    rotateY(var(--c-ry, 0deg))
+    rotateZ(var(--c-rz, 0deg))
+    translate3d(var(--c-x, 0px), var(--c-y, 0px), var(--c-z, 0px))
+    scale(var(--c-scale, 1));
+  opacity: var(--c-opacity, 1);
+  transition:
+    transform 1.5s cubic-bezier(0.19, 1.05, 0.32, 1),
+    opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.6s var(--ease);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
-.case:first-child { border-top: none; }
+/* Initial state: карточка далеко слева снизу, в глубине (-500px по Z),
+   с 3 осями поворота одновременно → ощущение объёмной спирали */
+.case:not(.is-in) {
+  --c-rx: 22deg;       /* наклон "на зрителя" — верх карточки отодвинут */
+  --c-ry: -42deg;      /* "дверной" поворот влево, видна правая грань */
+  --c-rz: -16deg;      /* twist вокруг оси Z — spiral tell */
+  --c-x: -280px;       /* слева */
+  --c-y: 160px;        /* снизу */
+  --c-z: -500px;       /* утоплена в глубину — летит из далека */
+  --c-scale: 0.72;
+  --c-opacity: 0;
+}
+/* Specular highlight сверху — real-glass tell */
+.case::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+}
+/* Chromatic amber edge снизу */
+.case::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(72% 0.14 65 / 0.4), transparent);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+}
+/* Stagger на случай одновременного попадания в viewport */
+.cases-track > .case:nth-of-type(1) { transition-delay: 0s; }
+.cases-track > .case:nth-of-type(2) { transition-delay: 0.1s; }
+.cases-track > .case:nth-of-type(3) { transition-delay: 0.2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .case:not(.is-in) {
+    --c-rx: 0deg; --c-ry: 0deg; --c-rz: 0deg;
+    --c-x: 0px; --c-y: 20px; --c-z: 0px;
+    --c-scale: 1;
+    /* opacity 0 → мягкий fade без 3D-motion */
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .case {
+    background: var(--ink-1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
 
 @media (min-width: 900px) {
   .case-grid {
     grid-template-columns: 1.15fr 1fr;
-    gap: clamp(48px, 6vw, 96px);
+    gap: clamp(32px, 4vw, 72px);
     align-items: center;
+  }
+}
+@media (max-width: 720px) {
+  .case {
+    padding: clamp(24px, 5vw, 32px);
+    margin: clamp(24px, 5vw, 40px) auto;
+    border-radius: 16px;
   }
 }
 
@@ -1695,70 +1789,29 @@ p  { margin: 0; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
 
-/* --- 18.4 case shots: Wispr Flow-style entrance (объёмный диагональный
-   поворот). При входе в viewport карточка прилетает по диагонали, вращаясь
-   в 3D пространстве (rotateY — ось Y, "дверной" поворот) + translate3d
-   с глубиной Z. Снова возвращаемся в прямое положение. --- */
+/* --- 18.4 case shots: entrance теперь на родителе .case (spiral 3D),
+   .case-shot внутри просто clip-reveal img и hover tilt --- */
 .case-shot {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   transform-style: preserve-3d;
-  /* Compose: perspective (tilt mouse) + rotateY (объёмный поворот входа)
-     + rotateZ (небольшой twist) + translate3d (диагональ) + scale.
-     Все переменные дефолтятся к resting state. */
+  /* Mouse-tilt (hover ±6°) через data-tilt. Entrance на родителе .case */
   transform:
-    perspective(1400px)
+    perspective(1200px)
     rotateX(var(--rx, 0deg))
-    rotateY(calc(var(--ry, 0deg) + var(--entry-ry, 0deg)))
-    rotateZ(var(--entry-rz, 0deg))
-    translate3d(var(--entry-x, 0px), var(--entry-y, 0px), var(--entry-z, 0px))
-    scale(var(--entry-scale, 1));
-  opacity: var(--entry-opacity, 1);
-  /* Spring-ish — overshoots слегка */
+    rotateY(var(--ry, 0deg))
+    translateZ(0);
   transition:
-    transform 1.3s cubic-bezier(0.16, 1.08, 0.3, 1),
-    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.6s var(--ease);
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-/* Нечётные (1, 3) — прилетают из нижнего-левого угла, поворот влево */
-.cases-track > .case:nth-of-type(odd) .case-shot:not(.is-in) {
-  --entry-ry: -22deg;    /* 3D-поворот по оси Y: карточка смотрит правой гранью */
-  --entry-rz: -4deg;     /* небольшой twist */
-  --entry-x: -120px;
-  --entry-y: 80px;
-  --entry-z: -140px;     /* утоплена в глубину — ощущение что летит из-за угла */
-  --entry-scale: 0.88;
-  --entry-opacity: 0;
-}
-/* Чётные (2) — прилетают из правого-нижнего, поворот вправо */
-.cases-track > .case:nth-of-type(even) .case-shot:not(.is-in) {
-  --entry-ry: 22deg;
-  --entry-rz: 4deg;
-  --entry-x: 120px;
-  --entry-y: 80px;
-  --entry-z: -140px;
-  --entry-scale: 0.88;
-  --entry-opacity: 0;
-}
-@media (prefers-reduced-motion: reduce) {
-  .case-shot:not(.is-in) {
-    --entry-ry: 0deg;
-    --entry-rz: 0deg;
-    --entry-x: 0px;
-    --entry-y: 10px;
-    --entry-z: 0px;
-    --entry-scale: 1;
-    /* opacity 0 → fade без motion */
-  }
+  will-change: transform;
 }
 /* 3D-tilt: data-tilt элементы наклоняются по курсору.
    JS выставляет --rx/--ry (deg) и --mx/--my (0..1) для shine.
    Shine рендерится DOM-child'ом .tilt-shine (не ::after) — чтобы не
    конфликтовать с уже занятыми псевдоэлементами (например, .case-shot). */
-[data-tilt]:not(.case-shot) {
+[data-tilt] {
   transform:
     perspective(1200px)
     rotateX(var(--rx, 0deg))
