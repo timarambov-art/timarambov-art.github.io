@@ -7,9 +7,11 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- Header shrink + scroll progress -------------------- */
+/* -------------------- Header shrink on scroll -------------------- */
+/* Progress bar — через CSS animation-timeline: scroll(). JS-fallback только если браузер не поддерживает. */
 const header = document.getElementById('header');
 const progress = document.getElementById('scrollProgress');
+const supportsScrollTimeline = CSS.supports('animation-timeline', 'scroll()');
 let scrollRaf = null;
 
 function onPageScroll() {
@@ -17,10 +19,10 @@ function onPageScroll() {
     if (window.scrollY > 32) header.classList.add('is-scrolled');
     else header.classList.remove('is-scrolled');
   }
-  if (progress) {
+  if (progress && !supportsScrollTimeline) {
     const docH = document.documentElement.scrollHeight - window.innerHeight;
     const p = docH > 0 ? Math.min(1, Math.max(0, window.scrollY / docH)) : 0;
-    progress.style.width = (p * 100).toFixed(2) + '%';
+    progress.style.transform = `scaleX(${p.toFixed(4)})`;
   }
   scrollRaf = null;
 }
@@ -95,13 +97,12 @@ const caseShotIO = new IntersectionObserver((entries) => {
 document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(shot));
 
 
-/* -------------------- Magnetic hover on CTAs -------------------- */
+/* -------------------- Magnetic hover (только [data-magnetic], не трогаем .pc-btn/.case-link
+   у которых свой hover-transform — иначе два transition дерутся за transform и дёргают) -------- */
 if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
-  const magnets = document.querySelectorAll('[data-magnetic], .pc-btn, .case-link');
+  const magnets = document.querySelectorAll('[data-magnetic]');
   magnets.forEach((el) => {
     const strength = 0.3;
-    el.style.willChange = 'transform';
-    el.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
     el.addEventListener('mousemove', (e) => {
       const r = el.getBoundingClientRect();
       const x = (e.clientX - (r.left + r.width / 2)) * strength;

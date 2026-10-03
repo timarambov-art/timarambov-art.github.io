@@ -367,9 +367,9 @@ p  { margin: 0; }
   font-size: 15px;
   letter-spacing: -0.005em;
   white-space: nowrap;
-  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+  transition: background 0.3s var(--ease);
 }
-.hero .cta:hover { transform: translateY(-2px); background: #fff; }
+.hero .cta:hover { background: #fff; }
 .hero .cta svg { width: 14px; height: 14px; }
 
 @media (max-width: 720px) {
@@ -1120,17 +1120,27 @@ p  { margin: 0; }
    magnetic, section stepper, terminal
    ============================================================ */
 
-/* --- 18.1 scroll progress bar --- */
+/* --- 18.1 scroll progress bar (native CSS scroll-driven, GPU) --- */
 .scroll-progress {
   position: fixed;
   top: 0; left: 0;
   height: 2px;
-  width: 0%;
+  width: 100%;
   background: var(--grad);
   z-index: 100;
+  transform: scaleX(0);
   transform-origin: left center;
-  transition: width 0.1s linear;
   pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: scroll-progress linear;
+    animation-timeline: scroll(root);
+  }
+  @keyframes scroll-progress {
+    to { transform: scaleX(1); }
+  }
 }
 
 
@@ -1157,12 +1167,13 @@ p  { margin: 0; }
 
 .hero > .container { position: relative; z-index: 1; }
 
-.hero h1 .line { display: block; }
+.hero h1 .line { display: block; line-height: 1.08; }
 .hero h1 .w {
   display: inline-block;
+  padding-bottom: 0.06em;
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.95s var(--ease), transform 0.95s var(--ease);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
   will-change: opacity, transform;
 }
 .hero h1.is-visible .w {
@@ -1229,6 +1240,10 @@ p  { margin: 0; }
   transform: scale(1);
   clip-path: inset(0 0 0 0);
 }
+/* После entrance укорачиваем transition — hover должен быть snappy, не ватный */
+.case-shot.is-in img {
+  transition: transform 0.5s var(--ease), filter 0.4s var(--ease);
+}
 .case-shot:hover img { transform: scale(1.04); filter: saturate(1.05); }
 .case-shot::after {
   content: "";
@@ -1259,11 +1274,15 @@ p  { margin: 0; }
 .case-shot:hover::before { opacity: 1; transform: translateY(0); }
 
 
-/* --- 18.5 magnetic hover (CTA, service arrows, case links) --- */
+/* --- 18.5 magnetic hover (только hero CTA, остальным не нужен) --- */
 [data-magnetic] {
   display: inline-flex;
   will-change: transform;
-  transition: transform 0.35s var(--ease);
+  /* короткая transition чтобы JS-mousemove не отставал, но mouseleave плавно возвращал */
+  transition: transform 0.15s linear;
+}
+[data-magnetic]:not(:hover) {
+  transition: transform 0.4s var(--ease);
 }
 
 
@@ -1288,22 +1307,11 @@ p  { margin: 0; }
 .terminal .bar {
   display: flex;
   align-items: center;
-  gap: 6px;
   padding: 10px 14px;
   border-bottom: 1px solid var(--rule);
   background: rgba(0,0,0,0.2);
 }
-.terminal .bar i {
-  display: inline-block;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--rule-strong);
-}
-.terminal .bar i:nth-child(1) { background: #ff5f56; opacity: 0.55; }
-.terminal .bar i:nth-child(2) { background: #ffbd2e; opacity: 0.55; }
-.terminal .bar i:nth-child(3) { background: #27c93f; opacity: 0.55; }
 .terminal .bar .path {
-  margin-left: 10px;
   font-size: 11px;
   color: var(--muted);
   font-family: var(--f-mono);
@@ -1367,15 +1375,17 @@ p  { margin: 0; }
 .case-link:hover::after { transform: scaleX(1); }
 
 
-/* --- 18.10 svc-row: animate line fill on hover --- */
+/* --- 18.10 svc-row: animate line fill on hover (transform-only, GPU) --- */
 .svc-row { position: relative; }
 .svc-row::before {
   content: "";
   position: absolute;
-  left: 0; right: 100%;
+  left: 0; right: 0;
   bottom: -1px;
   height: 1px;
   background: var(--grad);
-  transition: right 0.6s var(--ease);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s var(--ease);
 }
-.svc-row:hover::before { right: 0; }
+.svc-row:hover::before { transform: scaleX(1); }
