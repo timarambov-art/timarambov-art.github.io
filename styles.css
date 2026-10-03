@@ -553,12 +553,25 @@ p  { margin: 0; }
 .lm-points { list-style: none; padding: 0; margin: 0; }
 .lm-points li {
   display: grid;
-  grid-template-columns: 48px 1fr;
-  gap: 20px;
+  grid-template-columns: 48px 44px 1fr;
+  gap: 16px;
   padding: 24px 0;
   border-top: 1px solid var(--rule);
   align-items: start;
 }
+.lm-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.lm-icon svg { width: 20px; height: 20px; display: block; }
 .lm-points li:last-child { border-bottom: 1px solid var(--rule); }
 .lm-points li .n {
   font-family: var(--f-mono);
@@ -581,6 +594,14 @@ p  { margin: 0; }
 
 @media (max-width: 900px) {
   .leadmag-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+
+@media (max-width: 720px) {
+  /* На мобиле убираем num, оставляем только icon + content, экономим ширину */
+  .lm-points li { grid-template-columns: 40px 1fr; gap: 14px; }
+  .lm-points li .n { display: none; }
+  .lm-icon { width: 36px; height: 36px; }
+  .lm-icon svg { width: 18px; height: 18px; }
 }
 
 .paper-card {
@@ -1211,13 +1232,32 @@ p  { margin: 0; }
 .channels-list { border-top: 1px solid var(--rule); }
 .channel {
   display: grid;
-  grid-template-columns: 80px 1fr 1fr 32px;
+  grid-template-columns: 56px 56px 1fr 1fr 32px;
   gap: 24px;
   align-items: center;
   padding: 28px 0;
   border-bottom: 1px solid var(--rule);
   color: var(--text);
   transition: background 0.3s var(--ease);
+}
+.ch-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+}
+.ch-icon svg { width: 22px; height: 22px; display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .channel:hover .ch-icon {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
 }
 .channel:hover { background: linear-gradient(90deg, transparent, rgba(236,231,216,0.03) 50%, transparent); }
 .channel .ch-num { color: var(--muted); font-family: var(--f-mono); font-size: 13px; }
@@ -1238,13 +1278,16 @@ p  { margin: 0; }
   .channel {
     grid-template-columns: 48px 1fr auto;
     grid-template-areas:
-      "num name arrow"
-      "num val  arrow";
-    gap: 4px 16px;
+      "icon name arrow"
+      "icon val  arrow";
+    gap: 4px 14px;
+    align-items: center;
   }
-  .channel .ch-num   { grid-area: num; align-self: start; padding-top: 6px; }
-  .channel .ch-name  { grid-area: name; }
-  .channel .ch-val   { grid-area: val; }
+  .channel .ch-num   { display: none; }
+  .channel .ch-icon  { grid-area: icon; align-self: center; width: 40px; height: 40px; }
+  .channel .ch-icon svg { width: 20px; height: 20px; }
+  .channel .ch-name  { grid-area: name; align-self: end; }
+  .channel .ch-val   { grid-area: val;  align-self: start; }
   .channel .ch-arrow { grid-area: arrow; align-self: center; }
 }
 
