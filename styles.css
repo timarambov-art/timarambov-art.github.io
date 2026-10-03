@@ -738,13 +738,24 @@ p  { margin: 0; }
   perspective-origin: 50% 40%;
 }
 /* Pinned stacking mode — активируется JS'ом когда GSAP готов.
-   Секция #cases закреплена целиком, заголовок остаётся виден сверху,
-   .cases-track занимает оставшийся viewport, карточка умещается внутри. */
+   Секция #cases закреплена целиком, заголовок компактно сверху,
+   карточка центрирована в оставшемся viewport. */
+.cases.is-stacked-mode {
+  padding-top: clamp(80px, 10vh, 120px);
+  padding-bottom: 0;
+}
+.cases.is-stacked-mode .section-head {
+  margin-bottom: 24px;
+}
+.cases.is-stacked-mode .section-head h2 {
+  font-size: clamp(28px, 4vw, 48px);  /* heading компактнее при pin */
+  margin-bottom: 0;
+}
 .cases-track.is-stacked {
   display: block;
   position: relative;
-  /* Высота = viewport минус header + section-head (чтобы карточка умещалась) */
-  min-height: calc(100vh - 240px);
+  /* Высота оставшегося viewport после header + компактного heading */
+  min-height: calc(100vh - 220px);
 }
 .cases-track.is-stacked > .case {
   position: absolute;

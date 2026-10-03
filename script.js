@@ -103,8 +103,9 @@ function initCinematic() {
     const casesTrack = document.querySelector('.cases-track');
     const cases = gsap.utils.toArray('.cases-track > .case');
     if (casesWrap && cases.length > 1) {
-      // Переводим в stacked режим — через CSS класс, карточки position:absolute
+      // Переводим в stacked режим — через CSS классы, карточки position:absolute
       casesTrack.classList.add('is-stacked');
+      document.getElementById('cases').classList.add('is-stacked-mode');
       // Отмечаем все .case и .case-shot как .is-in (clip-reveal img),
       // чтобы entrance делала только GSAP timeline, а не IO observer
       cases.forEach((c) => {
