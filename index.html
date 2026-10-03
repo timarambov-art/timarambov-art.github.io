@@ -100,6 +100,16 @@
     </defs>
   </svg>
 
+  <!-- Ambient background — живой фон под всем контентом, fixed viewport-wide.
+       3 radial-gradient blob'а медленно "дышат" (translate + scale), создавая
+       ощущение глубины и света в комнате за стеклом. prefers-reduced-motion
+       отключает анимацию. prefers-reduced-transparency заменяет на flat ink. -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-blob b1"></div>
+    <div class="ambient-blob b2"></div>
+    <div class="ambient-blob b3"></div>
+  </div>
+
   <!-- Film grain overlay — fixed, pointer-events-none, подмешивается ко всему контенту -->
   <div class="grain-layer" aria-hidden="true"></div>
 
@@ -423,7 +433,7 @@
   </section>
 
   <!-- ==================== SERVICES ==================== -->
-  <section id="services" class="section services">
+  <section id="services" class="section services glass-section">
     <div class="container">
       <div class="section-head">
         <div class="num">03</div>
@@ -530,7 +540,7 @@
   </section>
 
   <!-- ==================== PROCESS ==================== -->
-  <section id="process" class="section process">
+  <section id="process" class="section process glass-section">
     <div class="process-numeral" aria-hidden="true">01</div>
     <div class="container">
       <div class="section-head">
@@ -815,7 +825,7 @@
   </section>
 
   <!-- ==================== CONTACT ==================== -->
-  <section id="contact" class="section contact">
+  <section id="contact" class="section contact glass-section">
     <div class="container">
       <div class="contact-head">
         <div class="num">08</div>

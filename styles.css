@@ -2013,3 +2013,190 @@ p  { margin: 0; }
 @media (hover: hover) and (pointer: fine) {
   .svc-row:hover::before { transform: scaleX(1); }
 }
+
+
+/* ============================================================
+   19 · AMBIENT BACKGROUND + LIQUID GLASS LAYER
+   iOS-style "комната за стеклом": живой фон с медленно
+   дышащими blob'ами, стеклянные подложки у ключевых секций,
+   specular highlights на всех glass-поверхностях.
+   ============================================================ */
+
+/* --- 19.1 Ambient background — живой фон под всем контентом ---
+   Фиксированная viewport-wide сцена: 3 radial-gradient blob'а
+   в amber/cold-blue/cream тонах медленно двигаются и дышат.
+   z-index 0: над плоским body-background, под #smooth-wrapper. */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* deep ink gradient подложка — не плоский чёрный, а тёплый сдвиг
+     от top-left к bottom-right, едва заметный, как Apple product pages */
+  background:
+    radial-gradient(ellipse at 20% 10%, oklch(16% 0.04 230) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%, oklch(13% 0.02 60) 0%, transparent 55%),
+    var(--ink-0);
+}
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+/* b1 — тёплый amber accent, top-left, медленно плавает */
+.ambient-blob.b1 {
+  top: -15vh;
+  left: -10vw;
+  width: 65vw;
+  height: 65vw;
+  background: radial-gradient(circle, oklch(65% 0.14 65 / 0.28) 0%, transparent 65%);
+  animation: ambient-float-1 24s ease-in-out infinite;
+}
+/* b2 — холодный синий, bottom-right, противовес */
+.ambient-blob.b2 {
+  bottom: -20vh;
+  right: -15vw;
+  width: 70vw;
+  height: 70vw;
+  background: radial-gradient(circle, oklch(55% 0.1 240 / 0.22) 0%, transparent 65%);
+  animation: ambient-float-2 32s ease-in-out infinite;
+}
+/* b3 — тёплый cream glow, center-right, подсвечивает middle fold */
+.ambient-blob.b3 {
+  top: 30%;
+  left: 40%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, oklch(80% 0.08 85 / 0.14) 0%, transparent 60%);
+  animation: ambient-float-3 28s ease-in-out infinite;
+}
+
+/* Keyframes — медленное дыхание. Edge-free: максимум ±8%, scale 0.95–1.08.
+   Без prefers-reduced-motion — анимация off (блобы статичны, но видны). */
+@keyframes ambient-float-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(6vw, 4vh, 0) scale(1.08); }
+}
+@keyframes ambient-float-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-5vw, -6vh, 0) scale(1.06); }
+}
+@keyframes ambient-float-3 {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.95); }
+  50%      { transform: translate3d(-4vw, 5vh, 0) scale(1.05); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-blob { animation: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .ambient-bg { background: var(--ink-0); }
+  .ambient-blob { display: none; }
+}
+
+/* body прозрачный — чтобы ambient-bg был виден, и свой гарант deep ink
+   на случай если ambient-bg скрыт prefers-reduced-transparency */
+body { background: var(--ink-0); position: relative; }
+#smooth-wrapper { position: relative; z-index: 1; }
+.grain-layer { z-index: 60; }
+
+
+/* --- 19.2 Glass section plate — стеклянная подложка для ключевых секций ---
+   Применяется к .section.glass-section — обёртывает .container в стеклянную
+   плиту с внутренней подсветкой сверху, тенью снизу и тонкой белой гранью. */
+.glass-section {
+  padding: clamp(48px, 7vw, 112px) clamp(16px, 2vw, 32px);
+}
+.glass-section > .container {
+  position: relative;
+  padding: clamp(56px, 7vw, 104px) clamp(32px, 5vw, 72px);
+  border-radius: clamp(16px, 2vw, 28px);
+  background: linear-gradient(180deg, rgba(21, 35, 57, 0.42), rgba(14, 28, 50, 0.62));
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 40px 120px -40px rgba(0, 0, 0, 0.7),
+    0 2px 0 rgba(255, 255, 255, 0.02);
+  isolation: isolate;
+}
+/* Specular highlight — узкая верхняя полоса-блик, как на реальном стекле */
+.glass-section > .container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+/* Chromatic amber edge снизу — тёплый тонкий отсвет, подчёркивающий depth */
+.glass-section > .container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(72% 0.14 65 / 0.4), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+/* Убираем .section + .section border-top между glass-секциями — стеклянная
+   плита уже даёт достаточное разделение */
+.glass-section + .section,
+.section + .glass-section { border-top: none; }
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-section > .container {
+    background: var(--ink-1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+@media (max-width: 720px) {
+  .glass-section { padding: 32px 8px; }
+  .glass-section > .container {
+    padding: 48px 20px;
+    border-radius: 14px;
+  }
+}
+
+
+/* --- 19.3 Specular highlights на существующих glass-поверхностях ---
+   Тонкая конически-растянутая полоса сверху — iOS-style блик, который
+   отличает real-glass от просто размытого прямоугольника. */
+.paper-card { position: relative; isolation: isolate; }
+.paper-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+}
+
+.terminal { position: relative; }
+.terminal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+}
