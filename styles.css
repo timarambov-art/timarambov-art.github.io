@@ -1,40 +1,43 @@
 /* ==========================================================================
    Тимофей Рямбов, веб-разработчик
-   Dark editorial, from scratch
-   Fonts: Playfair Display (display) + Plus Jakarta Sans (body) + JetBrains Mono (numerals)
+   Hallmark · macrostructure: Marquee Hero + Sticky · tone: editorial-austere
+   theme: custom (vibe "midnight newsroom, warm serif on ink, amber brass")
+   paper: oklch(14% .015 260) · accent: oklch(72% .14 65) amber · display: Bodoni Moda
    ========================================================================== */
 
 
 /* ============================================================
-   01 · TOKENS
+   01 · TOKENS (OKLCH, locked)
    ============================================================ */
 :root {
-  /* ink palette, тёмно-синий как чернила */
-  --ink-0:  #0A1628;
-  --ink-1:  #0E1C32;
-  --ink-2:  #152339;
-  --ink-3:  #1B2B45;
+  /* ink paper (dark bg) — глубокое чернильное сине-чёрное, не чистый #000 */
+  --ink-0:  oklch(14% 0.015 260);
+  --ink-1:  oklch(17% 0.015 260);
+  --ink-2:  oklch(21% 0.012 260);
+  --ink-3:  oklch(26% 0.010 260);
 
-  /* paper, кремовый лист бумаги для lead-magnet */
-  --paper:   #F4EFE2;
-  --paper-2: #E9E2D0;
+  /* warm paper — тёплый amber-кремовый лист для lead-magnet-карточки */
+  --paper:   oklch(93% 0.040 85);
+  --paper-2: oklch(87% 0.055 75);
 
-  /* text, тёплый кремовый */
-  --text:  #ECE7D8;
-  --muted: rgba(236, 231, 216, 0.58);
-  --faint: rgba(236, 231, 216, 0.32);
-  --rule:  rgba(236, 231, 216, 0.10);
-  --rule-strong: rgba(236, 231, 216, 0.18);
+  /* text — warm cream */
+  --text:  oklch(93% 0.025 85);
+  --muted: oklch(93% 0.025 85 / 0.60);
+  --faint: oklch(93% 0.025 85 / 0.32);
+  --rule:  oklch(93% 0.025 85 / 0.10);
+  --rule-strong: oklch(93% 0.025 85 / 0.20);
 
-  /* акценты, редко */
-  --blue:   #6BA4FF;
-  --violet: #B48DFF;
-  --grad: linear-gradient(96deg, #6BA4FF 0%, #B48DFF 100%);
+  /* accent — ОДИН приглушённый amber/brass. Без gradient (LILA rule). */
+  --accent:      oklch(72% 0.14 65);
+  --accent-soft: oklch(72% 0.14 65 / 0.22);
+  --accent-ink:  oklch(45% 0.12 65);   /* для hover-состояний */
+  /* Legacy alias — всё ещё читается в CSS, но указывает на solid color, не gradient */
+  --grad: var(--accent);
 
   /* type */
-  --f-display: "Playfair Display", "Times New Roman", Georgia, serif;
-  --f-body:    "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --f-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --f-display: "Bodoni Moda", "Didot", "Times New Roman", Georgia, serif;
+  --f-body:    "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --f-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* layout */
   --max-w: 1200px;
@@ -42,6 +45,7 @@
 
   /* motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @media (max-width: 720px) {
@@ -159,13 +163,11 @@ p  { margin: 0; }
 
 .italic { font-style: italic; }
 
+/* Accent — ОДИН тёплый amber color + lower weight (не italic — hallmark banит italic headers). */
 .accent {
-  background: var(--grad);
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  font-style: italic;
+  color: var(--accent);
+  font-weight: 400;
+  font-style: normal;
 }
 
 .eyebrow {
@@ -357,11 +359,34 @@ p  { margin: 0; }
 
 
 /* ============================================================
-   06 · HERO
+   06 · HERO (cinematic staging)
    ============================================================ */
+/* .hero-stage — внешняя обёртка, задаёт высоту скролл-прохода. GSAP ScrollTrigger
+   пинит .hero внутри. На устройствах без GSAP (отключён JS) — обычный hero. */
+.hero-stage {
+  position: relative;
+}
+
 .hero {
   padding: clamp(140px, 20vw, 240px) 0 clamp(96px, 14vw, 160px);
   position: relative;
+  isolation: isolate;
+}
+
+/* Hero-ambient: субтильное свечение в фоне, оставляет место для будущего Three.js canvas */
+.hero-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 40% at 72% 42%, var(--accent-soft), transparent 65%),
+    radial-gradient(ellipse 40% 60% at 8% 88%, oklch(72% 0.08 65 / 0.07), transparent 60%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+}
+@media (prefers-reduced-transparency: reduce) {
+  .hero-ambient { display: none; }
 }
 
 .hero .eyebrow-row {
@@ -1588,6 +1613,22 @@ p  { margin: 0; }
   background: linear-gradient(180deg, rgba(10, 22, 40, 0.65) 0%, transparent 100%);
   pointer-events: none;
 }
+
+/* --- 18.13.5 Grain layer (film-noise overlay) — fixed, pointer-none, mix-blend
+   даёт тёплое зерно на всём контенте, едва заметное — ощущение бумаги/плёнки --- */
+.grain-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+}
+@media (prefers-reduced-transparency: reduce) {
+  .grain-layer { display: none; }
+}
+
 
 /* --- 18.14 Scroll-driven: section headlines medley reveal --- */
 .section-head h2 .w {

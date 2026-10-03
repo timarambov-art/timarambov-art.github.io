@@ -1,10 +1,98 @@
 /* ============================================================
    Тимофей Рямбов, лендинг
-   JS: reveal, header shrink, FAQ, case modal, burger, counter
-   Нативный скролл, без Lenis.
+   JS: Lenis momentum scroll + GSAP ScrollTrigger cinematic +
+       SplitType char-reveal, reveal, FAQ, case modal, burger, counter.
+   CDN-зависимости: lenis, gsap, ScrollTrigger, SplitType (defer-loaded).
    ============================================================ */
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+/* -------------------- Lenis + GSAP boot (CDN-dependent) --------------------
+   Все три библиотеки грузятся defer-ом. Ждём DOMContentLoaded + проверяем наличие.
+   Если что-то не загрузилось — работаем на нативном scroll, остальной код живёт сам. */
+let lenis = null;
+let cinematicInited = false;
+function initCinematic() {
+  if (cinematicInited || reduceMotion) return;
+  // Нужны минимум gsap + ScrollTrigger. Lenis / SplitType опциональны.
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  cinematicInited = true;
+
+  // Lenis — momentum smooth scroll
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.2,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+
+  // GSAP + ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+  if (lenis) {
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+    // Hero ghost '26 — scrubbed parallax + scale при проходе hero
+    gsap.to('.hero-ghost', {
+      scale: 1.25,
+      yPercent: -30,
+      opacity: 0.07,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
+
+    // Hero stats — subtle lift при выходе из viewport
+    gsap.to('.hero-stats', {
+      yPercent: -15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero-stats',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
+
+  // Marquee speed-up: при scroll через hero marquee ускоряется
+  const marqueeTrack = document.querySelector('.marquee-track');
+  if (marqueeTrack) {
+    let marqueeSpeed = { v: 1 };
+    gsap.to(marqueeSpeed, {
+      v: 2.2,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.marquee',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: () => {
+          marqueeTrack.style.animationDuration = (42 / marqueeSpeed.v).toFixed(2) + 's';
+        },
+      },
+    });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCinematic);
+} else {
+  initCinematic();
+}
+// GSAP/Lenis грузятся с defer — дадим им кадр осесть
+window.addEventListener('load', () => { setTimeout(initCinematic, 50); });
 
 
 /* -------------------- Scroll progress fallback --------------------
@@ -62,17 +150,66 @@ function splitWords(root, { wrapLines = false } = {}) {
   });
 }
 
-/* Hero: сразу после загрузки */
-(function () {
+/* Hero: SplitType + GSAP character-level (если доступны), иначе CSS word fallback.
+   Guard: вызываем до тех пор пока не inited; если CDN отвалился — через 1.5с CSS-путь. */
+let heroInited = false;
+function initHeroReveal() {
+  if (heroInited) return;
+  const title = document.querySelector('[data-hero-reveal]');
+  if (!title) return;
+
+  if (reduceMotion) {
+    title.classList.add('is-visible');
+    heroInited = true;
+    return;
+  }
+
+  // GSAP + SplitType path: character-level reveal с blur + rotateX
+  if (typeof gsap !== 'undefined' && typeof SplitType !== 'undefined') {
+    title.querySelectorAll('.accent').forEach(a => a.classList.add('splittype-ignore'));
+    new SplitType(title, {
+      types: 'lines,words,chars',
+      tagName: 'span',
+      lineClass: 'line',
+      wordClass: 'w',
+      charClass: 'ch',
+    });
+    gsap.from(title.querySelectorAll('.ch, .splittype-ignore'), {
+      opacity: 0,
+      yPercent: 110,
+      rotateX: -70,
+      filter: 'blur(8px)',
+      transformOrigin: '50% 100%',
+      stagger: { amount: 0.9, from: 'start' },
+      duration: 1.1,
+      ease: 'power3.out',
+      delay: 0.15,
+    });
+    title.classList.add('is-visible');
+    heroInited = true;
+  }
+}
+
+function heroFallback() {
+  if (heroInited) return;
   const title = document.querySelector('[data-hero-reveal]');
   if (!title) return;
   splitWords(title, { wrapLines: true });
   title.querySelectorAll('.w').forEach((w, i) => { w.style.transitionDelay = (i * 70) + 'ms'; });
-  if (reduceMotion) { title.classList.add('is-visible'); return; }
   requestAnimationFrame(() => {
     requestAnimationFrame(() => title.classList.add('is-visible'));
   });
-})();
+  heroInited = true;
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeroReveal);
+} else {
+  initHeroReveal();
+}
+window.addEventListener('load', () => { setTimeout(initHeroReveal, 60); });
+// Если CDN отвалился — через 1.5с запускаем CSS-путь, чтобы hero не остался пустым
+setTimeout(heroFallback, 1500);
 
 /* Section headlines: разбить и анимировать при входе в viewport */
 (function () {

@@ -52,12 +52,18 @@
   }
   </script>
 
-  <!-- Fonts: Playfair Display + Plus Jakarta Sans + JetBrains Mono -->
+  <!-- Fonts: Bodoni Moda (display) + Public Sans (body) + IBM Plex Mono (numerals) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
+
+  <!-- Cinematic stack: Lenis (momentum smooth scroll) + GSAP + ScrollTrigger + Split-type -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js" defer></script>
 
   <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
@@ -73,6 +79,19 @@
   <!-- /Yandex.Metrika counter -->
 </head>
 <body>
+
+  <!-- SVG filter definitions: film grain, warp. Используются как backdrop-filter / background. -->
+  <svg class="svg-defs" aria-hidden="true" width="0" height="0" style="position:absolute">
+    <defs>
+      <filter id="grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
+        <feColorMatrix values="0 0 0 0 0.93  0 0 0 0 0.90  0 0 0 0 0.80  0 0 0 0.5 0"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Film grain overlay — fixed, pointer-events-none, подмешивается ко всему контенту -->
+  <div class="grain-layer" aria-hidden="true"></div>
 
   <!-- Scroll progress bar -->
   <div class="scroll-progress" id="scrollProgress"></div>
@@ -120,15 +139,18 @@
   </div>
 
   <!-- ==================== HERO ==================== -->
-  <section class="hero">
-    <div class="hero-ghost" aria-hidden="true">’26</div>
-    <div class="container">
+  <!-- Cinematic staging: .hero-stage высокий, .hero внутри pinned sticky, scroll-scrubbing фон/ghost/words. -->
+  <div class="hero-stage">
+    <section class="hero">
+      <div class="hero-ghost" aria-hidden="true">’26</div>
+      <div class="hero-ambient" aria-hidden="true"></div>
+      <div class="container">
       <div class="eyebrow-row" data-reveal>
         <span class="dot"></span>
         <span class="eyebrow">Веб-разработчик · Екатеринбург · 2026</span>
       </div>
 
-      <h1 class="hero-title" data-hero-reveal>
+      <h1 class="hero-title" data-hero-reveal data-split>
         <span class="line">Сайт, который сам</span>
         <span class="line">закрывает <span class="accent">сделки</span>.</span>
       </h1>
@@ -185,8 +207,9 @@
           <div class="marquee-item">React / Next.js</div>
         </div>
       </div>
-    </div>
-  </section>
+      </div>
+    </section>
+  </div>
 
   <!-- ==================== LEAD MAGNET ==================== -->
   <section id="offer" class="section leadmag">
