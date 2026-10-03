@@ -384,6 +384,48 @@ const caseShotIO = new IntersectionObserver((entries) => {
 document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(shot));
 
 
+/* -------------------- 3D tilt (data-tilt) — mouse-tracking perspective ---
+   При движении курсора карточка наклоняется под перспективой, следит
+   за курсором. На touch и reduce-motion отключается через CSS. */
+if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('[data-tilt]').forEach((el) => {
+    const max = parseFloat(el.dataset.tiltMax) || 6;
+    let raf = null;
+    let targetRX = 0, targetRY = 0, curRX = 0, curRY = 0;
+    let targetMX = 0.5, targetMY = 0.5, curMX = 0.5, curMY = 0.5;
+
+    function loop() {
+      curRX += (targetRX - curRX) * 0.12;
+      curRY += (targetRY - curRY) * 0.12;
+      curMX += (targetMX - curMX) * 0.12;
+      curMY += (targetMY - curMY) * 0.12;
+      el.style.setProperty('--rx', curRX.toFixed(2) + 'deg');
+      el.style.setProperty('--ry', curRY.toFixed(2) + 'deg');
+      el.style.setProperty('--mx', curMX.toFixed(3));
+      el.style.setProperty('--my', curMY.toFixed(3));
+      if (Math.abs(targetRX - curRX) > 0.01 || Math.abs(targetRY - curRY) > 0.01) {
+        raf = requestAnimationFrame(loop);
+      } else { raf = null; }
+    }
+    function schedule() { if (!raf) raf = requestAnimationFrame(loop); }
+
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      targetMX = x; targetMY = y;
+      targetRY = (x - 0.5) * 2 * max;     // горизонтальная мышь → rotateY
+      targetRX = -(y - 0.5) * 2 * max;    // вертикальная мышь → rotateX (инвертированно)
+      schedule();
+    });
+    el.addEventListener('mouseleave', () => {
+      targetRX = 0; targetRY = 0; targetMX = 0.5; targetMY = 0.5;
+      schedule();
+    });
+  });
+}
+
+
 /* -------------------- Magnetic hover (только [data-magnetic], не трогаем .pc-btn/.case-link
    у которых свой hover-transform — иначе два transition дерутся за transform и дёргают) -------- */
 if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {

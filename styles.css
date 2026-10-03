@@ -614,12 +614,22 @@ p  { margin: 0; }
   margin-top: clamp(56px, 8vw, 96px);
   background: var(--paper);
   color: var(--ink-0);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: clamp(32px, 5vw, 56px);
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: clamp(24px, 4vw, 48px);
+  /* Depth: inner highlight сверху + мягкая amber-тень снизу. Карточка
+     ощущается как лист тёплой бумаги на плите, с 3D-tilt на hover. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 30px 60px -30px rgba(0, 0, 0, 0.5),
+    0 2px 0 rgba(0, 0, 0, 0.05);
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  will-change: transform;
 }
 
 .paper-card .pc-head .eyebrow {
@@ -1627,11 +1637,43 @@ p  { margin: 0; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
 
-/* --- 18.4 case shots: clip reveal + hover zoom --- */
+/* --- 18.4 case shots: clip reveal + 3D tilt --- */
 .case-shot {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s var(--ease);
+  will-change: transform;
+}
+/* 3D-tilt: data-tilt элементы наклоняются по курсору.
+   JS выставляет --rx и --ry (-10..10deg) и --mx, --my (0..1) для shine. */
+[data-tilt] {
+  transform:
+    perspective(1200px)
+    rotateX(var(--rx, 0deg))
+    rotateY(var(--ry, 0deg))
+    translateZ(0);
+}
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    400px circle at calc(var(--mx, 0.5) * 100%) calc(var(--my, 0.5) * 100%),
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
+  opacity: var(--tilt-shine, 0);
+  transition: opacity 0.3s var(--ease);
+  mix-blend-mode: overlay;
+  z-index: 3;
+}
+[data-tilt]:hover { --tilt-shine: 1; }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  [data-tilt] { transform: none !important; }
+  [data-tilt]::after { display: none; }
 }
 .case-shot img {
   transform: scale(1.08);
@@ -1709,10 +1751,28 @@ p  { margin: 0; }
 .terminal {
   margin-top: 32px;
   border: 1px solid var(--rule-strong);
-  border-radius: 6px;
-  background: linear-gradient(180deg, var(--ink-2), var(--ink-1));
+  border-radius: 10px;
+  /* Glass-поверхность: полупрозрачная база + inner highlight + outer shadow,
+     чтобы терминал читался как настоящая стеклянная плита, а не flat div. */
+  background:
+    linear-gradient(180deg, rgba(21, 35, 57, 0.55), rgba(14, 28, 50, 0.75));
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 24px 60px -20px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.02);
   font-family: var(--f-mono);
   overflow: hidden;
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .terminal {
+    background: linear-gradient(180deg, var(--ink-2), var(--ink-1));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 .terminal--wide { margin-top: clamp(48px, 7vw, 96px); }
 .terminal--wide pre { padding: clamp(20px, 3vw, 32px) clamp(22px, 3vw, 36px); font-size: 14px; }
