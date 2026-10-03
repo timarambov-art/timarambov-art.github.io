@@ -18,38 +18,8 @@ if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && typeof Len
   requestAnimationFrame(lenisRaf);
 }
 
-// ==================== CUSTOM CURSOR ====================
-const cursor = document.querySelector('.cursor');
-
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-let posX = mouseX;
-let posY = mouseY;
-
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
-
-function animateCursor() {
-  posX += (mouseX - posX) * 0.65;
-  posY += (mouseY - posY) * 0.65;
-  if (cursor) {
-    cursor.style.left = posX + 'px';
-    cursor.style.top = posY + 'px';
-  }
-  requestAnimationFrame(animateCursor);
-}
-animateCursor();
-
-document.querySelectorAll('a, button, .btn, .case-card, .price-card, .channel, .step, .faq-item-q')
-  .forEach((el) => {
-    el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hover'));
-    el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
-  });
-
 // ==================== 3D TILT ON HERO TITLE ====================
-// Работает только на десктопе с мышью — на тач-устройствах бесполезен и может тормозить
+// Работает только на десктопе с мышью, на тач-устройствах бесполезен и может тормозить
 const isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 const title = document.querySelector('.hero-title');
 const heroImg = document.querySelector('.hero-img');
@@ -91,11 +61,11 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 });
 
 // ==================== SPLIT WORDS ====================
-// Разбиваем текст заголовков на слова — для анимации по словам.
+// Разбиваем текст заголовков на слова, для анимации по словам.
 // Правила:
-//  • .accent НЕ трогаем вообще — остаётся обычным inline с градиентом,
+//  • .accent НЕ трогаем вообще, остаётся обычным inline с градиентом,
 //    чтобы знаки после него не переносились на новую строку.
-//  • Одиночные знаки препинания (.,!?;:—…) оставляем текстом — иначе
+//  • Одиночные знаки препинания (.,!?;:,…) оставляем текстом, иначе
 //    inline-block с точкой улетает на новую строку после длинного .accent.
 function splitWords(root) {
   root.querySelectorAll('.split-words').forEach((el) => {
@@ -110,8 +80,8 @@ function splitWords(root) {
           if (!part) return;
           if (/^\s+$/.test(part)) {
             frag.appendChild(document.createTextNode(part));
-          } else if (/^[.,!?;:…—–\-]+$/.test(part)) {
-            // Знак препинания сам по себе — не оборачиваем
+          } else if (/^[.,!?;:…,-\-]+$/.test(part)) {
+            // Знак препинания сам по себе, не оборачиваем
             frag.appendChild(document.createTextNode(part));
           } else {
             const span = document.createElement('span');
@@ -123,7 +93,7 @@ function splitWords(root) {
         node.parentNode.replaceChild(frag, node);
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         if (node.tagName === 'BR') return;
-        // .accent оставляем как есть — пусть остаётся inline
+        // .accent оставляем как есть, пусть остаётся inline
         if (node.classList && node.classList.contains('accent')) return;
         Array.from(node.childNodes).forEach(wrap);
       }
@@ -156,7 +126,7 @@ const revealObserver = new IntersectionObserver(
         // Запустить счётчики, если это контейнер со статистикой
         el.querySelectorAll('[data-count]').forEach(startCounter);
 
-        // Если элемент сам — data-count
+        // Если элемент сам, data-count
         if (el.hasAttribute('data-count')) startCounter(el);
       }, delay);
 
@@ -194,7 +164,7 @@ function startCounter(el) {
 }
 
 // ==================== PARALLAX ON SCROLL ====================
-// Отключаем parallax на мобильных — на телефоне это только создаёт нагрузку
+// Отключаем parallax на мобильных, на телефоне это только создаёт нагрузку
 const parallaxEls = document.querySelectorAll('[data-parallax]');
 let ticking = false;
 
@@ -228,10 +198,10 @@ updateParallax();
 // ==================== МОДАЛКА «ПОСМОТРЕТЬ САЙТ» ====================
 const CASE_DATA = {
   alexandra: {
-    title: 'Александра — LED-наращивание',
+    title: 'Александра, LED-наращивание',
     slides: [
       {
-        html: `<iframe src="assets/alexandra-demo.html" title="Сайт Александры — живое демо" loading="lazy"></iframe>`,
+        html: `<iframe src="assets/alexandra-demo.html" title="Сайт Александры, живое демо" loading="lazy"></iframe>`,
       },
     ],
   },
@@ -240,7 +210,7 @@ const CASE_DATA = {
     title: 'Салон «ПилиПилить»',
     slides: [
       {
-        html: `<img src="assets/pilipilit-hero.webp" alt="ПилиПилить — главный экран" style="width:100%;display:block;border-radius:12px">`,
+        html: `<img src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран" style="width:100%;display:block;border-radius:12px">`,
       },
     ],
   },
@@ -249,7 +219,7 @@ const CASE_DATA = {
     title: 'SvarkaUral196',
     slides: [
       {
-        html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196 — живое демо" loading="lazy"></iframe>`,
+        html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" loading="lazy"></iframe>`,
       },
     ],
   },
@@ -265,7 +235,7 @@ function openCase(caseId) {
 
   modalTitle.textContent = data.title;
 
-  // Рендерим все секции стопкой — пользователь скроллит вертикально, как на настоящем сайте
+  // Рендерим все секции стопкой, пользователь скроллит вертикально, как на настоящем сайте
   modalScroll.innerHTML = data.slides
     .map((s) => {
       const cap = s.caption ? `<div class="modal-section-caption">${s.caption}</div>` : '';
@@ -315,13 +285,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeCase();
 });
 
-// Ховер курсора на элементы модалки
-document.querySelectorAll('.modal-close').forEach((el) => {
-  el.addEventListener('mouseenter', () => cursor && cursor.classList.add('hover'));
-  el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('hover'));
-});
-
-// ==================== FAQ — АККОРДЕОН ====================
+// ==================== FAQ, АККОРДЕОН ====================
 // Клик по вопросу раскрывает ответ. Одновременно открыт только один пункт.
 document.querySelectorAll('.faq-item').forEach((item) => {
   const btn = item.querySelector('.faq-item-q');
@@ -359,7 +323,7 @@ window.addEventListener('resize', () => {
   if (open) open.style.maxHeight = open.scrollHeight + 'px';
 });
 
-// ==================== КЕЙСЫ — 3D-НАКЛОН + СВЕЧЕНИЕ ЗА КУРСОРОМ ====================
+// ==================== КЕЙСЫ, 3D-НАКЛОН + СВЕЧЕНИЕ ЗА КУРСОРОМ ====================
 // Только на устройствах с мышью и без запрета анимаций.
 (function () {
   const canHover = window.matchMedia('(hover: hover)').matches;
@@ -472,18 +436,18 @@ const SERVICE_DATA = {
     cells: [
       { h: 'Кому подойдёт', body: '<ul><li>Один товар или одна услуга</li><li>Нужно простое место, чтобы рассказать о&nbsp;себе</li><li>Хочешь быстро</li></ul>' },
       { h: 'Что входит', body: '<ul><li>Одна страница со&nbsp;всем главным</li><li>Дизайн и&nbsp;тексты</li><li>Версия для&nbsp;телефона</li><li>Кнопка в&nbsp;WhatsApp или Telegram</li><li>Свой домен</li></ul>' },
-      { h: 'Срок', body: '3–5 дней.' },
+      { h: 'Срок', body: '3-5 дней.' },
     ],
   },
 
   multipage: {
     eyebrow: '02 · Сайт из страниц',
-    title: 'Несколько услуг — у&nbsp;каждой <span class="accent">своя страница</span>.',
-    lead: 'Главная знакомит с&nbsp;тобой. Дальше у&nbsp;каждой услуги&nbsp;— своя страница: что это, как проходит, как записаться.',
+    title: 'Несколько услуг, у&nbsp;каждой <span class="accent">своя страница</span>.',
+    lead: 'Главная знакомит с&nbsp;тобой. Дальше у&nbsp;каждой услуги, своя страница: что это, как проходит, как записаться.',
     cells: [
-      { h: 'Кому подойдёт', body: '<ul><li>2–5 услуг или направлений</li><li>Каждой нужно своё место</li><li>Хочешь, чтобы клиент сам всё нашёл</li></ul>' },
-      { h: 'Что входит', body: '<ul><li>Главная и&nbsp;3–5 страниц по&nbsp;услугам</li><li>Меню сверху</li><li>Карточки услуг с&nbsp;фото</li><li>Формы связи</li><li>Версия для&nbsp;телефона</li></ul>' },
-      { h: 'Срок', body: '7–10 дней.' },
+      { h: 'Кому подойдёт', body: '<ul><li>2-5 услуг или направлений</li><li>Каждой нужно своё место</li><li>Хочешь, чтобы клиент сам всё нашёл</li></ul>' },
+      { h: 'Что входит', body: '<ul><li>Главная и&nbsp;3-5 страниц по&nbsp;услугам</li><li>Меню сверху</li><li>Карточки услуг с&nbsp;фото</li><li>Формы связи</li><li>Версия для&nbsp;телефона</li></ul>' },
+      { h: 'Срок', body: '7-10 дней.' },
     ],
   },
 
@@ -494,18 +458,18 @@ const SERVICE_DATA = {
     cells: [
       { h: 'Кому подойдёт', body: '<ul><li>У&nbsp;компании есть команда и&nbsp;история</li><li>Нужен сайт надолго</li><li>Хочешь добавлять страницы со&nbsp;временем</li></ul>' },
       { h: 'Что входит', body: '<ul><li>До&nbsp;10 страниц</li><li>Раздел новостей или блог</li><li>Страницы команды и&nbsp;кейсов</li><li>Формы заявок и&nbsp;вакансий</li><li>Запас на&nbsp;будущее</li></ul>' },
-      { h: 'Срок', body: '2–3 недели.' },
+      { h: 'Срок', body: '2-3 недели.' },
     ],
   },
 
   minisite: {
     eyebrow: '04 · Мини-сайт',
-    title: 'Одна ссылка — <span class="accent">для всех соцсетей</span>.',
+    title: 'Одна ссылка, <span class="accent">для всех соцсетей</span>.',
     lead: 'Короткая страничка с&nbsp;главным: кто ты, что делаешь, как написать. Удобно ставить в&nbsp;шапку Instagram или Telegram. Своя замена Linktree, только на&nbsp;твоём домене.',
     cells: [
       { h: 'Кому подойдёт', body: '<ul><li>Нужна одна ссылка в&nbsp;шапку соцсети</li><li>Хочешь свой стиль, а&nbsp;не&nbsp;шаблон</li><li>Сайт нужен быстро</li></ul>' },
       { h: 'Что входит', body: '<ul><li>Одна страница</li><li>О&nbsp;тебе и&nbsp;услуги</li><li>Кнопки в&nbsp;мессенджеры</li><li>Свой домен (например, твоё имя.ru)</li><li>Версия для&nbsp;телефона на&nbsp;первом месте</li></ul>' },
-      { h: 'Срок', body: '2–3 дня.' },
+      { h: 'Срок', body: '2-3 дня.' },
     ],
   },
 
@@ -516,7 +480,7 @@ const SERVICE_DATA = {
     cells: [
       { h: 'Кому подойдёт', body: '<ul><li>Хочешь снять с&nbsp;себя одинаковые сообщения</li><li>Принимаешь записи и&nbsp;заявки</li><li>Нужен помощник, который не&nbsp;спит</li></ul>' },
       { h: 'Что входит', body: '<ul><li>Меню с&nbsp;кнопками</li><li>Ответы на&nbsp;частые вопросы</li><li>Запись на&nbsp;услугу</li><li>Уведомления тебе в&nbsp;Telegram</li><li>Инструкция, как им&nbsp;управлять</li></ul>' },
-      { h: 'Срок', body: '5–7 дней.' },
+      { h: 'Срок', body: '5-7 дней.' },
     ],
   },
 };
@@ -572,7 +536,7 @@ function openService(card, svcId) {
 
   const finalRect = svcModalInner.getBoundingClientRect();
 
-  // Inverse transform — «вернуть» в позицию плашки
+  // Inverse transform, «вернуть» в позицию плашки
   const dx = startRect.left - finalRect.left;
   const dy = startRect.top  - finalRect.top;
   const sx = startRect.width  / finalRect.width;
@@ -674,22 +638,8 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Ховер курсора на интерактив внутри модалки (делегируем — CTA рендерится динамически)
-if (svcModal) {
-  svcModal.addEventListener('mouseover', (e) => {
-    if (e.target.closest('.service-modal-close, .svc-cta')) {
-      cursor && cursor.classList.add('hover');
-    }
-  });
-  svcModal.addEventListener('mouseout', (e) => {
-    if (e.target.closest('.service-modal-close, .svc-cta')) {
-      cursor && cursor.classList.remove('hover');
-    }
-  });
-}
-
 // ==================== РЕЖИМ РЕДАКТИРОВАНИЯ ====================
-// editor.js подгружаем только при ?edit — в боевом режиме он не грузится.
+// editor.js подгружаем только при ?edit, в боевом режиме он не грузится.
 if (new URLSearchParams(location.search).has('edit')) {
   const s = document.createElement('script');
   s.src = 'editor.js';
