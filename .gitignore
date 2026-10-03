@@ -1,0 +1,16 @@
+# Артефакты среды разработки — не часть сайта
+.claude/
+.agents/
+skills-main/
+scroll-world-main/
+skills-lock.json
+
+# Случайные/рабочие файлы
+Screenshot_*.png
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Node / Playwright (если вдруг появится)
+node_modules/
+.playwright/
