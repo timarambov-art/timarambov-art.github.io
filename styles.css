@@ -803,15 +803,16 @@ p  { margin: 0; }
   margin: clamp(40px, 7vw, 96px) auto;
   padding: clamp(32px, 5vw, 72px);
   border-radius: clamp(20px, 2.4vw, 32px);
-  background: linear-gradient(170deg, rgba(21, 35, 57, 0.55), rgba(14, 28, 50, 0.75));
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Кремовая paper-подложка — контраст с dark editorial страницей,
+     как у .paper-card в lead-magnet. Текст внутри — dark (var(--ink-0)). */
+  background: var(--paper);
+  color: var(--ink-0);
+  border: 1px solid rgba(10, 22, 40, 0.08);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
-    0 50px 140px -40px rgba(0, 0, 0, 0.75),
-    0 2px 0 rgba(255, 255, 255, 0.02);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(10, 22, 40, 0.08),
+    0 50px 140px -40px rgba(0, 0, 0, 0.5),
+    0 2px 0 rgba(10, 22, 40, 0.04);
   transform-style: preserve-3d;
   isolation: isolate;
 
@@ -843,7 +844,7 @@ p  { margin: 0; }
   --c-scale: 0.72;
   --c-opacity: 0;
 }
-/* Specular highlight сверху — real-glass tell */
+/* Paper tactile highlights: тонкая белая грань сверху + тёплая amber-подпись снизу */
 .case::before {
   content: "";
   position: absolute;
@@ -851,12 +852,11 @@ p  { margin: 0; }
   left: 12%;
   right: 12%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
   pointer-events: none;
   border-radius: inherit;
   z-index: 2;
 }
-/* Chromatic amber edge снизу */
 .case::after {
   content: "";
   position: absolute;
@@ -864,7 +864,7 @@ p  { margin: 0; }
   left: 20%;
   right: 20%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, oklch(72% 0.14 65 / 0.4), transparent);
+  background: linear-gradient(90deg, transparent, oklch(72% 0.14 65 / 0.6), transparent);
   pointer-events: none;
   border-radius: inherit;
   z-index: 2;
@@ -882,13 +882,7 @@ p  { margin: 0; }
     /* opacity 0 → мягкий fade без 3D-motion */
   }
 }
-@media (prefers-reduced-transparency: reduce) {
-  .case {
-    background: var(--ink-1);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-}
+/* prefers-reduced-transparency не требуется — paper-подложка непрозрачна */
 
 @media (min-width: 900px) {
   .case-grid {
@@ -2505,3 +2499,85 @@ body { background: var(--ink-0); position: relative; }
   .shot-live { font-size: 9px; padding: 2px 8px; }
   .case-shot img { padding-top: 32px; }
 }
+
+
+/* ============================================================
+   21 · CASE CARD — PAPER PALETTE OVERRIDE
+   .case теперь кремовая paper-карточка на dark странице.
+   Переопределяем цвета всех внутренних элементов на dark-on-light.
+   ============================================================ */
+
+/* Границы между секциями карточки — тёплый ink вместо светлого rule */
+.case .case-meta,
+.case .case-facts {
+  border-color: rgba(10, 22, 40, 0.14);
+}
+.case .case-facts {
+  border-top-color: rgba(10, 22, 40, 0.14);
+  border-bottom-color: rgba(10, 22, 40, 0.14);
+}
+
+/* Мета сверху: номер + тег */
+.case .case-meta .num {
+  color: rgba(10, 22, 40, 0.55);
+}
+.case .case-meta .tag {
+  color: rgba(10, 22, 40, 0.55);
+}
+
+/* Заголовок — тёплый ink, не светлый text */
+.case .case-body h2 {
+  color: var(--ink-0);
+}
+.case .case-body h2 em,
+.case .case-body h2 .accent {
+  color: oklch(55% 0.15 60);
+}
+
+/* Описание — muted dark */
+.case .case-body .case-desc {
+  color: rgba(10, 22, 40, 0.72);
+}
+
+/* Facts: число — ink, подпись — muted dark */
+.case .case-facts .f .v {
+  color: var(--ink-0);
+}
+.case .case-facts .f .l {
+  color: rgba(10, 22, 40, 0.55);
+}
+
+/* CTA кнопка — dark на cream, с чётким border */
+.case .case-link {
+  color: var(--ink-0);
+  border-bottom-color: rgba(10, 22, 40, 0.3);
+}
+.case .case-link:hover {
+  border-bottom-color: var(--ink-0);
+}
+
+/* Chip-tags — dark border + ink color на cream */
+.case .case-stack .chip {
+  border-color: rgba(10, 22, 40, 0.15);
+  background: rgba(10, 22, 40, 0.03);
+  color: rgba(10, 22, 40, 0.65);
+}
+@media (hover: hover) and (pointer: fine) {
+  .case .case-stack .chip:hover {
+    border-color: oklch(55% 0.15 60);
+    color: var(--ink-0);
+    background: oklch(85% 0.08 65 / 0.4);
+  }
+}
+
+/* Watermark с номером — тёплый ink вместо text */
+.case .case-watermark {
+  color: var(--ink-0);
+  opacity: 0.06;
+}
+
+/* Browser chrome на фото остаётся dark — это mock-окно сайта.
+   Фото лежит на cream рамке, но chrome сверху фото — тёмный,
+   как настоящая строка браузера. */
+
+/* .cases-track.is-stacked правила для компакта остаются, только color inherit */
