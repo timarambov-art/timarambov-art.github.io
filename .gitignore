@@ -11,6 +11,10 @@ Screenshot_*.png
 .DS_Store
 Thumbs.db
 
+# Orphan-ассеты, нигде не используются в коде
+assets/coffee-real.*
+assets/raritet/
+
 # Node / Playwright (если вдруг появится)
 node_modules/
 .playwright/
