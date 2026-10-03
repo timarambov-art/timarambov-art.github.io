@@ -92,26 +92,10 @@ function initCinematic() {
 
   const isDesktop = window.matchMedia('(min-width: 900px)').matches;
 
-  /* ---------- Horizontal scroll hijack: cases (desktop only) ---------- */
-  if (isDesktop) {
-    const casesTrack = document.querySelector('.cases-track');
-    const casesWrap = document.querySelector('.cases-wrap');
-    if (casesTrack && casesWrap) {
-      gsap.to(casesTrack, {
-        x: () => -(casesTrack.scrollWidth - window.innerWidth),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: casesWrap,
-          start: 'top top',
-          end: () => '+=' + (casesTrack.scrollWidth - window.innerWidth),
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        },
-      });
-    }
-  }
+  /* ---------- Cases: вертикальный stack с диагональным entrance.
+     Horizontal hijack убран — пользователь хочет Wispr-flow подачу:
+     каждый кейс прилетает по диагонали со объёмным rotateY поворотом,
+     stagger через IntersectionObserver + CSS vars (см. .case-shot в styles.css). */
 
   /* Services pinned через CSS sticky (см. styles.css) — JS не нужен.
      Service rows при scroll получают scrubbed-fade: приглушённые пока

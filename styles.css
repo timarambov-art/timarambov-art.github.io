@@ -726,44 +726,32 @@ p  { margin: 0; }
    ============================================================ */
 .cases { padding-top: clamp(96px, 14vw, 192px); padding-bottom: 0; }
 
-/* --- Horizontal scroll hijack на desktop ---
-   .cases-wrap pinned через GSAP ScrollTrigger. .cases-track едет влево.
-   На мобиле всё возвращается в вертикальный stack. */
-.cases-wrap {
-  position: relative;
-}
+/* --- Cases: вертикальный stack. Каждый кейс занимает полный viewport
+   width в контейнере, идёт друг под другом с большим padding, разделён
+   тонкой линией. 3D-entrance на .case-shot внизу — Wispr Flow стиль. */
+.cases-wrap { position: relative; }
 .cases-track {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  perspective: 2000px;
+  perspective-origin: 50% 40%;
 }
 
 .case {
   padding: clamp(72px, 10vw, 128px) 0;
   border-top: 1px solid var(--rule);
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  width: 100%;
 }
+.case:first-child { border-top: none; }
 
-/* Desktop (от 900px) — horizontal track, но ТОЛЬКО если GSAP инициализирован.
-   body.no-cinematic (fallback через 2с без GSAP) возвращает вертикальный stack. */
 @media (min-width: 900px) {
-  body:not(.no-cinematic) .cases-wrap {
-    padding-top: clamp(48px, 7vw, 96px);
-    padding-bottom: clamp(48px, 7vw, 96px);
-    overflow: hidden;
-  }
-  body:not(.no-cinematic) .cases-track {
-    display: flex;
-    gap: 8vw;
-    width: max-content;
-    padding: 0 max(5vw, var(--gutter));
-    will-change: transform;
-  }
-  body:not(.no-cinematic) .case {
-    flex: 0 0 min(85vw, 1200px);
-    padding: 0;
-    border-top: none;
-  }
-  body:not(.no-cinematic) .case-grid {
-    grid-template-columns: 1.1fr 1fr;
-    gap: 4vw;
+  .case-grid {
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(48px, 6vw, 96px);
     align-items: center;
   }
 }
@@ -1707,57 +1695,63 @@ p  { margin: 0; }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 
 
-/* --- 18.4 case shots: Wispr Flow-style entrance (slide-in по диагонали
-   с полуповоротом) + 3D tilt --- */
+/* --- 18.4 case shots: Wispr Flow-style entrance (объёмный диагональный
+   поворот). При входе в viewport карточка прилетает по диагонали, вращаясь
+   в 3D пространстве (rotateY — ось Y, "дверной" поворот) + translate3d
+   с глубиной Z. Снова возвращаемся в прямое положение. --- */
 .case-shot {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   transform-style: preserve-3d;
-  /* Compose: perspective (tilt) + rotate (entrance twist) + translate (slide-in)
-     + scale (entrance zoom). Все переменные дефолтятся к resting state. */
+  /* Compose: perspective (tilt mouse) + rotateY (объёмный поворот входа)
+     + rotateZ (небольшой twist) + translate3d (диагональ) + scale.
+     Все переменные дефолтятся к resting state. */
   transform:
-    perspective(1200px)
+    perspective(1400px)
     rotateX(var(--rx, 0deg))
-    rotateY(var(--ry, 0deg))
-    rotate(var(--entry-rot, 0deg))
-    translate3d(var(--entry-x, 0px), var(--entry-y, 0px), 0)
+    rotateY(calc(var(--ry, 0deg) + var(--entry-ry, 0deg)))
+    rotateZ(var(--entry-rz, 0deg))
+    translate3d(var(--entry-x, 0px), var(--entry-y, 0px), var(--entry-z, 0px))
     scale(var(--entry-scale, 1));
   opacity: var(--entry-opacity, 1);
-  /* Spring-ish curve: overshoots слегка (ощущение физики, не фикс-ease) */
+  /* Spring-ish — overshoots слегка */
   transition:
-    transform 1.1s cubic-bezier(0.16, 1.08, 0.3, 1),
-    opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.3s cubic-bezier(0.16, 1.08, 0.3, 1),
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.6s var(--ease);
   will-change: transform, opacity;
+  backface-visibility: hidden;
 }
-/* Initial state: карточка лежит снизу-слева, повёрнута на -7deg,
-   приглушена. При .is-in → всё обнуляется, карточка выпрямляется. */
-.case-shot:not(.is-in) {
-  --entry-rot: -7deg;
-  --entry-x: -60px;
-  --entry-y: 40px;
-  --entry-scale: 0.92;
+/* Нечётные (1, 3) — прилетают из нижнего-левого угла, поворот влево */
+.cases-track > .case:nth-of-type(odd) .case-shot:not(.is-in) {
+  --entry-ry: -22deg;    /* 3D-поворот по оси Y: карточка смотрит правой гранью */
+  --entry-rz: -4deg;     /* небольшой twist */
+  --entry-x: -120px;
+  --entry-y: 80px;
+  --entry-z: -140px;     /* утоплена в глубину — ощущение что летит из-за угла */
+  --entry-scale: 0.88;
   --entry-opacity: 0;
 }
-/* Stagger — каждая следующая карточка появляется на 180ms позже.
-   Через nth-of-type на article.case, т.к. shot внутри .case-grid */
-.cases-track > .case:nth-of-type(1) .case-shot { transition-delay: 0s, 0s, 0s; }
-.cases-track > .case:nth-of-type(2) .case-shot { transition-delay: 0.18s, 0.18s, 0s; }
-.cases-track > .case:nth-of-type(3) .case-shot { transition-delay: 0.36s, 0.36s, 0s; }
-/* Чередование направления поворота — нечётные влево, чётные вправо
-   (ощущение разбросанной стопки) */
+/* Чётные (2) — прилетают из правого-нижнего, поворот вправо */
 .cases-track > .case:nth-of-type(even) .case-shot:not(.is-in) {
-  --entry-rot: 6deg;
-  --entry-x: 60px;
+  --entry-ry: 22deg;
+  --entry-rz: 4deg;
+  --entry-x: 120px;
+  --entry-y: 80px;
+  --entry-z: -140px;
+  --entry-scale: 0.88;
+  --entry-opacity: 0;
 }
 @media (prefers-reduced-motion: reduce) {
   .case-shot:not(.is-in) {
-    --entry-rot: 0deg;
+    --entry-ry: 0deg;
+    --entry-rz: 0deg;
     --entry-x: 0px;
     --entry-y: 10px;
+    --entry-z: 0px;
     --entry-scale: 1;
-    /* opacity всё ещё 0 → fade без motion */
+    /* opacity 0 → fade без motion */
   }
 }
 /* 3D-tilt: data-tilt элементы наклоняются по курсору.
