@@ -2,10 +2,22 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "demo-landing",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "Лендинг для александры"],
+      "port": 7788
+    },
+    {
       "name": "ryambov-site",
       "runtimeExecutable": "powershell.exe",
-      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ".claude/serve.ps1"],
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "D:/GitHub/ryambov-site/.claude/serve.ps1"],
       "port": 5500
+    },
+    {
+      "name": "pilipilit",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "7799", "--directory", "pilipilit"],
+      "port": 7799
     }
   ]
 }
