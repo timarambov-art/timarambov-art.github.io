@@ -625,9 +625,46 @@ p  { margin: 0; }
    ============================================================ */
 .cases { padding-top: clamp(96px, 14vw, 192px); padding-bottom: 0; }
 
+/* --- Horizontal scroll hijack на desktop ---
+   .cases-wrap pinned через GSAP ScrollTrigger. .cases-track едет влево.
+   На мобиле всё возвращается в вертикальный stack. */
+.cases-wrap {
+  position: relative;
+}
+.cases-track {
+  display: block;
+}
+
 .case {
   padding: clamp(72px, 10vw, 128px) 0;
   border-top: 1px solid var(--rule);
+}
+
+/* Desktop (от 900px) — horizontal track, но ТОЛЬКО если GSAP инициализирован.
+   body.no-cinematic (fallback через 2с без GSAP) возвращает вертикальный stack. */
+@media (min-width: 900px) {
+  body:not(.no-cinematic) .cases-wrap {
+    padding-top: clamp(48px, 7vw, 96px);
+    padding-bottom: clamp(48px, 7vw, 96px);
+    overflow: hidden;
+  }
+  body:not(.no-cinematic) .cases-track {
+    display: flex;
+    gap: 8vw;
+    width: max-content;
+    padding: 0 max(5vw, var(--gutter));
+    will-change: transform;
+  }
+  body:not(.no-cinematic) .case {
+    flex: 0 0 min(85vw, 1200px);
+    padding: 0;
+    border-top: none;
+  }
+  body:not(.no-cinematic) .case-grid {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4vw;
+    align-items: center;
+  }
 }
 
 .case-grid {
@@ -1010,12 +1047,15 @@ p  { margin: 0; }
 .about-photo img {
   width: 100%; height: 100%;
   object-fit: cover;
+  object-position: center 20%; /* сдвигаем кроп вверх, чтобы лицо не обрезалось */
   filter: grayscale(0.1);
 }
 
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .about-photo { order: -1; aspect-ratio: 4 / 3; }
+  /* На мобиле — не landscape (там Тима теряет голову), оставляем портрет,
+     но чуть сдавленнее, чтобы не занимало пол-экрана. */
+  .about-photo { order: -1; aspect-ratio: 4 / 5; max-width: 420px; }
 }
 
 

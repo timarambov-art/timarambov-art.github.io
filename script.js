@@ -8,37 +8,16 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- Lenis + GSAP boot (CDN-dependent) --------------------
-   Все три библиотеки грузятся defer-ом. Ждём DOMContentLoaded + проверяем наличие.
-   Если что-то не загрузилось — работаем на нативном scroll, остальной код живёт сам. */
-let lenis = null;
+/* -------------------- GSAP boot (CDN-dependent, native scroll) --------------------
+   GSAP + ScrollTrigger грузятся defer-ом. SplitType опционален.
+   Без Lenis — нативный scroll. */
 let cinematicInited = false;
 function initCinematic() {
   if (cinematicInited || reduceMotion) return;
-  // Нужны минимум gsap + ScrollTrigger. Lenis / SplitType опциональны.
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   cinematicInited = true;
 
-  // Lenis — momentum smooth scroll
-  if (typeof Lenis !== 'undefined') {
-    lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.2,
-    });
-    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-  }
-
-  // GSAP + ScrollTrigger
   gsap.registerPlugin(ScrollTrigger);
-  if (lenis) {
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-  }
 
     // Hero ghost '26 — scrubbed parallax + scale при проходе hero
     gsap.to('.hero-ghost', {
@@ -84,6 +63,82 @@ function initCinematic() {
       },
     });
   }
+
+  const isDesktop = window.matchMedia('(min-width: 900px)').matches;
+
+  /* ---------- Horizontal scroll hijack: cases (desktop only) ---------- */
+  if (isDesktop) {
+    const casesTrack = document.querySelector('.cases-track');
+    const casesWrap = document.querySelector('.cases-wrap');
+    if (casesTrack && casesWrap) {
+      gsap.to(casesTrack, {
+        x: () => -(casesTrack.scrollWidth - window.innerWidth),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: casesWrap,
+          start: 'top top',
+          end: () => '+=' + (casesTrack.scrollWidth - window.innerWidth),
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
+      });
+    }
+  }
+
+  /* ---------- Pinned Services header: title остаётся прижатым, пока
+     список услуг пролистывается мимо (Apple-style) ---------- */
+  if (isDesktop) {
+    const servicesSection = document.querySelector('#services');
+    const servicesHead = servicesSection?.querySelector('.section-head');
+    const svcList = servicesSection?.querySelector('.svc-list');
+    if (servicesHead && svcList) {
+      ScrollTrigger.create({
+        trigger: servicesSection,
+        start: 'top 10%',
+        endTrigger: svcList,
+        end: 'bottom 40%',
+        pin: servicesHead,
+        pinSpacing: false,
+      });
+    }
+  }
+
+  /* ---------- Scrubbed About: слова параграфов разгораются из dim в full
+     по мере прокрутки viewport через about-text (Apple-style) ---------- */
+  const aboutParas = document.querySelectorAll('.about-text p');
+  aboutParas.forEach((p) => {
+    // Разбиваем на слова, оборачиваем в .about-w
+    const text = p.textContent;
+    p.textContent = '';
+    text.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        p.appendChild(document.createTextNode(part));
+      } else {
+        const w = document.createElement('span');
+        w.className = 'about-w';
+        w.textContent = part;
+        p.appendChild(w);
+      }
+    });
+    gsap.fromTo(
+      p.querySelectorAll('.about-w'),
+      { opacity: 0.22 },
+      {
+        opacity: 1,
+        stagger: 0.015,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: p,
+          start: 'top 85%',
+          end: 'top 30%',
+          scrub: 1,
+        },
+      },
+    );
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -210,6 +265,14 @@ if (document.readyState === 'loading') {
 window.addEventListener('load', () => { setTimeout(initHeroReveal, 60); });
 // Если CDN отвалился — через 1.5с запускаем CSS-путь, чтобы hero не остался пустым
 setTimeout(heroFallback, 1500);
+
+/* Если GSAP не загрузился за 2 секунды — переключаем всё в no-cinematic режим,
+   чтобы horizontal cases и pinned services не оставались сломанными. */
+setTimeout(() => {
+  if (!cinematicInited) {
+    document.body.classList.add('no-cinematic');
+  }
+}, 2000);
 
 /* Section headlines: разбить и анимировать при входе в viewport */
 (function () {
