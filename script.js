@@ -1,41 +1,38 @@
 /* ============================================================
    Тимофей Рямбов, лендинг
-   JS: Lenis momentum scroll + GSAP ScrollTrigger cinematic +
-       SplitType char-reveal, reveal, FAQ, case modal, burger, counter.
-   CDN-зависимости: lenis, gsap, ScrollTrigger, SplitType (defer-loaded).
+   JS: GSAP ScrollSmoother (free since GSAP 3.13) + ScrollTrigger
+       cinematic + SplitType char-reveal, reveal, FAQ, case modal,
+       burger, counter.
+   CDN-зависимости: gsap, ScrollTrigger, ScrollSmoother, SplitType.
    ============================================================ */
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- GSAP + Lenis boot (CDN-dependent) --------------------
-   Lenis настроен мягко — короткий duration, малая инерция, чтобы не бесило. */
+/* -------------------- GSAP + ScrollSmoother boot --------------------
+   ScrollSmoother делает плавный «плыву по сайту» скролл и сам
+   интегрируется со ScrollTrigger. Lenis больше не нужен. */
 let cinematicInited = false;
-let lenis = null;
+let smoother = null;
 function initCinematic() {
   if (cinematicInited || reduceMotion) return;
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   cinematicInited = true;
 
-  // Lenis — lerp-режим: каждый кадр плавно догоняет цель (не фиксированная
-  // длительность). Ощущение «теку по сайту», нет резкого старта/прыжков.
-  if (typeof Lenis !== 'undefined') {
-    lenis = new Lenis({
-      lerp: 0.08,              // 8% catch-up в кадр = плавно, но без вязкости
-      smoothWheel: true,
-      wheelMultiplier: 0.9,    // одно колесо тянет чуть мягче, не рывком
-      touchMultiplier: 1.5,
-      syncTouch: false,
-    });
-    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-  }
+  const plugins = [ScrollTrigger];
+  if (typeof ScrollSmoother !== 'undefined') plugins.push(ScrollSmoother);
+  gsap.registerPlugin(...plugins);
 
-  gsap.registerPlugin(ScrollTrigger);
-  if (lenis) {
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
+  // ScrollSmoother — физический momentum скролл, premium ощущение
+  if (typeof ScrollSmoother !== 'undefined' && document.getElementById('smooth-wrapper')) {
+    smoother = ScrollSmoother.create({
+      wrapper: '#smooth-wrapper',
+      content: '#smooth-content',
+      smooth: 1.5,              // секунды catchup (ощущение «теку»)
+      effects: true,            // data-speed, data-lag работают из коробки
+      smoothTouch: 0,           // на touch — нативный скролл
+      normalizeScroll: true,    // гасит разницу между браузерами и тачпадами
+    });
   }
 
     // Hero ghost '26 — scrubbed parallax + scale при проходе hero

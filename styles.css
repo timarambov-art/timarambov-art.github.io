@@ -81,6 +81,13 @@ section[id] { scroll-margin-top: 80px; }
 
 html, body { margin: 0; padding: 0; }
 
+/* ScrollSmoother wrapper/content.
+   До инициализации — обычные div-ы, не ломают layout.
+   ScrollSmoother применяет fixed/height/overflow стили программно
+   через inline-style, они перекрывают дефолтные значения ниже. */
+#smooth-wrapper { position: relative; }
+#smooth-content { position: relative; will-change: transform; }
+
 body {
   background: var(--ink-0);
   color: var(--text);

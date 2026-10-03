@@ -59,10 +59,10 @@
 
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Cinematic stack: Lenis (мягкий) + GSAP + ScrollTrigger + Split-type -->
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <!-- Cinematic stack: GSAP 3.13 + ScrollTrigger + ScrollSmoother (free с 2024) + Split-type -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollSmoother.min.js" defer></script>
   <script src="https://unpkg.com/split-type@0.3.4/umd/index.min.js" defer></script>
 
   <!-- Three.js (ES module via importmap) — ink/amber warp shader в hero-ambient.
@@ -147,6 +147,13 @@
       <a href="https://wa.me/79022540481" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </div>
+
+  <!-- ==================== SMOOTH SCROLL WRAPPER ====================
+       ScrollSmoother wraps всё scrollable (hero + sections + footer).
+       header, mobile-menu, case-modal, grain-layer, scroll-progress — fixed,
+       живут ВНЕ wrapper. -->
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
 
   <!-- ==================== HERO ==================== -->
   <!-- Cinematic staging: .hero-stage высокий, .hero внутри pinned sticky, scroll-scrubbing фон/ghost/words. -->
@@ -791,6 +798,9 @@
     </div>
   </footer>
 
+    </div><!-- /#smooth-content -->
+  </div><!-- /#smooth-wrapper -->
+
   <!-- ==================== CASE MODAL ==================== -->
   <div class="case-modal" id="caseModal" aria-hidden="true">
     <div class="cm-backdrop" data-modal-close></div>
@@ -919,7 +929,10 @@
         function tick() {
           if (visible) {
             uniforms.uTime.value = clock.getElapsedTime();
-            uniforms.uScroll.value = Math.min(1, Math.max(0, window.scrollY / (window.innerHeight || 1)));
+            // ScrollSmoother может подменять scroll — используем его scrollTop если доступен
+            const smoother = (typeof ScrollSmoother !== 'undefined' && ScrollSmoother.get()) ? ScrollSmoother.get() : null;
+            const scrollY = smoother ? smoother.scrollTop() : window.scrollY;
+            uniforms.uScroll.value = Math.min(1, Math.max(0, scrollY / (window.innerHeight || 1)));
             renderer.render(scene, camera);
           }
           requestAnimationFrame(tick);
