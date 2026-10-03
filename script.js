@@ -7,30 +7,25 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- Header shrink on scroll -------------------- */
-/* Progress bar — через CSS animation-timeline: scroll(). JS-fallback только если браузер не поддерживает. */
-const header = document.getElementById('header');
+/* -------------------- Scroll progress fallback --------------------
+   Основной progress — через CSS animation-timeline: scroll().
+   Этот rAF-фолбэк остаётся ТОЛЬКО для браузеров без scroll-timeline. */
 const progress = document.getElementById('scrollProgress');
 const supportsScrollTimeline = CSS.supports('animation-timeline', 'scroll()');
-let scrollRaf = null;
 
-function onPageScroll() {
-  if (header) {
-    if (window.scrollY > 32) header.classList.add('is-scrolled');
-    else header.classList.remove('is-scrolled');
-  }
-  if (progress && !supportsScrollTimeline) {
+if (progress && !supportsScrollTimeline) {
+  let scrollRaf = null;
+  const update = () => {
     const docH = document.documentElement.scrollHeight - window.innerHeight;
     const p = docH > 0 ? Math.min(1, Math.max(0, window.scrollY / docH)) : 0;
     progress.style.transform = `scaleX(${p.toFixed(4)})`;
-  }
-  scrollRaf = null;
+    scrollRaf = null;
+  };
+  window.addEventListener('scroll', () => {
+    if (!scrollRaf) scrollRaf = requestAnimationFrame(update);
+  }, { passive: true });
+  update();
 }
-
-window.addEventListener('scroll', () => {
-  if (!scrollRaf) scrollRaf = requestAnimationFrame(onPageScroll);
-}, { passive: true });
-onPageScroll();
 
 
 /* -------------------- Hero: word-mask reveal -------------------- */

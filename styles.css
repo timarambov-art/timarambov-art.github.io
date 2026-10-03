@@ -60,6 +60,12 @@ html {
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  /* Mobile-native baseline — убираем серую вспышку при тапе, отключаем
+     автопилот text-inflation в landscape, запрещаем pull-to-refresh,
+     чтобы наш own scroll поведение не прерывалось системным. */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -97,7 +103,42 @@ button {
   cursor: pointer;
 }
 
+/* Tap-отклик без 300мс задержки, запрет long-press selection на кнопках и
+   ссылках-кнопках. Текст-ссылки в body оставляем выделяемыми. */
+button, a[href^="#"], a[role="button"], [role="button"],
+.cta, .pc-btn, .btn-link, .cm-close, .burger, .faq-q,
+.svc-row, .case-link, .channel {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
 ::selection { background: var(--violet); color: var(--ink-0); }
+
+/* Фокус-кольцо для keyboard-users — одинаковое по всему сайту.
+   Не анимируется (Emil: focus должен появляться мгновенно). */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.cta:focus-visible,
+.pc-btn:focus-visible,
+.btn-link:focus-visible,
+.cm-close:focus-visible { outline-offset: 4px; border-radius: 999px; }
+
+/* Press-feedback — интерфейс должен ощутимо откликаться на клик */
+.cta, .pc-btn, .btn-link, .cm-close, .channel, .case-link {
+  transition-property: transform, background, border-color;
+  transition-duration: 0.12s;
+  transition-timing-function: var(--ease);
+}
+.cta:active, .pc-btn:active, .btn-link:active,
+.cm-close:active, .channel:active, .case-link:active {
+  transform: scale(0.97);
+}
+/* У mobile burger уже свой transform-ный морф — press-feedback конфликтует */
 
 
 /* ============================================================
@@ -192,7 +233,10 @@ p  { margin: 0; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 50;
-  padding: 20px var(--gutter);
+  padding: 18px var(--gutter);
+  padding-top: calc(18px + env(safe-area-inset-top, 0px));
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -201,10 +245,9 @@ p  { margin: 0; }
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--rule);
-  transition: padding 0.3s var(--ease);
+  /* Safe-area insets: сайт теперь viewport-fit=cover, контент под notch —
+     поднимаем header-content сверху и держим gutters от боковых insets. */
 }
-
-.header.is-scrolled { padding-top: 14px; padding-bottom: 14px; }
 
 .header .logo {
   font-family: var(--f-body);
@@ -282,7 +325,7 @@ p  { margin: 0; }
   inset: 0;
   z-index: 40;
   background: var(--ink-0);
-  padding: 96px var(--gutter) 48px;
+  padding: calc(96px + env(safe-area-inset-top, 0px)) var(--gutter) calc(48px + env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -336,10 +379,20 @@ p  { margin: 0; }
 }
 
 .hero h1 {
-  max-width: 14ch;
+  max-width: 22ch;
   margin-bottom: clamp(32px, 4vw, 56px);
 }
 .hero h1 .accent { white-space: nowrap; }
+/* Принудительные .line — чтобы каждая строка жила своей жизнью
+   и внутри строки слова не переносились (иначе на desktop headline
+   уходит в 4 строки). */
+.hero h1 .line { white-space: nowrap; }
+
+@media (max-width: 720px) {
+  /* На мобиле белый space переносит слова как обычно — иначе headline
+     вылетит за viewport. */
+  .hero h1 .line { white-space: normal; }
+}
 
 .hero .sub {
   display: grid;
@@ -387,6 +440,16 @@ p  { margin: 0; }
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(24px, 4vw, 56px);
 }
+/* Stats появляются с лёгким stagger-ом — читаются как последовательность
+   фактов, а не как слитый блок. Срабатывает один раз при scroll-in. */
+.hero-stats .stat {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.hero-stats.is-visible .stat { opacity: 1; transform: translateY(0); }
+.hero-stats .stat:nth-child(2) { transition-delay: 80ms; }
+.hero-stats .stat:nth-child(3) { transition-delay: 160ms; }
 .hero-stats .stat .n {
   font-family: var(--f-display);
   font-size: clamp(44px, 6vw, 72px);
@@ -514,7 +577,9 @@ p  { margin: 0; }
   color: var(--text);
   transition: transform 0.25s var(--ease), background 0.25s var(--ease);
 }
-.paper-card .pc-btn:hover { transform: translateY(-2px); background: #000; }
+@media (hover: hover) and (pointer: fine) {
+  .paper-card .pc-btn:hover { transform: translateY(-2px); background: #000; }
+}
 .paper-card .pc-btn svg { width: 16px; height: 16px; }
 .paper-card .pc-btn--ghost {
   background: transparent;
@@ -626,10 +691,16 @@ p  { margin: 0; }
   color: var(--text);
   padding-bottom: 4px;
   border-bottom: 1px solid var(--rule-strong);
-  transition: border-color 0.2s var(--ease), gap 0.25s var(--ease);
+  transition: border-color 0.2s var(--ease);
 }
-.case-link:hover { border-color: var(--text); gap: 14px; }
-.case-link svg { width: 14px; height: 14px; }
+.case-link:hover { border-color: var(--text); }
+.case-link svg {
+  width: 14px; height: 14px;
+  transition: transform 0.25s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .case-link:hover svg { transform: translateX(4px); }
+}
 
 @media (max-width: 900px) {
   .case-grid { grid-template-columns: 1fr; gap: 32px; }
@@ -653,12 +724,19 @@ p  { margin: 0; }
   align-items: center;
   padding: 32px 0;
   border-bottom: 1px solid var(--rule);
-  transition: background 0.3s var(--ease), padding 0.3s var(--ease);
+  transition: background 0.3s var(--ease);
 }
 .svc-row:hover {
   background: linear-gradient(90deg, transparent, rgba(236,231,216,0.03) 50%, transparent);
-  padding-left: 8px;
-  padding-right: 8px;
+}
+/* Контент внутри ряда едет вбок на hover через transform (не padding — layout prop) */
+.svc-row .svc-name,
+.svc-row .svc-desc {
+  transition: transform 0.3s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .svc-row:hover .svc-name,
+  .svc-row:hover .svc-desc { transform: translateX(6px); }
 }
 .svc-row .svc-num { color: var(--muted); font-family: var(--f-mono); font-size: 13px; }
 .svc-row .svc-name {
@@ -686,7 +764,9 @@ p  { margin: 0; }
   color: var(--muted);
   transition: color 0.2s var(--ease), transform 0.25s var(--ease);
 }
-.svc-row:hover .svc-arrow { color: var(--text); transform: translateX(4px); }
+@media (hover: hover) and (pointer: fine) {
+  .svc-row:hover .svc-arrow { color: var(--text); transform: translateX(4px); }
+}
 
 @media (max-width: 900px) {
   .svc-row {
@@ -948,7 +1028,9 @@ p  { margin: 0; }
 }
 .channel .ch-val { font-size: 15px; color: var(--muted); }
 .channel .ch-arrow { justify-self: end; color: var(--muted); transition: transform 0.25s var(--ease), color 0.2s var(--ease); }
-.channel:hover .ch-arrow { color: var(--text); transform: translateX(4px); }
+@media (hover: hover) and (pointer: fine) {
+  .channel:hover .ch-arrow { color: var(--text); transform: translateX(4px); }
+}
 
 @media (max-width: 720px) {
   .contact .contact-head { grid-template-columns: 1fr; gap: 20px; }
@@ -1037,6 +1119,14 @@ p  { margin: 0; }
   transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
 }
 .case-modal.is-open { opacity: 1; visibility: visible; }
+
+/* Modal content: scale от 0.98 (не 0 — вещи не рождаются из ничего) + opacity */
+.case-modal .cm-inner {
+  transform: scale(0.98);
+  transform-origin: center;
+  transition: transform 0.35s var(--ease);
+}
+.case-modal.is-open .cm-inner { transform: scale(1); }
 .cm-backdrop {
   position: absolute;
   inset: 0;
@@ -1111,9 +1201,58 @@ p  { margin: 0; }
   transform: translateY(0);
 }
 
+/* --- Accessibility: три независимых user-preference сигнала --- */
+
+/* Пользователь просит меньше прозрачности → убираем blur, повышаем
+   фоновую непрозрачность до читаемой. */
+@media (prefers-reduced-transparency: reduce) {
+  .header {
+    background: var(--ink-0);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .cm-backdrop {
+    background: var(--ink-0);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .marquee {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
+/* Высокий контраст: усиливаем muted-текст и hairline-рамки */
+@media (prefers-contrast: more) {
+  :root {
+    --muted: rgba(236, 231, 216, 0.85);
+    --faint: rgba(236, 231, 216, 0.55);
+    --rule: rgba(236, 231, 216, 0.25);
+    --rule-strong: rgba(236, 231, 216, 0.45);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  /* Emil-rule: reduced ≠ zero. Отключаем движение (transform-ы, scroll-driven,
+     бесконечные animation-ы), но оставляем opacity/color transitions — они
+     помогают понимать интерактивность и не вызывают моушн-сенсеитив. */
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  /* Color/background transitions оставляем короткими, чтобы hover-states
+     читались мягко, без резких вспышек */
+  a, button, [role="button"], .svc-row, .price-row, .channel, .faq-item,
+  .pc-btn, .case-link, .btn-link, .footer-col a, .cm-close {
+    transition-duration: 0.15s !important;
+    transition-property: color, background-color, border-color, opacity !important;
+  }
   [data-reveal] { opacity: 1; transform: none; }
+  .hero h1 .w { opacity: 1; transform: none; }
+  .case-shot img { transform: scale(1); clip-path: inset(0); }
+  .marquee-track { animation: none; }
+  .terminal .caret { animation: none; opacity: 1; }
 }
 
 
@@ -1246,7 +1385,9 @@ p  { margin: 0; }
 .case-shot.is-in img {
   transition: transform 0.5s var(--ease), filter 0.4s var(--ease);
 }
-.case-shot:hover img { transform: scale(1.04); filter: saturate(1.05); }
+@media (hover: hover) and (pointer: fine) {
+  .case-shot:hover img { transform: scale(1.04); filter: saturate(1.05); }
+}
 .case-shot::after {
   content: "";
   position: absolute;
@@ -1256,7 +1397,9 @@ p  { margin: 0; }
   opacity: 0;
   transition: opacity 0.5s var(--ease);
 }
-.case-shot:hover::after { opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .case-shot:hover::after { opacity: 1; }
+}
 .case-shot::before {
   content: "смотреть →";
   position: absolute;
@@ -1273,7 +1416,9 @@ p  { margin: 0; }
   transition: opacity 0.4s var(--ease) 0.08s, transform 0.4s var(--ease) 0.08s;
   pointer-events: none;
 }
-.case-shot:hover::before { opacity: 1; transform: translateY(0); }
+@media (hover: hover) and (pointer: fine) {
+  .case-shot:hover::before { opacity: 1; transform: translateY(0); }
+}
 
 
 /* --- 18.5 magnetic hover (только hero CTA, остальным не нужен) --- */
@@ -1355,7 +1500,9 @@ p  { margin: 0; }
   transition: transform 0.5s var(--ease);
   z-index: 0;
 }
-.hero .cta:hover::before { transform: translateY(0); }
+@media (hover: hover) and (pointer: fine) {
+  .hero .cta:hover::before { transform: translateY(0); }
+}
 .hero .cta > * { position: relative; z-index: 1; }
 
 
@@ -1374,7 +1521,9 @@ p  { margin: 0; }
   transform-origin: left center;
   transition: transform 0.6s var(--ease);
 }
-.case-link:hover::after { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .case-link:hover::after { transform: scaleX(1); }
+}
 
 
 /* --- 18.10 svc-row: animate line fill on hover (transform-only, GPU) --- */
@@ -1390,4 +1539,6 @@ p  { margin: 0; }
   transform-origin: left center;
   transition: transform 0.5s var(--ease);
 }
-.svc-row:hover::before { transform: scaleX(1); }
+@media (hover: hover) and (pointer: fine) {
+  .svc-row:hover::before { transform: scaleX(1); }
+}
