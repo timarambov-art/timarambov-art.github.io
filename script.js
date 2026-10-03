@@ -390,6 +390,14 @@ document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(sho
 if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   document.querySelectorAll('[data-tilt]').forEach((el) => {
     const max = parseFloat(el.dataset.tiltMax) || 6;
+    // Shine рендерится DOM-child'ом, не ::after — так он не конфликтует
+    // с уже занятыми псевдоэлементами (например, .case-shot::after).
+    if (!el.querySelector(':scope > .tilt-shine')) {
+      const shine = document.createElement('div');
+      shine.className = 'tilt-shine';
+      shine.setAttribute('aria-hidden', 'true');
+      el.appendChild(shine);
+    }
     let raf = null;
     let targetRX = 0, targetRY = 0, curRX = 0, curRY = 0;
     let targetMX = 0.5, targetMY = 0.5, curMX = 0.5, curMY = 0.5;
