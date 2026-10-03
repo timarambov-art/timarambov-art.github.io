@@ -8,16 +8,35 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- GSAP boot (CDN-dependent, native scroll) --------------------
-   GSAP + ScrollTrigger грузятся defer-ом. SplitType опционален.
-   Без Lenis — нативный scroll. */
+/* -------------------- GSAP + Lenis boot (CDN-dependent) --------------------
+   Lenis настроен мягко — короткий duration, малая инерция, чтобы не бесило. */
 let cinematicInited = false;
+let lenis = null;
 function initCinematic() {
   if (cinematicInited || reduceMotion) return;
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   cinematicInited = true;
 
+  // Lenis — мягкий, короткий duration, быстрая реакция на wheel
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 0.7,
+      easing: (t) => 1 - Math.pow(1 - t, 3),  // ease-out cubic — быстрый старт, мягкий финиш
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+      syncTouch: false,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+
   gsap.registerPlugin(ScrollTrigger);
+  if (lenis) {
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
 
     // Hero ghost '26 — scrubbed parallax + scale при проходе hero
     gsap.to('.hero-ghost', {
@@ -87,22 +106,70 @@ function initCinematic() {
     }
   }
 
-  /* ---------- Pinned Services header: title остаётся прижатым, пока
-     список услуг пролистывается мимо (Apple-style) ---------- */
+  /* Services pinned через CSS sticky (см. styles.css) — JS не нужен.
+     Service rows при scroll получают scrubbed-fade: приглушённые пока
+     внизу viewport, активные к центру, снова приглушённые при уходе. */
   if (isDesktop) {
-    const servicesSection = document.querySelector('#services');
-    const servicesHead = servicesSection?.querySelector('.section-head');
-    const svcList = servicesSection?.querySelector('.svc-list');
-    if (servicesHead && svcList) {
+    gsap.utils.toArray('.svc-row').forEach((row) => {
+      gsap.fromTo(row,
+        { opacity: 0.35, xPercent: 2 },
+        {
+          opacity: 1,
+          xPercent: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: row,
+            start: 'top 85%',
+            end: 'top 45%',
+            scrub: 1,
+          },
+        },
+      );
+    });
+  }
+
+  /* ---------- Pricing active row: ряд в центре viewport получает
+     amber glow + лёгкий scale. Делает прайс «кинематографичным». ---------- */
+  if (isDesktop) {
+    gsap.utils.toArray('.price-row').forEach((row) => {
       ScrollTrigger.create({
-        trigger: servicesSection,
-        start: 'top 10%',
-        endTrigger: svcList,
-        end: 'bottom 40%',
-        pin: servicesHead,
-        pinSpacing: false,
+        trigger: row,
+        start: 'top 65%',
+        end: 'bottom 35%',
+        toggleClass: { targets: row, className: 'is-active' },
       });
-    }
+    });
+  }
+
+  /* ---------- Process giant backdrop numeral: за степами проезжает
+     огромная цифра 01→02→03→04→05, scrub по scroll ---------- */
+  const procNumeral = document.querySelector('.process-numeral');
+  if (procNumeral && isDesktop) {
+    const steps = gsap.utils.toArray('.proc-step');
+    steps.forEach((step, i) => {
+      ScrollTrigger.create({
+        trigger: step,
+        start: 'top 70%',
+        end: 'bottom 30%',
+        onToggle: (self) => {
+          if (self.isActive) {
+            procNumeral.textContent = String(i + 1).padStart(2, '0');
+            procNumeral.classList.add('is-visible');
+          }
+        },
+      });
+    });
+    // Параллакс самой цифры при прокрутке через process section
+    gsap.to(procNumeral, {
+      yPercent: -20,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#process',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+      },
+    });
   }
 
   /* ---------- Scrubbed About: слова параграфов разгораются из dim в full
