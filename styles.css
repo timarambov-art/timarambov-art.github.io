@@ -737,11 +737,14 @@ p  { margin: 0; }
   perspective: 2000px;
   perspective-origin: 50% 40%;
 }
-/* Pinned stacking mode — активируется JS'ом когда GSAP готов */
+/* Pinned stacking mode — активируется JS'ом когда GSAP готов.
+   Секция #cases закреплена целиком, заголовок остаётся виден сверху,
+   .cases-track занимает оставшийся viewport, карточка умещается внутри. */
 .cases-track.is-stacked {
   display: block;
   position: relative;
-  min-height: 100vh;
+  /* Высота = viewport минус header + section-head (чтобы карточка умещалась) */
+  min-height: calc(100vh - 240px);
 }
 .cases-track.is-stacked > .case {
   position: absolute;
@@ -752,12 +755,42 @@ p  { margin: 0; }
   max-width: var(--max-w);
   translate: -50% -50%;
   transition: none;
-  /* В stacked режиме transform/opacity управляются GSAP timeline напрямую,
-     CSS vars для :not(.is-in) не используются (все карточки .is-in) */
+  /* Компактнее — карточка должна уместиться в оставшемся viewport */
+  padding: clamp(20px, 2.5vw, 40px);
 }
-.cases-track.is-stacked > .case:not(:first-child) {
-  /* Prev-карточки получают opacity 0 при init через JS */
+/* В stacked-режиме уменьшаем внутренние отступы контента карточки */
+.cases-track.is-stacked .case-body h2 {
+  font-size: clamp(28px, 3.6vw, 48px);
+  margin-bottom: 16px;
 }
+.cases-track.is-stacked .case-body .case-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  max-width: 48ch;
+}
+.cases-track.is-stacked .case-body .case-meta {
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+.cases-track.is-stacked .case-facts {
+  margin-bottom: 20px;
+}
+.cases-track.is-stacked .case-stack {
+  margin-bottom: 22px;
+}
+.cases-track.is-stacked .case-watermark {
+  font-size: clamp(120px, 14vw, 200px);
+  top: -30px;
+  right: -14px;
+}
+/* Уменьшаем gap между shot и body в стопке */
+.cases-track.is-stacked .case-grid {
+  gap: clamp(24px, 3vw, 48px);
+}
+/* Секции-разделители (.section + .section border-top) под pinned-секцией
+   отрисовываются поверх — убираем border после pinned #cases в stacked-режиме */
+.cases.has-pin + .section { border-top: none; }
 
 /* .case теперь ЦЕЛЬНАЯ стеклянная карточка (shot + body в одном блоке).
    Entrance spiral: rotateX+rotateY+rotateZ одновременно + translate3d с

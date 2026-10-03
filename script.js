@@ -134,7 +134,7 @@ function initCinematic() {
       const tl = gsap.timeline({
         defaults: { ease: 'power2.inOut' },
         scrollTrigger: {
-          trigger: casesWrap,
+          trigger: '#cases',       // Pin всю секцию — заголовок остаётся виден
           start: 'top top',
           end: () => `+=${window.innerHeight * total}`,
           pin: true,
