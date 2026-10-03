@@ -7,15 +7,111 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- Header shrink on scroll -------------------- */
+/* -------------------- Header shrink + scroll progress -------------------- */
 const header = document.getElementById('header');
-if (header) {
-  const onScroll = () => {
+const progress = document.getElementById('scrollProgress');
+let scrollRaf = null;
+
+function onPageScroll() {
+  if (header) {
     if (window.scrollY > 32) header.classList.add('is-scrolled');
     else header.classList.remove('is-scrolled');
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  }
+  if (progress) {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const p = docH > 0 ? Math.min(1, Math.max(0, window.scrollY / docH)) : 0;
+    progress.style.width = (p * 100).toFixed(2) + '%';
+  }
+  scrollRaf = null;
+}
+
+window.addEventListener('scroll', () => {
+  if (!scrollRaf) scrollRaf = requestAnimationFrame(onPageScroll);
+}, { passive: true });
+onPageScroll();
+
+
+/* -------------------- Hero: word-mask reveal -------------------- */
+(function () {
+  const title = document.querySelector('[data-hero-reveal]');
+  if (!title) return;
+
+  // Оборачиваем каждое слово в .w, пробелы оставляем текстом
+  title.querySelectorAll('.line').forEach((line) => {
+    const walk = (node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const frag = document.createDocumentFragment();
+        node.nodeValue.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) {
+            frag.appendChild(document.createTextNode(part));
+          } else {
+            const w = document.createElement('span');
+            w.className = 'w';
+            w.textContent = part;
+            frag.appendChild(w);
+          }
+        });
+        node.parentNode.replaceChild(frag, node);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        // .accent само становится «словом», не трогаем его потроха
+        // (иначе gradient на background-clip: text ломается)
+        if (node.classList.contains('accent')) {
+          node.classList.add('w');
+          return;
+        }
+        Array.from(node.childNodes).forEach(walk);
+      }
+    };
+    Array.from(line.childNodes).forEach(walk);
+  });
+
+  const words = title.querySelectorAll('.w');
+  words.forEach((w, i) => { w.style.transitionDelay = (i * 70) + 'ms'; });
+
+  // Фолбэк на reduced-motion
+  if (reduceMotion) {
+    title.classList.add('is-visible');
+    return;
+  }
+
+  // Запускаем сразу после первого фрейма
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => title.classList.add('is-visible'));
+  });
+})();
+
+
+/* -------------------- Case screenshots: clip reveal on enter -------------------- */
+const caseShotIO = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-in');
+      caseShotIO.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(shot));
+
+
+/* -------------------- Magnetic hover on CTAs -------------------- */
+if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+  const magnets = document.querySelectorAll('[data-magnetic], .pc-btn, .case-link');
+  magnets.forEach((el) => {
+    const strength = 0.3;
+    el.style.willChange = 'transform';
+    el.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - (r.left + r.width / 2)) * strength;
+      const y = (e.clientY - (r.top + r.height / 2)) * strength;
+      el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+    });
+  });
 }
 
 

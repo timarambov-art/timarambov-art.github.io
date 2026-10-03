@@ -74,6 +74,9 @@
 </head>
 <body>
 
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <!-- ==================== HEADER ==================== -->
   <header class="header" id="header">
     <a href="#" class="logo">
@@ -118,15 +121,16 @@
 
   <!-- ==================== HERO ==================== -->
   <section class="hero">
+    <div class="hero-ghost" aria-hidden="true">’26</div>
     <div class="container">
       <div class="eyebrow-row" data-reveal>
         <span class="dot"></span>
         <span class="eyebrow">Веб-разработчик · Екатеринбург · 2026</span>
       </div>
 
-      <h1 data-reveal>
-        Сайт, который сам<br>
-        закрывает <span class="accent">сделки</span>.
+      <h1 class="hero-title" data-hero-reveal>
+        <span class="line">Сайт, который сам</span>
+        <span class="line">закрывает <span class="accent">сделки</span>.</span>
       </h1>
 
       <div class="sub">
@@ -134,8 +138,8 @@
           Делаю лендинги и сайты для салонов, студий и мастеров Екатеринбурга.
           Чистый код, без Тильды и подписок. От&nbsp;3&nbsp;дней, от&nbsp;6&nbsp;000&nbsp;₽.
         </p>
-        <a href="#offer" class="cta" data-reveal>
-          Начать с бесплатного экрана
+        <a href="#offer" class="cta" data-reveal data-magnetic>
+          <span>Начать с бесплатного экрана</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
@@ -152,6 +156,33 @@
         <div class="stat">
           <div class="n">1&nbsp;ч</div>
           <div class="l">отвечу на заявку в мессенджер</div>
+        </div>
+      </div>
+
+      <!-- Marquee ticker -->
+      <div class="marquee" aria-hidden="true" data-reveal>
+        <div class="marquee-track">
+          <div class="marquee-item">Лендинги</div>
+          <div class="marquee-item">Многостраничники</div>
+          <div class="marquee-item">Telegram-боты</div>
+          <div class="marquee-item">Taplink</div>
+          <div class="marquee-item">Сайты компаний</div>
+          <div class="marquee-item">Квизы</div>
+          <div class="marquee-item">Онлайн-запись</div>
+          <div class="marquee-item">Видео-hero</div>
+          <div class="marquee-item">Анимации</div>
+          <div class="marquee-item">React / Next.js</div>
+          <!-- дубликат для бесшовной петли -->
+          <div class="marquee-item">Лендинги</div>
+          <div class="marquee-item">Многостраничники</div>
+          <div class="marquee-item">Telegram-боты</div>
+          <div class="marquee-item">Taplink</div>
+          <div class="marquee-item">Сайты компаний</div>
+          <div class="marquee-item">Квизы</div>
+          <div class="marquee-item">Онлайн-запись</div>
+          <div class="marquee-item">Видео-hero</div>
+          <div class="marquee-item">Анимации</div>
+          <div class="marquee-item">React / Next.js</div>
         </div>
       </div>
     </div>
@@ -607,6 +638,22 @@
               <span>Figma</span>
               <span>Анимации</span>
             </div>
+          </div>
+
+          <div class="terminal" data-reveal>
+            <div class="bar">
+              <i></i><i></i><i></i>
+              <span class="path">~ / tim / about.sh</span>
+            </div>
+<pre><span class="comment"># что я делаю руками, без Тильды и конструкторов</span>
+<span class="prompt">$</span> <span class="cmd">tim --build</span> <span class="str">"сайт, который отвечает за тебя"</span>
+<span class="prompt">→</span> макет в Figma
+<span class="prompt">→</span> вёрстка на HTML / CSS / JS
+<span class="prompt">→</span> проверка на iPhone, Android, медленном 3G
+<span class="prompt">→</span> домен, хостинг, доставка заявок
+
+<span class="comment"># отвечу в течение часа в WhatsApp или Telegram</span>
+<span class="prompt">$</span> <span class="cmd">_</span><span class="caret"></span></pre>
           </div>
         </div>
 
