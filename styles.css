@@ -808,15 +808,37 @@ p  { margin: 0; }
 
 .svc-row {
   display: grid;
-  grid-template-columns: 80px 1fr 1fr 180px 32px;
+  grid-template-columns: 56px 56px 1fr 1.1fr 110px 24px;
   gap: 24px;
   align-items: center;
-  padding: 32px 0;
+  padding: 28px 0;
   border-bottom: 1px solid var(--rule);
   transition: background 0.3s var(--ease);
 }
 .svc-row:hover {
   background: linear-gradient(90deg, transparent, rgba(236,231,216,0.03) 50%, transparent);
+}
+
+/* Иконка услуги — тонкая editorial-линия в amber, подложный круг
+   из rule-strong. На hover круг амберится. */
+.svc-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+  flex-shrink: 0;
+}
+.svc-icon svg { width: 24px; height: 24px; display: block; }
+@media (hover: hover) and (pointer: fine) {
+  .svc-row:hover .svc-icon {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
 }
 /* Контент внутри ряда едет вбок на hover через transform (не padding — layout prop) */
 .svc-row .svc-name,
@@ -859,16 +881,19 @@ p  { margin: 0; }
 
 @media (max-width: 900px) {
   .svc-row {
-    grid-template-columns: 48px 1fr auto;
+    grid-template-columns: 44px 1fr auto;
     grid-template-areas:
-      "num name arrow"
-      "num desc arrow"
-      "num meta arrow";
-    gap: 10px 16px;
+      "icon name  arrow"
+      "icon desc  arrow"
+      "icon meta  arrow";
+    gap: 8px 16px;
+    align-items: center;
   }
-  .svc-row .svc-num   { grid-area: num; align-self: start; padding-top: 8px; }
-  .svc-row .svc-name  { grid-area: name; }
-  .svc-row .svc-desc  { grid-area: desc; }
+  .svc-row .svc-num   { display: none; }
+  .svc-row .svc-icon  { grid-area: icon; align-self: center; width: 40px; height: 40px; }
+  .svc-row .svc-icon svg { width: 20px; height: 20px; }
+  .svc-row .svc-name  { grid-area: name; align-self: end; }
+  .svc-row .svc-desc  { grid-area: desc; align-self: start; }
   .svc-row .svc-meta  { grid-area: meta; flex-direction: row; align-items: baseline; gap: 12px; text-align: left; }
   .svc-row .svc-arrow { grid-area: arrow; align-self: center; }
 }
