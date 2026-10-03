@@ -808,7 +808,7 @@ p  { margin: 0; }
 
 .svc-row {
   display: grid;
-  grid-template-columns: 56px 56px 1fr 1.1fr 110px 24px;
+  grid-template-columns: 56px 60px 1fr 1.1fr 110px 24px;
   gap: 24px;
   align-items: center;
   padding: 28px 0;
@@ -819,26 +819,28 @@ p  { margin: 0; }
   background: linear-gradient(90deg, transparent, rgba(236,231,216,0.03) 50%, transparent);
 }
 
-/* Иконка услуги — тонкая editorial-линия в amber, подложный круг
-   из rule-strong. На hover круг амберится. */
-.svc-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid var(--rule-strong);
+/* Иконки услуги — пара тонких editorial outline-svg, amber accent.
+   Первая основная (document, phone, etc.), вторая — complementary
+   (arrow, link, chart) для storytelling: что именно делает услуга. */
+.svc-icons {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   color: var(--accent);
-  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
   flex-shrink: 0;
+  transition: opacity 0.3s var(--ease);
 }
-.svc-icon svg { width: 24px; height: 24px; display: block; }
+.svc-icons svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease);
+}
+.svc-icons svg:last-child { opacity: 0.5; }
 @media (hover: hover) and (pointer: fine) {
-  .svc-row:hover .svc-icon {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-  }
+  .svc-row:hover .svc-icons svg { opacity: 1; }
+  .svc-row:hover .svc-icons svg:last-child { transform: translateX(2px); }
 }
 /* Контент внутри ряда едет вбок на hover через transform (не padding — layout prop) */
 .svc-row .svc-name,
@@ -881,17 +883,17 @@ p  { margin: 0; }
 
 @media (max-width: 900px) {
   .svc-row {
-    grid-template-columns: 44px 1fr auto;
+    grid-template-columns: 56px 1fr auto;
     grid-template-areas:
       "icon name  arrow"
       "icon desc  arrow"
       "icon meta  arrow";
-    gap: 8px 16px;
+    gap: 8px 14px;
     align-items: center;
   }
   .svc-row .svc-num   { display: none; }
-  .svc-row .svc-icon  { grid-area: icon; align-self: center; width: 40px; height: 40px; }
-  .svc-row .svc-icon svg { width: 20px; height: 20px; }
+  .svc-row .svc-icons { grid-area: icon; align-self: center; flex-direction: column; gap: 4px; }
+  .svc-row .svc-icons svg { width: 20px; height: 20px; }
   .svc-row .svc-name  { grid-area: name; align-self: end; }
   .svc-row .svc-desc  { grid-area: desc; align-self: start; }
   .svc-row .svc-meta  { grid-area: meta; flex-direction: row; align-items: baseline; gap: 12px; text-align: left; }
@@ -904,6 +906,25 @@ p  { margin: 0; }
    ============================================================ */
 .process { position: relative; overflow: hidden; }
 .process .process-list { border-top: 1px solid var(--rule); position: relative; z-index: 1; }
+
+/* --- Process step icons: кружок с editorial SVG над заголовком шага --- */
+.proc-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+}
+.proc-icon svg { width: 20px; height: 20px; display: block; }
+.proc-step:hover .proc-icon {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
 
 /* --- Giant backdrop numeral — за process-list плывёт огромная цифра
    01→02→03→04→05, подхватывает текущий активный step. --- */
@@ -934,12 +955,16 @@ p  { margin: 0; }
 .proc-step {
   display: grid;
   grid-template-columns: 80px 1fr 2fr;
-  gap: clamp(24px, 4vw, 56px);
+  grid-template-rows: auto auto;
+  gap: 16px clamp(24px, 4vw, 56px);
   padding: clamp(32px, 5vw, 56px) 0;
   border-bottom: 1px solid var(--rule);
   align-items: start;
 }
-.proc-step .num { padding-top: 10px; }
+.proc-step .num      { grid-column: 1; grid-row: 1 / 3; padding-top: 10px; }
+.proc-step .proc-icon{ grid-column: 2; grid-row: 1; justify-self: start; }
+.proc-step h3        { grid-column: 2; grid-row: 2; }
+.proc-step p         { grid-column: 3; grid-row: 1 / 3; align-self: start; }
 .proc-step h3 {
   font-family: var(--f-display);
   font-size: clamp(22px, 2.6vw, 32px);
@@ -956,7 +981,15 @@ p  { margin: 0; }
 }
 
 @media (max-width: 900px) {
-  .proc-step { grid-template-columns: 1fr; gap: 12px; }
+  .proc-step {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+  .proc-step .num,
+  .proc-step .proc-icon,
+  .proc-step h3,
+  .proc-step p { grid-column: 1; grid-row: auto; }
   .proc-step .num { padding-top: 0; }
 }
 
