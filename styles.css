@@ -726,15 +726,37 @@ p  { margin: 0; }
    ============================================================ */
 .cases { padding-top: clamp(96px, 14vw, 192px); padding-bottom: 0; }
 
-/* --- Cases: вертикальный stack. Каждый кейс занимает полный viewport
-   width в контейнере, идёт друг под другом с большим padding, разделён
-   тонкой линией. 3D-entrance на .case-shot внизу — Wispr Flow стиль. */
+/* --- Cases: по умолчанию вертикальный stack (fallback без GSAP).
+   С GSAP Scrolltrigger pin — .cases-track получает .is-stacked, карточки
+   позиционируются абсолютно друг на друге, scroll переключает их через
+   timeline (см. script.js). */
 .cases-wrap { position: relative; }
 .cases-track {
   display: flex;
   flex-direction: column;
   perspective: 2000px;
   perspective-origin: 50% 40%;
+}
+/* Pinned stacking mode — активируется JS'ом когда GSAP готов */
+.cases-track.is-stacked {
+  display: block;
+  position: relative;
+  min-height: 100vh;
+}
+.cases-track.is-stacked > .case {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  width: min(calc(100% - 2 * var(--gutter)), var(--max-w));
+  max-width: var(--max-w);
+  translate: -50% -50%;
+  transition: none;
+  /* В stacked режиме transform/opacity управляются GSAP timeline напрямую,
+     CSS vars для :not(.is-in) не используются (все карточки .is-in) */
+}
+.cases-track.is-stacked > .case:not(:first-child) {
+  /* Prev-карточки получают opacity 0 при init через JS */
 }
 
 /* .case теперь ЦЕЛЬНАЯ стеклянная карточка (shot + body в одном блоке).

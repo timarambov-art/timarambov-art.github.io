@@ -92,10 +92,95 @@ function initCinematic() {
 
   const isDesktop = window.matchMedia('(min-width: 900px)').matches;
 
-  /* ---------- Cases: вертикальный stack с диагональным entrance.
-     Horizontal hijack убран — пользователь хочет Wispr-flow подачу:
-     каждый кейс прилетает по диагонали со объёмным rotateY поворотом,
-     stagger через IntersectionObserver + CSS vars (см. .case-shot в styles.css). */
+  /* ---------- Cases: pinned stacking cards.
+     Секция cases закрепляется (pin), страница стоит на месте, а карточки
+     одна за другой проплывают через viewport. Каждая выезжает по spiral 3D
+     (rotateX/Y/Z + translate3d с Z-глубиной) слева, задерживается, уплывает
+     вправо, следующая берёт её место тем же spiral entrance.
+     Fallback (без GSAP) — вертикальный stack через body.no-cinematic. */
+  if (isDesktop) {
+    const casesWrap = document.querySelector('.cases-wrap');
+    const casesTrack = document.querySelector('.cases-track');
+    const cases = gsap.utils.toArray('.cases-track > .case');
+    if (casesWrap && cases.length > 1) {
+      // Переводим в stacked режим — через CSS класс, карточки position:absolute
+      casesTrack.classList.add('is-stacked');
+      // Отмечаем все .case и .case-shot как .is-in (clip-reveal img),
+      // чтобы entrance делала только GSAP timeline, а не IO observer
+      cases.forEach((c) => {
+        c.classList.add('is-in');
+        const shot = c.querySelector('.case-shot');
+        if (shot) shot.classList.add('is-in');
+      });
+
+      // Initial state: карточка 0 на месте, остальные — в spiral-away state
+      gsap.set(cases[0], {
+        rotateX: 0, rotateY: 0, rotateZ: 0,
+        x: 0, y: 0, z: 0, scale: 1, opacity: 1,
+        pointerEvents: 'auto',
+      });
+      gsap.set(cases.slice(1), {
+        rotateX: 22, rotateY: -42, rotateZ: -16,
+        x: -300, y: 160, z: -500, scale: 0.72, opacity: 0,
+        pointerEvents: 'none',
+      });
+
+      // Timeline: pin wrap, каждая смена карточки занимает 1 "scroll-кадр"
+      // + hold в середине. Общая длина = (N-1) * segment * vh + hold start/end.
+      const segment = 0.9; // viewport-heights per transition
+      const hold = 0.5;    // viewport-heights hold after entry
+      const total = hold + (cases.length - 1) * (segment + hold);
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power2.inOut' },
+        scrollTrigger: {
+          trigger: casesWrap,
+          start: 'top top',
+          end: () => `+=${window.innerHeight * total}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      // Hold первой карточки
+      tl.to({}, { duration: hold });
+
+      for (let i = 1; i < cases.length; i++) {
+        const prev = cases[i - 1];
+        const curr = cases[i];
+        const label = `swap${i}`;
+        tl.addLabel(label);
+        // Прошлая улетает вправо (exit spiral)
+        tl.to(prev, {
+          rotateX: -12,
+          rotateY: 32,
+          rotateZ: 12,
+          x: 320,
+          y: -100,
+          z: -400,
+          scale: 0.78,
+          opacity: 0,
+          pointerEvents: 'none',
+          duration: segment,
+        }, label);
+        // Текущая влетает слева (entry spiral)
+        tl.to(curr, {
+          rotateX: 0,
+          rotateY: 0,
+          rotateZ: 0,
+          x: 0, y: 0, z: 0,
+          scale: 1,
+          opacity: 1,
+          pointerEvents: 'auto',
+          duration: segment,
+        }, label);
+        // Hold текущей
+        tl.to({}, { duration: hold });
+      }
+    }
+  }
 
   /* Services pinned через CSS sticky (см. styles.css) — JS не нужен.
      Service rows при scroll получают scrubbed-fade: приглушённые пока
