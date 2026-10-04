@@ -71,24 +71,7 @@ function initCinematic() {
       },
     });
 
-  // Marquee speed-up: при scroll через hero marquee ускоряется
-  const marqueeTrack = document.querySelector('.marquee-track');
-  if (marqueeTrack) {
-    let marqueeSpeed = { v: 1 };
-    gsap.to(marqueeSpeed, {
-      v: 2.2,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.marquee',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1,
-        onUpdate: () => {
-          marqueeTrack.style.animationDuration = (42 / marqueeSpeed.v).toFixed(2) + 's';
-        },
-      },
-    });
-  }
+  // Marquee: ровная скорость без разгона от скролла
 
   const isDesktop = window.matchMedia('(min-width: 900px)').matches;
 
@@ -250,39 +233,43 @@ function initCinematic() {
   }
 
   /* ---------- Scrubbed About: слова параграфов разгораются из dim в full
-     по мере прокрутки viewport через about-text (Apple-style) ---------- */
-  const aboutParas = document.querySelectorAll('.about-text p');
-  aboutParas.forEach((p) => {
-    // Разбиваем на слова, оборачиваем в .about-w
-    const text = p.textContent;
-    p.textContent = '';
-    text.split(/(\s+)/).forEach((part) => {
-      if (!part) return;
-      if (/^\s+$/.test(part)) {
-        p.appendChild(document.createTextNode(part));
-      } else {
-        const w = document.createElement('span');
-        w.className = 'about-w';
-        w.textContent = part;
-        p.appendChild(w);
-      }
-    });
-    gsap.fromTo(
-      p.querySelectorAll('.about-w'),
-      { opacity: 0.22 },
-      {
-        opacity: 1,
-        stagger: 0.015,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: p,
-          start: 'top 85%',
-          end: 'top 30%',
-          scrub: 1,
+     по мере прокрутки viewport через about-text (Apple-style).
+     Только на десктопе — на телефоне маленький viewport делает эффект
+     неуправляемым, и текст застревает на dim. ---------- */
+  if (isDesktop) {
+    const aboutParas = document.querySelectorAll('.about-text p');
+    aboutParas.forEach((p) => {
+      // Разбиваем на слова, оборачиваем в .about-w
+      const text = p.textContent;
+      p.textContent = '';
+      text.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) {
+          p.appendChild(document.createTextNode(part));
+        } else {
+          const w = document.createElement('span');
+          w.className = 'about-w';
+          w.textContent = part;
+          p.appendChild(w);
+        }
+      });
+      gsap.fromTo(
+        p.querySelectorAll('.about-w'),
+        { opacity: 0.22 },
+        {
+          opacity: 1,
+          stagger: 0.015,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: p,
+            start: 'top 85%',
+            end: 'top 30%',
+            scrub: 1,
+          },
         },
-      },
-    );
-  });
+      );
+    });
+  }
 }
 
 if (document.readyState === 'loading') {

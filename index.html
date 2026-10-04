@@ -584,65 +584,81 @@
         </div>
       </div>
 
-      <div class="process-list">
-        <div class="proc-step" data-reveal>
-          <div class="num">01</div>
-          <span class="proc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 5h12v9H9l-5 4V5z"/>
-              <path d="M8 20h11a1 1 0 0 0 1-1v-9"/>
-            </svg>
-          </span>
+      <div class="process-list" role="list">
+        <div class="process-rail" aria-hidden="true"></div>
+
+        <div class="proc-step" data-reveal role="listitem">
+          <div class="proc-step-head">
+            <span class="proc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5h12v9H9l-5 4V5z"/>
+                <path d="M8 20h11a1 1 0 0 0 1-1v-9"/>
+              </svg>
+            </span>
+            <div class="num">01</div>
+          </div>
           <h3>Обсуждаем задачу</h3>
-          <p>Созваниваемся или общаемся в&nbsp;мессенджере. Разбираю, что за&nbsp;продукт, кто аудитория, какие задачи должен решать сайт. Фиксирую структуру, тексты и&nbsp;референсы в одном документе.</p>
+          <p>Созвон или мессенджер. Разбираю продукт, аудиторию и&nbsp;задачу сайта. Фиксирую всё в&nbsp;одном документе.</p>
         </div>
-        <div class="proc-step" data-reveal>
-          <div class="num">02</div>
-          <span class="proc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 20l5-14 6 11 3-5 2 8"/>
-              <circle cx="4.5" cy="20" r="0.8" fill="currentColor"/>
-              <path d="M14 4l6 6"/>
-            </svg>
-          </span>
+
+        <div class="proc-step" data-reveal role="listitem">
+          <div class="proc-step-head">
+            <span class="proc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20l5-14 6 11 3-5 2 8"/>
+                <circle cx="4.5" cy="20" r="0.8" fill="currentColor"/>
+                <path d="M14 4l6 6"/>
+              </svg>
+            </span>
+            <div class="num">02</div>
+          </div>
           <h3>Показываю дизайн</h3>
-          <p>Рисую макет в&nbsp;Figma: главный экран, ключевые блоки, версия для телефона. Согласуем цвета, типографику и&nbsp;переходы. Этап итеративный, правлю, пока результат не устроит обе стороны.</p>
+          <p>Рисую макет в&nbsp;Figma: главный экран, ключевые блоки, версия для телефона. Правим, пока обе стороны не&nbsp;кивнут.</p>
         </div>
-        <div class="proc-step" data-reveal>
-          <div class="num">03</div>
-          <span class="proc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 6l-5 6 5 6"/>
-              <path d="M16 6l5 6-5 6"/>
-              <path d="M14 4l-4 16"/>
-            </svg>
-          </span>
+
+        <div class="proc-step" data-reveal role="listitem">
+          <div class="proc-step-head">
+            <span class="proc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 6l-5 6 5 6"/>
+                <path d="M16 6l5 6-5 6"/>
+                <path d="M14 4l-4 16"/>
+              </svg>
+            </span>
+            <div class="num">03</div>
+          </div>
           <h3>Собираю</h3>
-          <p>Вёрстка точно по&nbsp;макету: HTML, CSS, JavaScript. Сайт корректно работает на&nbsp;компьютере, планшете и&nbsp;телефоне. На&nbsp;лендинг уходит 5–7 дней, на&nbsp;многостраничный 2–3 недели.</p>
+          <p>Вёрстка точно по&nbsp;макету: HTML, CSS, JavaScript. Лендинг — 5–7&nbsp;дней, многостраничник — 2–3&nbsp;недели.</p>
         </div>
-        <div class="proc-step" data-reveal>
-          <div class="num">04</div>
-          <span class="proc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="7"/>
-              <path d="M20 20l-3.5-3.5"/>
-              <path d="M8 11l2.5 2.5L14 9"/>
-            </svg>
-          </span>
+
+        <div class="proc-step" data-reveal role="listitem">
+          <div class="proc-step-head">
+            <span class="proc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="M20 20l-3.5-3.5"/>
+                <path d="M8 11l2.5 2.5L14 9"/>
+              </svg>
+            </span>
+            <div class="num">04</div>
+          </div>
           <h3>Тестирую</h3>
-          <p>Проверяю на реальных устройствах и&nbsp;в&nbsp;разных браузерах: iPhone, Android, медленный интернет, старый ноутбук. Фикшу всё, что съезжает, тормозит или отображается иначе.</p>
+          <p>iPhone, Android, медленный интернет, старый ноут. Фикшу всё, что съезжает или тормозит.</p>
         </div>
-        <div class="proc-step" data-reveal>
-          <div class="num">05</div>
-          <span class="proc-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 15c-3-1-5-3-5-7a5 5 0 0 1 10 0c0 4-2 6-5 7z"/>
-              <circle cx="12" cy="8" r="1.5"/>
-              <path d="M9 19l-2 2M15 19l2 2M12 20v2"/>
-            </svg>
-          </span>
+
+        <div class="proc-step" data-reveal role="listitem">
+          <div class="proc-step-head">
+            <span class="proc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15c-3-1-5-3-5-7a5 5 0 0 1 10 0c0 4-2 6-5 7z"/>
+                <circle cx="12" cy="8" r="1.5"/>
+                <path d="M9 19l-2 2M15 19l2 2M12 20v2"/>
+              </svg>
+            </span>
+            <div class="num">05</div>
+          </div>
           <h3>Запускаю</h3>
-          <p>Размещаю сайт на&nbsp;хостинге, подключаю твой домен (<em>yoursite.ru</em>), настраиваю доставку заявок. В комплекте: короткая инструкция по&nbsp;самостоятельному обновлению текстов и&nbsp;цен.</p>
+          <p>Хостинг, твой домен (<em>yoursite.ru</em>), доставка заявок. Плюс инструкция, как самому обновлять тексты.</p>
         </div>
       </div>
 
