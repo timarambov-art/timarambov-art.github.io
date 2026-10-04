@@ -28,10 +28,20 @@ function initCinematic() {
     smoother = ScrollSmoother.create({
       wrapper: '#smooth-wrapper',
       content: '#smooth-content',
-      smooth: 2,              // секунды catchup (ощущение «теку»)
+      smooth: 2,
       effects: true,            // data-speed, data-lag работают из коробки
       smoothTouch: 0,           // на touch — нативный скролл
       normalizeScroll: true,    // гасит разницу между браузерами и тачпадами
+    });
+  }
+
+  // Пересчёт размеров после загрузки шрифтов — убирает race, когда hero
+  // headline рендерится fallback-шрифтом, потом свапается на Bodoni Moda
+  // и ScrollSmoother с кэшем ломает позиции.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh();
+      if (smoother) smoother.refresh();
     });
   }
 
@@ -82,24 +92,94 @@ function initCinematic() {
 
   const isDesktop = window.matchMedia('(min-width: 900px)').matches;
 
-  /* ---------- Horizontal scroll hijack: cases (desktop only) ---------- */
+  /* ---------- Cases: pinned stacking cards.
+     Секция cases закрепляется (pin), страница стоит на месте, а карточки
+     одна за другой проплывают через viewport. Каждая выезжает по spiral 3D
+     (rotateX/Y/Z + translate3d с Z-глубиной) слева, задерживается, уплывает
+     вправо, следующая берёт её место тем же spiral entrance.
+     Fallback (без GSAP) — вертикальный stack через body.no-cinematic. */
   if (isDesktop) {
-    const casesTrack = document.querySelector('.cases-track');
     const casesWrap = document.querySelector('.cases-wrap');
-    if (casesTrack && casesWrap) {
-      gsap.to(casesTrack, {
-        x: () => -(casesTrack.scrollWidth - window.innerWidth),
-        ease: 'none',
+    const casesTrack = document.querySelector('.cases-track');
+    const cases = gsap.utils.toArray('.cases-track > .case');
+    if (casesWrap && cases.length > 1) {
+      // Переводим в stacked режим — через CSS классы, карточки position:absolute
+      casesTrack.classList.add('is-stacked');
+      document.getElementById('cases').classList.add('is-stacked-mode');
+      // Отмечаем все .case и .case-shot как .is-in (clip-reveal img),
+      // чтобы entrance делала только GSAP timeline, а не IO observer
+      cases.forEach((c) => {
+        c.classList.add('is-in');
+        const shot = c.querySelector('.case-shot');
+        if (shot) shot.classList.add('is-in');
+      });
+
+      // Initial state: карточка 0 на месте, остальные — в spiral-away state
+      gsap.set(cases[0], {
+        rotateX: 0, rotateY: 0, rotateZ: 0,
+        x: 0, y: 0, z: 0, scale: 1, opacity: 1,
+        pointerEvents: 'auto',
+      });
+      gsap.set(cases.slice(1), {
+        rotateX: 22, rotateY: -42, rotateZ: -16,
+        x: -300, y: 160, z: -500, scale: 0.72, opacity: 0,
+        pointerEvents: 'none',
+      });
+
+      // Timeline: pin wrap, каждая смена карточки занимает 1 "scroll-кадр"
+      // + hold в середине. Общая длина = (N-1) * segment * vh + hold start/end.
+      const segment = 0.9; // viewport-heights per transition
+      const hold = 0.5;    // viewport-heights hold after entry
+      const total = hold + (cases.length - 1) * (segment + hold);
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power2.inOut' },
         scrollTrigger: {
-          trigger: casesWrap,
+          trigger: '#cases',       // Pin всю секцию — заголовок остаётся виден
           start: 'top top',
-          end: () => '+=' + (casesTrack.scrollWidth - window.innerWidth),
+          end: () => `+=${window.innerHeight * total}`,
           pin: true,
           scrub: 1,
-          invalidateOnRefresh: true,
           anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
       });
+
+      // Hold первой карточки
+      tl.to({}, { duration: hold });
+
+      for (let i = 1; i < cases.length; i++) {
+        const prev = cases[i - 1];
+        const curr = cases[i];
+        const label = `swap${i}`;
+        tl.addLabel(label);
+        // Прошлая улетает вправо (exit spiral)
+        tl.to(prev, {
+          rotateX: -12,
+          rotateY: 32,
+          rotateZ: 12,
+          x: 320,
+          y: -100,
+          z: -400,
+          scale: 0.78,
+          opacity: 0,
+          pointerEvents: 'none',
+          duration: segment,
+        }, label);
+        // Текущая влетает слева (entry spiral)
+        tl.to(curr, {
+          rotateX: 0,
+          rotateY: 0,
+          rotateZ: 0,
+          x: 0, y: 0, z: 0,
+          scale: 1,
+          opacity: 1,
+          pointerEvents: 'auto',
+          duration: segment,
+        }, label);
+        // Hold текущей
+        tl.to({}, { duration: hold });
+      }
     }
   }
 
@@ -362,16 +442,71 @@ setTimeout(() => {
 
 
 /* -------------------- Case screenshots: clip reveal on enter -------------------- */
-const caseShotIO = new IntersectionObserver((entries) => {
+/* Observer наблюдает всю .case (article) — entrance теперь spiral 3D для
+   целой карточки (shot + body двигаются как один объект). Внутри shot тоже
+   получает .is-in, чтобы clip-path reveal на img по-прежнему работал. */
+const caseIO = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add('is-in');
-      caseShotIO.unobserve(entry.target);
+      const shot = entry.target.querySelector('.case-shot');
+      if (shot) shot.classList.add('is-in');
+      caseIO.unobserve(entry.target);
     }
   });
-}, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
-document.querySelectorAll('.case-shot').forEach((shot) => caseShotIO.observe(shot));
+document.querySelectorAll('.cases-track > .case').forEach((c) => caseIO.observe(c));
+
+
+/* -------------------- 3D tilt (data-tilt) — mouse-tracking perspective ---
+   При движении курсора карточка наклоняется под перспективой, следит
+   за курсором. На touch и reduce-motion отключается через CSS. */
+if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('[data-tilt]').forEach((el) => {
+    const max = parseFloat(el.dataset.tiltMax) || 6;
+    // Shine рендерится DOM-child'ом, не ::after — так он не конфликтует
+    // с уже занятыми псевдоэлементами (например, .case-shot::after).
+    if (!el.querySelector(':scope > .tilt-shine')) {
+      const shine = document.createElement('div');
+      shine.className = 'tilt-shine';
+      shine.setAttribute('aria-hidden', 'true');
+      el.appendChild(shine);
+    }
+    let raf = null;
+    let targetRX = 0, targetRY = 0, curRX = 0, curRY = 0;
+    let targetMX = 0.5, targetMY = 0.5, curMX = 0.5, curMY = 0.5;
+
+    function loop() {
+      curRX += (targetRX - curRX) * 0.12;
+      curRY += (targetRY - curRY) * 0.12;
+      curMX += (targetMX - curMX) * 0.12;
+      curMY += (targetMY - curMY) * 0.12;
+      el.style.setProperty('--rx', curRX.toFixed(2) + 'deg');
+      el.style.setProperty('--ry', curRY.toFixed(2) + 'deg');
+      el.style.setProperty('--mx', curMX.toFixed(3));
+      el.style.setProperty('--my', curMY.toFixed(3));
+      if (Math.abs(targetRX - curRX) > 0.01 || Math.abs(targetRY - curRY) > 0.01) {
+        raf = requestAnimationFrame(loop);
+      } else { raf = null; }
+    }
+    function schedule() { if (!raf) raf = requestAnimationFrame(loop); }
+
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      targetMX = x; targetMY = y;
+      targetRY = (x - 0.5) * 2 * max;     // горизонтальная мышь → rotateY
+      targetRX = -(y - 0.5) * 2 * max;    // вертикальная мышь → rotateX (инвертированно)
+      schedule();
+    });
+    el.addEventListener('mouseleave', () => {
+      targetRX = 0; targetRY = 0; targetMX = 0.5; targetMY = 0.5;
+      schedule();
+    });
+  });
+}
 
 
 /* -------------------- Magnetic hover (только [data-magnetic], не трогаем .pc-btn/.case-link

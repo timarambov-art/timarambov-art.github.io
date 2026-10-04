@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
-  <title>Тимофей Рямбов, веб-разработчик в Екатеринбурге, сайты под ключ</title>
-  <meta name="description" content="Делаю сайты, лендинги, Taplink и Telegram-ботов под ключ в Екатеринбурге. Чистый код, без конструкторов и Тильды. От первой встречи до запуска на вашем домене. Первый экран бесплатно.">
+  <title>Тимофей Рямбов, веб-разработчик, сайты под ключ</title>
+  <meta name="description" content="Делаю сайты, лендинги, Taplink и Telegram-ботов под ключ. Чистый код, без конструкторов и Тильды. От первой встречи до запуска на вашем домене. Первый экран бесплатно.">
   <link rel="canonical" href="https://trwebstudio.ru/">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
@@ -14,7 +14,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://trwebstudio.ru/">
-  <meta property="og:title" content="Тимофей Рямбов, веб-разработчик в Екатеринбурге">
+  <meta property="og:title" content="Тимофей Рямбов, веб-разработчик">
   <meta property="og:description" content="Сайты, лендинги и Telegram-боты под ключ. Чистый код, без конструкторов и Тильды. Первый экран сайта сделаю бесплатно.">
   <meta property="og:image" content="https://trwebstudio.ru/assets/about.jpg">
   <meta property="og:image:width" content="1200">
@@ -24,7 +24,7 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Тимофей Рямбов, веб-разработчик в Екатеринбурге">
+  <meta name="twitter:title" content="Тимофей Рямбов, веб-разработчик">
   <meta name="twitter:description" content="Сайты, лендинги и Telegram-боты под ключ. Чистый код, без конструкторов. Первый экран бесплатно.">
   <meta name="twitter:image" content="https://trwebstudio.ru/assets/about.jpg">
 
@@ -38,11 +38,6 @@
     "url": "https://trwebstudio.ru/",
     "image": "https://trwebstudio.ru/assets/about.jpg",
     "telephone": "+7-902-254-04-81",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Екатеринбург",
-      "addressCountry": "RU"
-    },
     "knowsAbout": ["Веб-разработка", "Лендинги", "HTML", "CSS", "JavaScript", "React", "Next.js", "Telegram-боты"],
     "sameAs": [
       "https://t.me/TRyambov",
@@ -99,6 +94,16 @@
       </filter>
     </defs>
   </svg>
+
+  <!-- Ambient background — живой фон под всем контентом, fixed viewport-wide.
+       3 radial-gradient blob'а медленно "дышат" (translate + scale), создавая
+       ощущение глубины и света в комнате за стеклом. prefers-reduced-motion
+       отключает анимацию. prefers-reduced-transparency заменяет на flat ink. -->
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-blob b1"></div>
+    <div class="ambient-blob b2"></div>
+    <div class="ambient-blob b3"></div>
+  </div>
 
   <!-- Film grain overlay — fixed, pointer-events-none, подмешивается ко всему контенту -->
   <div class="grain-layer" aria-hidden="true"></div>
@@ -164,21 +169,21 @@
       <div class="container">
       <div class="eyebrow-row" data-reveal>
         <span class="dot"></span>
-        <span class="eyebrow">Веб-разработчик · Екатеринбург · 2026</span>
+        <span class="eyebrow">Веб-разработчик · 2026</span>
       </div>
 
       <h1 class="hero-title" data-hero-reveal data-split>
-        <span class="line">Сайт, который сам</span>
-        <span class="line">закрывает <span class="accent">сделки</span>.</span>
+        <span class="line">Сайт, который</span>
+        <span class="line">продаёт <span class="accent">за&nbsp;тебя</span>.</span>
       </h1>
 
       <div class="sub">
         <p data-reveal>
-          Делаю лендинги и сайты для салонов, студий и мастеров Екатеринбурга.
-          Чистый код, без Тильды и подписок. От&nbsp;3&nbsp;дней, от&nbsp;6&nbsp;000&nbsp;₽.
+          Собираю лендинги и&nbsp;сайты руками, без Тильды и&nbsp;подписок.
+          Платишь один раз, сайт твой. От&nbsp;3&nbsp;дней, от&nbsp;6&nbsp;000&nbsp;₽.
         </p>
         <a href="#offer" class="cta" data-reveal data-magnetic>
-          <span>Начать с бесплатного экрана</span>
+          <span>Забрать первый экран бесплатно</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
@@ -253,30 +258,50 @@
           <ul class="lm-points">
             <li data-reveal>
               <div class="n">01</div>
+              <span class="lm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="12" rx="1.5"/>
+                  <path d="M8 20h8M10 16v4M14 16v4"/>
+                  <path d="M7 8h6M7 11h4"/>
+                </svg>
+              </span>
               <div>
-                <h4>Готовый главный экран сайта</h4>
-                <p>Заголовок, кнопка, картинка, живьём в&nbsp;браузере по своей ссылке. Не статичный скрин из Фигмы, а настоящий сайт, который можно открыть и показать партнёру.</p>
+                <h4>Главный экран, живой в&nbsp;браузере</h4>
+                <p>Заголовок, кнопка, картинка — не&nbsp;скрин из Фигмы, а&nbsp;настоящий сайт по&nbsp;своей ссылке. Открой и&nbsp;покажи партнёру.</p>
               </div>
             </li>
             <li data-reveal>
               <div class="n">02</div>
+              <span class="lm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="2" width="10" height="20" rx="2"/>
+                  <circle cx="12" cy="18.5" r="0.8" fill="currentColor"/>
+                  <path d="M10 6h4M9 10h6M10 14h4"/>
+                </svg>
+              </span>
               <div>
                 <h4>Версия для телефона</h4>
-                <p>Открой с iPhone и посмотри глазами клиента, который перешёл по ссылке из&nbsp;сторис. Там, где решается запись.</p>
+                <p>Открой с&nbsp;iPhone и&nbsp;посмотри глазами клиента. 80%&nbsp;заходят с&nbsp;телефона — там решается покупка.</p>
               </div>
             </li>
             <li data-reveal>
               <div class="n">03</div>
+              <span class="lm-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3l9 4v4c0 5-3.5 9-9 10-5.5-1-9-5-9-10V7l9-4z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              </span>
               <div>
-                <h4>Точная цена за весь сайт</h4>
-                <p>Зайдёт, назову сумму и срок, запускаем. Не зайдёт, забираешь макет и ссылку себе. Без обязательств.</p>
+                <h4>Точная цена за&nbsp;весь сайт</h4>
+                <p>Зайдёт — назову сумму и&nbsp;срок, запускаем. Не&nbsp;зайдёт — забираешь макет себе. Без обязательств.</p>
               </div>
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="paper-card" data-reveal>
+      <div class="paper-card" data-reveal data-tilt data-tilt-max="4">
         <div class="pc-head">
           <div class="eyebrow">0&nbsp;₽ · без предоплаты · 3&nbsp;дня</div>
           <h3>Напиши пару строк о&nbsp;проекте, отвечу в&nbsp;течение часа.</h3>
@@ -312,13 +337,19 @@
 
       <article class="case" data-case="alexandra">
         <div class="case-grid">
-          <div class="case-shot" data-reveal>
+          <div class="case-shot" data-tilt data-tilt-max="6">
+            <div class="shot-chrome" aria-hidden="true">
+              <span class="shot-dots"><i></i><i></i><i></i></span>
+              <span class="shot-url">alexandra.ru</span>
+              <span class="shot-live"><span class="pulse"></span>LIVE</span>
+            </div>
             <img src="assets/case-alexandra.png" alt="Лендинг Александры, LED-наращивание" loading="lazy">
           </div>
-          <div class="case-body" data-reveal>
+          <div class="case-body">
+            <span class="case-watermark" aria-hidden="true">A01</span>
             <div class="case-meta">
               <span class="num">A01</span>
-              <span class="tag">Лендинг · 2025 · Екатеринбург</span>
+              <span class="tag">Лендинг · 2025 · Услуги</span>
             </div>
             <h2>Александра</h2>
             <p class="case-desc">
@@ -331,6 +362,13 @@
               <div class="f"><div class="v">Квиз</div><div class="l">подбор услуги</div></div>
               <div class="f"><div class="v">WhatsApp</div><div class="l">запись в один клик</div></div>
             </div>
+            <div class="case-stack" aria-label="Технологии">
+              <span class="chip">HTML</span>
+              <span class="chip">CSS</span>
+              <span class="chip">JS</span>
+              <span class="chip">Figma</span>
+              <span class="chip">WhatsApp API</span>
+            </div>
             <button type="button" class="case-link" data-open-case="alexandra">
               Посмотреть сайт
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -341,16 +379,17 @@
 
       <article class="case case--reverse" data-case="pilipilit">
         <div class="case-grid">
-          <div class="case-body" data-reveal>
+          <div class="case-body">
+            <span class="case-watermark" aria-hidden="true">A02</span>
             <div class="case-meta">
               <span class="num">A02</span>
-              <span class="tag">Сайт студии · 2025 · Екатеринбург</span>
+              <span class="tag">Многостраничник · 2025 · Услуги</span>
             </div>
             <h2>ПилиПилить</h2>
             <p class="case-desc">
-              Многостраничный сайт для ногтевой студии в&nbsp;центре Екатеринбурга. Видео-герой из&nbsp;трёх
+              Многостраничный сайт для ногтевой студии. Видео-герой из&nbsp;трёх
               колонок с живыми процессами, портфолио работ, карточки мастеров и&nbsp;онлайн-запись.
-              Задача: передать атмосферу студии до визита и провести гостя от&nbsp;интереса к&nbsp;записи
+              Задача: передать атмосферу до визита и провести гостя от&nbsp;интереса к&nbsp;записи
               без звонков.
             </p>
             <div class="case-facts">
@@ -358,12 +397,24 @@
               <div class="f"><div class="v">4</div><div class="l">мастера с портфолио</div></div>
               <div class="f"><div class="v">Онлайн</div><div class="l">запись без звонков</div></div>
             </div>
+            <div class="case-stack" aria-label="Технологии">
+              <span class="chip">HTML</span>
+              <span class="chip">CSS</span>
+              <span class="chip">JS</span>
+              <span class="chip">Figma</span>
+              <span class="chip">Видео-hero</span>
+            </div>
             <button type="button" class="case-link" data-open-case="pilipilit">
               Посмотреть сайт
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
           </div>
-          <div class="case-shot" data-reveal>
+          <div class="case-shot" data-tilt data-tilt-max="6">
+            <div class="shot-chrome" aria-hidden="true">
+              <span class="shot-dots"><i></i><i></i><i></i></span>
+              <span class="shot-url">pilipilit.ru</span>
+              <span class="shot-live"><span class="pulse"></span>LIVE</span>
+            </div>
             <img src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран сайта" loading="lazy">
           </div>
         </div>
@@ -371,17 +422,23 @@
 
       <article class="case" data-case="svarka">
         <div class="case-grid">
-          <div class="case-shot" data-reveal>
+          <div class="case-shot" data-tilt data-tilt-max="6">
+            <div class="shot-chrome" aria-hidden="true">
+              <span class="shot-dots"><i></i><i></i><i></i></span>
+              <span class="shot-url">svarkaural196.ru</span>
+              <span class="shot-live"><span class="pulse"></span>LIVE</span>
+            </div>
             <img src="assets/svarka-hero.webp" alt="SvarkaUral196, главный экран сайта" loading="lazy">
           </div>
-          <div class="case-body" data-reveal>
+          <div class="case-body">
+            <span class="case-watermark" aria-hidden="true">A03</span>
             <div class="case-meta">
               <span class="num">A03</span>
-              <span class="tag">Лендинг · 2025 · Екатеринбург</span>
+              <span class="tag">Лендинг · 2025 · B2B</span>
             </div>
             <h2>SvarkaUral196</h2>
             <p class="case-desc">
-              Лендинг для сварщика с 13-летним стажем и собственным цехом в&nbsp;Екатеринбурге.
+              Лендинг для сварщика с 13-летним стажем и собственным цехом.
               Задача: конвертировать посетителя в&nbsp;заявку. Trust-сигналы (стаж, ИП, цех),
               видео-герой, мгновенный расчёт, портфолио из 34 реальных фотографий работ.
             </p>
@@ -389,6 +446,13 @@
               <div class="f"><div class="v">7</div><div class="l">секций в конверсионной сборке</div></div>
               <div class="f"><div class="v">34</div><div class="l">фото реальных работ</div></div>
               <div class="f"><div class="v">Mobile</div><div class="l">адаптив от телефона</div></div>
+            </div>
+            <div class="case-stack" aria-label="Технологии">
+              <span class="chip">HTML</span>
+              <span class="chip">CSS</span>
+              <span class="chip">JS</span>
+              <span class="chip">Figma</span>
+              <span class="chip">Mobile-first</span>
             </div>
             <button type="button" class="case-link" data-open-case="svarka">
               Посмотреть сайт
@@ -403,7 +467,7 @@
   </section>
 
   <!-- ==================== SERVICES ==================== -->
-  <section id="services" class="section services">
+  <section id="services" class="section services glass-section">
     <div class="container">
       <div class="section-head">
         <div class="num">03</div>
@@ -415,56 +479,94 @@
       <div class="svc-list">
         <a href="#offer" class="svc-row" data-reveal>
           <span class="svc-num">01</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="3" width="14" height="18" rx="1.5"/>
+              <path d="M8 8h8M8 12h8M8 16h5"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/>
+              <path d="M13 6l6 6-6 6"/>
+            </svg>
+          </span>
           <span class="svc-name">Лендинг</span>
           <span class="svc-desc">Одна страница под одну услугу или акцию.</span>
-          <span class="svc-meta">
-            <span class="term">3–5 дней</span>
-            <span class="price">от 12&nbsp;000&nbsp;₽</span>
-          </span>
+          <span class="svc-meta"><span class="term">3–5 дней</span></span>
           <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
 
         <a href="#offer" class="svc-row" data-reveal>
           <span class="svc-num">02</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="6" width="14" height="15" rx="1.5"/>
+              <path d="M7 3h14v15"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7h16M4 12h16M4 17h16"/>
+            </svg>
+          </span>
           <span class="svc-name">Многостраничник</span>
           <span class="svc-desc">Когда услуг больше одной, каждой нужна своя страница.</span>
-          <span class="svc-meta">
-            <span class="term">7–10 дней</span>
-            <span class="price">от 30&nbsp;000&nbsp;₽</span>
-          </span>
+          <span class="svc-meta"><span class="term">7–10 дней</span></span>
           <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
 
         <a href="#offer" class="svc-row" data-reveal>
           <span class="svc-num">03</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21V9l9-5 9 5v12"/>
+              <path d="M10 21v-5h4v5"/>
+              <path d="M7 11h2M7 15h2M15 11h2M15 15h2"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20V8M10 20v-7M16 20v-5M22 20V4"/>
+            </svg>
+          </span>
           <span class="svc-name">Сайт компании</span>
           <span class="svc-desc">Услуги, команда, кейсы, новости. На годы вперёд.</span>
-          <span class="svc-meta">
-            <span class="term">2–3 недели</span>
-            <span class="price">от 50&nbsp;000&nbsp;₽</span>
-          </span>
+          <span class="svc-meta"><span class="term">2–3 недели</span></span>
           <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
 
         <a href="#offer" class="svc-row" data-reveal>
           <span class="svc-num">04</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="7" y="2" width="10" height="20" rx="2"/>
+              <circle cx="12" cy="18" r="0.8" fill="currentColor"/>
+              <path d="M10 7h4M10 10h4M11 13h2"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 14a4 4 0 0 1 0-5.6l3-3a4 4 0 0 1 5.6 5.6l-1.5 1.5"/>
+              <path d="M14 10a4 4 0 0 1 0 5.6l-3 3a4 4 0 0 1-5.6-5.6l1.5-1.5"/>
+            </svg>
+          </span>
           <span class="svc-name">Taplink</span>
           <span class="svc-desc">Твоя ссылка для шапки инстаграма, вместо Linktree.</span>
-          <span class="svc-meta">
-            <span class="term">2–3 дня</span>
-            <span class="price">от 6&nbsp;000&nbsp;₽</span>
-          </span>
+          <span class="svc-meta"><span class="term">2–3 дня</span></span>
           <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
 
         <a href="#offer" class="svc-row" data-reveal>
           <span class="svc-num">05</span>
+          <span class="svc-icons" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5h16v12H9l-5 4V5z"/>
+              <circle cx="9" cy="11" r="0.8" fill="currentColor"/>
+              <circle cx="12" cy="11" r="0.8" fill="currentColor"/>
+              <circle cx="15" cy="11" r="0.8" fill="currentColor"/>
+            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="8" width="14" height="12" rx="2"/>
+              <path d="M12 4v4M9 14h.01M15 14h.01"/>
+              <path d="M3 14v2M21 14v2"/>
+            </svg>
+          </span>
           <span class="svc-name">Telegram-бот</span>
           <span class="svc-desc">Записывает клиентов, пока ты работаешь с другими.</span>
-          <span class="svc-meta">
-            <span class="term">5–7 дней</span>
-            <span class="price">от 15&nbsp;000&nbsp;₽</span>
-          </span>
+          <span class="svc-meta"><span class="term">5–7 дней</span></span>
           <span class="svc-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
       </div>
@@ -472,7 +574,7 @@
   </section>
 
   <!-- ==================== PROCESS ==================== -->
-  <section id="process" class="section process">
+  <section id="process" class="section process glass-section">
     <div class="process-numeral" aria-hidden="true">01</div>
     <div class="container">
       <div class="section-head">
@@ -485,32 +587,66 @@
       <div class="process-list">
         <div class="proc-step" data-reveal>
           <div class="num">01</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5h12v9H9l-5 4V5z"/>
+              <path d="M8 20h11a1 1 0 0 0 1-1v-9"/>
+            </svg>
+          </span>
           <h3>Обсуждаем задачу</h3>
           <p>Созваниваемся или общаемся в&nbsp;мессенджере. Разбираю, что за&nbsp;продукт, кто аудитория, какие задачи должен решать сайт. Фиксирую структуру, тексты и&nbsp;референсы в одном документе.</p>
         </div>
         <div class="proc-step" data-reveal>
           <div class="num">02</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 20l5-14 6 11 3-5 2 8"/>
+              <circle cx="4.5" cy="20" r="0.8" fill="currentColor"/>
+              <path d="M14 4l6 6"/>
+            </svg>
+          </span>
           <h3>Показываю дизайн</h3>
           <p>Рисую макет в&nbsp;Figma: главный экран, ключевые блоки, версия для телефона. Согласуем цвета, типографику и&nbsp;переходы. Этап итеративный, правлю, пока результат не устроит обе стороны.</p>
         </div>
         <div class="proc-step" data-reveal>
           <div class="num">03</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 6l-5 6 5 6"/>
+              <path d="M16 6l5 6-5 6"/>
+              <path d="M14 4l-4 16"/>
+            </svg>
+          </span>
           <h3>Собираю</h3>
           <p>Вёрстка точно по&nbsp;макету: HTML, CSS, JavaScript. Сайт корректно работает на&nbsp;компьютере, планшете и&nbsp;телефоне. На&nbsp;лендинг уходит 5–7 дней, на&nbsp;многостраничный 2–3 недели.</p>
         </div>
         <div class="proc-step" data-reveal>
           <div class="num">04</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="M20 20l-3.5-3.5"/>
+              <path d="M8 11l2.5 2.5L14 9"/>
+            </svg>
+          </span>
           <h3>Тестирую</h3>
           <p>Проверяю на реальных устройствах и&nbsp;в&nbsp;разных браузерах: iPhone, Android, медленный интернет, старый ноутбук. Фикшу всё, что съезжает, тормозит или отображается иначе.</p>
         </div>
         <div class="proc-step" data-reveal>
           <div class="num">05</div>
+          <span class="proc-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 15c-3-1-5-3-5-7a5 5 0 0 1 10 0c0 4-2 6-5 7z"/>
+              <circle cx="12" cy="8" r="1.5"/>
+              <path d="M9 19l-2 2M15 19l2 2M12 20v2"/>
+            </svg>
+          </span>
           <h3>Запускаю</h3>
           <p>Размещаю сайт на&nbsp;хостинге, подключаю твой домен (<em>yoursite.ru</em>), настраиваю доставку заявок. В комплекте: короткая инструкция по&nbsp;самостоятельному обновлению текстов и&nbsp;цен.</p>
         </div>
       </div>
 
-      <div class="terminal terminal--wide" data-reveal>
+      <div class="terminal terminal--wide" data-reveal data-tilt data-tilt-max="4">
         <div class="bar">
           <span class="path">~ / тебе / после-сдачи</span>
         </div>
@@ -572,7 +708,7 @@
       </div>
 
       <p class="price-note" data-reveal>
-        Без абонентки и скрытых доплат. Платишь один раз, сайт твой навсегда. Точную сумму назову после короткого разговора о проекте.
+        Без абонентки и&nbsp;скрытых доплат. Платишь один раз, сайт твой навсегда. Точную сумму назову за&nbsp;10&nbsp;минут разговора.
       </p>
     </div>
   </section>
@@ -629,7 +765,7 @@
             <span class="q-ic" aria-hidden="true"></span>
           </button>
           <div class="faq-a">
-            <div class="faq-a-body"><p>Обязательно. Проверяю на&nbsp;iPhone, Android и&nbsp;планшетах. Твои клиенты заходят с&nbsp;телефона, там сайт должен открываться первым делом и&nbsp;удобно работать.</p></div>
+            <div class="faq-a-body"><p>Обязательно. Проверяю на&nbsp;iPhone, Android и&nbsp;планшетах. 80%&nbsp;твоих клиентов заходят с&nbsp;телефона — там сайт обязан работать первым делом.</p></div>
           </div>
         </div>
 
@@ -672,16 +808,16 @@
       <div class="about-grid">
         <div class="about-text">
           <p data-reveal>
-            Живу в&nbsp;Екатеринбурге. Сайты это моё основное занятие, а&nbsp;не подработка между парами. Сажусь за код каждый день, как на обычную работу.
+            Сайты это моё основное занятие, а&nbsp;не подработка между парами. Сажусь за код каждый день, как на обычную работу.
           </p>
           <p data-reveal>
-            Большинство моих клиентов это салоны красоты, студии и&nbsp;частные мастера. За пару лет насмотрелся, как у&nbsp;них устроен поток заявок: клиент листает сторис, ищет цены, не&nbsp;находит, уходит.
+            Работаю с&nbsp;малым бизнесом и&nbsp;частными специалистами. За&nbsp;пару лет насмотрелся, как у&nbsp;них устроен поток заявок: клиент заходит на&nbsp;сайт, ищет цены, не&nbsp;находит, уходит к&nbsp;конкурентам.
           </p>
           <p data-reveal>
             Поэтому делаю сайты, которые закрывают три вопроса сразу: что за услуга, сколько стоит, как записаться. Без лишних экранов «о&nbsp;нашей миссии».
           </p>
           <p data-reveal>
-            Если нужен сайт от&nbsp;мини-страницы до полноценного каталога, расскажи о&nbsp;задаче. Продумаю структуру, предложу решение, договоримся по&nbsp;срокам и&nbsp;бюджету.
+            Нужен сайт — от&nbsp;мини-страницы до&nbsp;каталога — напиши. Разберём задачу, посчитаем сроки и&nbsp;бюджет за&nbsp;один разговор.
           </p>
 
           <div class="about-stack" data-reveal>
@@ -699,7 +835,7 @@
             </div>
           </div>
 
-          <div class="terminal" data-reveal>
+          <div class="terminal" data-reveal data-tilt data-tilt-max="5">
             <div class="bar">
               <span class="path">~ / tim / about.sh</span>
             </div>
@@ -715,7 +851,7 @@
           </div>
         </div>
 
-        <div class="about-photo" data-reveal>
+        <div class="about-photo" data-reveal data-tilt data-tilt-max="6">
           <img src="assets/about.jpg" alt="Тимофей Рямбов, веб-разработчик">
         </div>
       </div>
@@ -723,7 +859,7 @@
   </section>
 
   <!-- ==================== CONTACT ==================== -->
-  <section id="contact" class="section contact">
+  <section id="contact" class="section contact glass-section">
     <div class="container">
       <div class="contact-head">
         <div class="num">08</div>
@@ -736,24 +872,48 @@
       <div class="channels-list">
         <a href="https://wa.me/79022540481" target="_blank" rel="noopener" class="channel" data-reveal>
           <span class="ch-num">01</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 20l1.6-4.5a9 9 0 1 1 3.4 3.3L3 20z"/>
+              <path d="M8.5 10.5c.4 2 2 3.6 4 4l1.3-1.2 2.2 1.3c-.3 1-1.2 1.9-2.5 1.9-2.5 0-6.5-4-6.5-6.5 0-1.3.9-2.2 1.9-2.5l1.3 2.2-1.7 1.3"/>
+            </svg>
+          </span>
           <span class="ch-name">WhatsApp</span>
           <span class="ch-val">Написать сообщение</span>
           <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
         <a href="https://t.me/TRyambov" target="_blank" rel="noopener" class="channel" data-reveal>
           <span class="ch-num">02</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 4L2 11l6 2.5L17 7l-7 8 1 5 3.5-4 5 3L21 4z"/>
+            </svg>
+          </span>
           <span class="ch-name">Telegram</span>
           <span class="ch-val">@TRyambov</span>
           <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
         <a href="tel:+79022540481" class="channel" data-reveal>
           <span class="ch-num">03</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 3 6a2 2 0 0 1 2-2z"/>
+            </svg>
+          </span>
           <span class="ch-name">Телефон</span>
           <span class="ch-val">+7&nbsp;(902)&nbsp;254-04-81</span>
           <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
         <a href="https://vk.com/ryambov" target="_blank" rel="noopener" class="channel" data-reveal>
           <span class="ch-num">04</span>
+          <span class="ch-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="3"/>
+              <path d="M7 9v3c0 1.5 1 3 3 3h1v-2.5"/>
+              <path d="M11 9v6"/>
+              <path d="M15 9c0 2.5 1 4 2 6h-2l-2-2.5"/>
+            </svg>
+          </span>
           <span class="ch-name">ВКонтакте</span>
           <span class="ch-val">vk.com/ryambov</span>
           <span class="ch-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
@@ -768,7 +928,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="#" class="logo">Тимофей Рямбов</a>
-          <p>Делаю сайты в&nbsp;Екатеринбурге, по&nbsp;чистому коду.</p>
+          <p>Делаю сайты по&nbsp;чистому коду, без Тильды и&nbsp;подписок.</p>
         </div>
         <div class="footer-col">
           <div class="ttl">Разделы</div>
