@@ -551,10 +551,35 @@ function runCounter(el) {
 }
 
 
-/* -------------------- Anchor nav: закрыть моб-меню после клика -------------------- */
+/* -------------------- Anchor nav: smooth scroll через ScrollSmoother + offset под хедер -------------------- */
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
-  a.addEventListener('click', () => {
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href');
+    if (!href || href === '#' || href.length < 2) {
+      closeMobileMenu();
+      return;
+    }
+    const target = document.querySelector(href);
+    if (!target) {
+      closeMobileMenu();
+      return;
+    }
+    e.preventDefault();
+    const headerEl = document.querySelector('.header');
+    const headerH = headerEl ? headerEl.getBoundingClientRect().height : 72;
+    const smoother = window.ScrollSmoother && window.ScrollSmoother.get();
     closeMobileMenu();
+    // даём мобильному меню закрыться (unlock scroll), потом скроллим
+    requestAnimationFrame(() => {
+      if (smoother) {
+        smoother.scrollTo(target, true, `top ${headerH + 12}px`);
+      } else {
+        const y = target.getBoundingClientRect().top + window.scrollY - headerH - 12;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+      // обновим URL hash без прыжка
+      history.pushState(null, '', href);
+    });
   });
 });
 
