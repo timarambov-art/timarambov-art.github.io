@@ -622,9 +622,9 @@ window.addEventListener('resize', () => {
 
 /* -------------------- Case modal -------------------- */
 const CASE_DATA = {
-  alexandra: {
-    title: 'Александра, LED-наращивание',
-    html: `<iframe src="assets/alexandra-demo.html" title="Сайт Александры, живое демо" loading="lazy"></iframe>`,
+  aurel: {
+    title: 'AUREL — Capsule 01',
+    html: `<iframe src="assets/aurel-demo/index.html" title="AUREL, живое демо"></iframe>`,
   },
   pilipilit: {
     title: 'Салон ПилиПилить',
@@ -633,6 +633,14 @@ const CASE_DATA = {
   svarka: {
     title: 'SvarkaUral196',
     html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" loading="lazy"></iframe>`,
+  },
+  metallprokat: {
+    title: 'РЕЗЕРВ — металлопрокат',
+    html: `<iframe src="assets/metallprokat-demo/index.html" title="РЕЗЕРВ, живое демо"></iframe>`,
+  },
+  obscura: {
+    title: 'OBSCURA — нишевая парфюмерия',
+    html: `<iframe src="assets/obscura-demo/index.html" title="OBSCURA, живое демо"></iframe>`,
   },
 };
 
@@ -651,6 +659,28 @@ function openCase(id) {
   modal.classList.add('is-open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('scroll-lock');
+
+  // Прячем scrollbar внутри same-origin iframe'ов (WebKit/Blink не поддерживают
+  // scrollbar-width снаружи, только внутри самого документа iframe)
+  const iframe = modalScroll.querySelector('iframe');
+  if (iframe) {
+    const hideScroll = () => {
+      try {
+        const doc = iframe.contentDocument;
+        if (!doc) return;
+        if (doc.getElementById('__cmScrollHide')) return;
+        const s = doc.createElement('style');
+        s.id = '__cmScrollHide';
+        s.textContent = `
+          html { scrollbar-width: none; -ms-overflow-style: none; }
+          html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+        `;
+        doc.head.appendChild(s);
+      } catch (e) { /* cross-origin — ничего не делаем, браузер сам покажет свой scrollbar */ }
+    };
+    iframe.addEventListener('load', hideScroll);
+    hideScroll();
+  }
 }
 
 function closeCase() {
@@ -676,6 +706,49 @@ document.querySelectorAll('.case[data-case]').forEach((card) => {
     shot.addEventListener('click', () => openCase(card.dataset.case));
   }
 });
+
+/* -------------------- More works toggle + mini-cases -------------------- */
+const moreToggle = document.querySelector('.more-works-toggle');
+const moreGrid   = document.getElementById('moreWorksGrid');
+if (moreToggle && moreGrid) {
+  moreToggle.addEventListener('click', () => {
+    const open = moreToggle.getAttribute('aria-expanded') === 'true';
+    moreToggle.setAttribute('aria-expanded', String(!open));
+    if (open) {
+      moreGrid.classList.remove('is-open');
+    } else {
+      moreGrid.classList.add('is-open');
+      requestAnimationFrame(() => {
+        moreGrid.style.opacity = '1';
+        moreGrid.style.transform = 'translateY(0)';
+      });
+    }
+  });
+}
+document.querySelectorAll('.mini-case[data-case]').forEach((card) => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => openCase(card.dataset.case));
+});
+
+/* -------------------- Скрываем scrollbar внутри same-origin preview-iframes -------- */
+function hideIframeScrollbar(iframe) {
+  const inject = () => {
+    try {
+      const doc = iframe.contentDocument;
+      if (!doc || doc.getElementById('__previewScrollHide')) return;
+      const s = doc.createElement('style');
+      s.id = '__previewScrollHide';
+      s.textContent = `
+        html { scrollbar-width: none; -ms-overflow-style: none; }
+        html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+      `;
+      doc.head.appendChild(s);
+    } catch (e) { /* cross-origin — пропускаем */ }
+  };
+  iframe.addEventListener('load', inject);
+  inject();
+}
+document.querySelectorAll('.shot-live-frame iframe').forEach(hideIframeScrollbar);
 
 document.querySelectorAll('[data-modal-close]').forEach((el) => {
   el.addEventListener('click', closeCase);
