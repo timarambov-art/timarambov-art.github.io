@@ -628,7 +628,7 @@ const CASE_DATA = {
   },
   pilipilit: {
     title: 'Салон ПилиПилить',
-    html: `<img src="assets/pilipilit-hero.webp" alt="ПилиПилить, главный экран">`,
+    html: `<iframe src="assets/pilipilit-demo/index.html" title="ПилиПилить, живое демо"></iframe>`,
   },
   svarka: {
     title: 'SvarkaUral196',
