@@ -624,23 +624,23 @@ window.addEventListener('resize', () => {
 const CASE_DATA = {
   aurel: {
     title: 'AUREL — Capsule 01',
-    html: `<iframe src="assets/aurel-demo/index.html" title="AUREL, живое демо"></iframe>`,
+    html: `<iframe src="assets/aurel-demo/index.html" title="AUREL, живое демо" allow="autoplay"></iframe>`,
   },
   pilipilit: {
     title: 'Салон ПилиПилить',
-    html: `<iframe src="assets/pilipilit-demo/index.html" title="ПилиПилить, живое демо"></iframe>`,
+    html: `<iframe src="assets/pilipilit-demo/index.html" title="ПилиПилить, живое демо" allow="autoplay"></iframe>`,
   },
   svarka: {
     title: 'SvarkaUral196',
-    html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" loading="lazy"></iframe>`,
+    html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" allow="autoplay"></iframe>`,
   },
   metallprokat: {
     title: 'РЕЗЕРВ — металлопрокат',
-    html: `<iframe src="assets/metallprokat-demo/index.html" title="РЕЗЕРВ, живое демо"></iframe>`,
+    html: `<iframe src="assets/metallprokat-demo/index.html" title="РЕЗЕРВ, живое демо" allow="autoplay"></iframe>`,
   },
   obscura: {
     title: 'OBSCURA — нишевая парфюмерия',
-    html: `<iframe src="assets/obscura-demo/index.html" title="OBSCURA, живое демо"></iframe>`,
+    html: `<iframe src="assets/obscura-demo/index.html" title="OBSCURA, живое демо" allow="autoplay"></iframe>`,
   },
 };
 
