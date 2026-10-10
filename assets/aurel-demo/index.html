@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3EEE6">
+<meta name="color-scheme" content="light">
+<title>AUREL — Capsule 01, Autumn / Winter 2026</title>
+<meta name="description" content="Независимый бренд одежды из Екатеринбурга. Капсула из льна, хлопка, шерсти и шёлка. Старт продаж 22 ноября 2026.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AUREL — Capsule 01, Autumn / Winter 2026">
+<meta property="og:description" content="Независимый бренд одежды из Екатеринбурга. Капсула из льна, хлопка, шерсти и шёлка. Старт продаж 22 ноября 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Literata:opsz,wght@7..72,300;7..72,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+/* Motion: скрытые состояния включаются классом js до первой отрисовки (нет вспышки контента).
+   animations.js ставит data-motion; не поднялся за 2.5с, класс снимается и всё показывается как есть. */
+document.documentElement.classList.add('js');
+setTimeout(function () {
+  var h = document.documentElement;
+  if (!h.hasAttribute('data-motion')) h.classList.remove('js');
+}, 2500);
+</script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="silk" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="grain"></div>
+</div>
+
+<div class="hero-bg" aria-hidden="true">
+  <div class="hero-bg-image" style="background-image: url('media/hero-fabric.jpg');"></div>
+  <div class="hero-bg-tint"></div>
+</div>
+
+<header class="nav">
+  <div class="nav-bar">
+    <a class="brand-mark" href="#hero" aria-label="AUREL">AUREL</a>
+    <nav class="nav-links" aria-label="AUREL">
+      <a href="#manifesto">Manifesto</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#materials">Materials</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="nav-cta" href="#early-access" data-animate="button">Early access</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. HERO -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-inner">
+
+      <p class="eyebrow">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Capsule 01 — Autumn / Winter 2026</span>
+      </p>
+
+      <h1 class="headline" id="hero-title">Вещи,<br>которые остаются.</h1>
+
+      <p class="lede">Капсула базовой одежды из льна, хлопка, шерсти и шёлка.<br>Ограниченный тираж. Доставка по миру.</p>
+
+      <div class="timer">
+        <p class="countdown-label">До открытия — 22 ноября</p>
+        <div class="countdown" id="countdown" aria-live="polite">
+          <div class="unit"><span class="num" data-unit="days">00</span><span class="lbl">дней</span></div>
+          <div class="unit"><span class="num" data-unit="hours">00</span><span class="lbl">часов</span></div>
+          <div class="unit"><span class="num" data-unit="minutes">00</span><span class="lbl">минут</span></div>
+          <div class="unit"><span class="num" data-unit="seconds">00</span><span class="lbl">секунд</span></div>
+        </div>
+        <p class="countdown-done">Продажи открыты</p>
+      </div>
+
+      <form class="notify" id="notify-form" data-source="hero" novalidate>
+        <label for="email" class="sr-only">Email</label>
+        <div class="notify-field">
+          <input type="email" id="email" name="email" placeholder="Ваш email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
+          <button type="submit" class="btn" data-animate="button">
+            <span class="btn-label">Сообщить о дропе</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+        <div class="notify-meta">
+          <p class="form-hint">На 48 часов раньше всех и −15% на первый заказ.</p>
+          <p class="form-note" id="form-note" role="status"></p>
+        </div>
+        <!-- PLACEHOLDER: число подписчиков выдуманное (312, диапазон 240-390), пока нет реальной базы.
+             Источник правды: CONFIG.proof в cro.js. До публичного запуска заменить на реальное число
+             из рассылочного сервиса или поставить CONFIG.proof.enabled = false. -->
+        <p class="form-proof" data-proof><span>Уже <b data-proof-count>312</b> <span data-proof-word>человек</span> в списке</span></p>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- 2. MANIFESTO -->
+  <section class="section manifesto" id="manifesto" aria-labelledby="manifesto-title">
+    <div class="wrap">
+
+      <header class="sec-head">
+        <p class="kicker" data-animate="reveal">Manifesto</p>
+        <h2 class="display display--xl" id="manifesto-title" data-animate="split">Меньше вещей, больше лет.</h2>
+      </header>
+
+      <ul class="theses">
+        <li class="thesis thesis-1" data-animate="reveal">
+          <p class="thesis-tag">Против спешки</p>
+          <p class="thesis-text">Новые коллекции выходят раньше, чем изнашиваются старые. Мы выходим из этой гонки.</p>
+        </li>
+        <li class="thesis thesis-2" data-animate="reveal">
+          <p class="thesis-tag">За материал</p>
+          <p class="thesis-text">Лён, хлопок, шерсть мериноса, шёлк. С такими тканями вещь стареет спокойно: лён с каждой стиркой мягче, шерсть держит форму.</p>
+        </li>
+        <li class="thesis thesis-3" data-animate="reveal">
+          <p class="thesis-tag">За меру</p>
+          <p class="thesis-text">В Capsule 01 от семи до десяти вещей. Нейтральная палитра, один язык кроя. Всё сочетается со всем, и утром не нужно думать, что надеть.</p>
+        </li>
+        <li class="thesis thesis-4" data-animate="reveal">
+          <p class="thesis-tag">Для тех, кто устал</p>
+          <p class="thesis-text">Мы шьём для людей, которым надоели покупки на один сезон. И которые готовы заплатить за вещь, которую не придётся заменять.</p>
+        </li>
+      </ul>
+
+      <p class="closing" data-animate="reveal">Одежда, которую не стыдно носить годами.</p>
+
+    </div>
+  </section>
+
+  <!-- 2.5 EDITORIAL BAND -->
+  <section class="band" aria-hidden="true">
+    <div class="band-image" data-parallax style="background-image: url('media/manifesto-detail.jpg');"></div>
+    <p class="band-caption">Capsule 01 · Autumn / Winter 2026</p>
+  </section>
+
+  <!-- 3. LOOKBOOK -->
+  <section class="section lookbook" id="lookbook" aria-labelledby="lookbook-title">
+    <div class="wrap">
+
+      <header class="sec-head" data-animate="reveal">
+        <p class="kicker">Lookbook</p>
+        <h2 class="display" id="lookbook-title">Первые пять вещей</h2>
+        <p class="intro">Всего в капсуле от семи до десяти вещей. Вот пять.</p>
+      </header>
+
+      <div class="looks-scroller" role="region" aria-labelledby="lookbook-title" tabindex="0">
+        <ul class="looks">
+
+          <li class="look look-1" data-animate="card">
+            <div class="look-media">
+              <img src="media/look-01.jpg" alt="" loading="lazy" width="800" height="1000">
+              <span class="look-no" aria-hidden="true">01</span>
+            </div>
+            <div class="look-body">
+              <div class="look-head">
+                <h3 class="look-name">Рубашка 01</h3>
+                <p class="look-material">Тяжёлый лён</p>
+              </div>
+              <p class="look-desc">Oversized. Плотный лён с рельефной фактурой. Хорошо ложится под жакет и поверх тонкого джемпера.</p>
+            </div>
+          </li>
+
+          <li class="look look-2" data-animate="card">
+            <div class="look-media">
+              <img src="media/look-02.jpg" alt="" loading="lazy" width="800" height="1000">
+              <span class="look-no" aria-hidden="true">02</span>
+            </div>
+            <div class="look-body">
+              <div class="look-head">
+                <h3 class="look-name">Жакет 02</h3>
+                <p class="look-material">Шерсть</p>
+              </div>
+              <p class="look-desc">Прямой крой без подкладки. Ткань держит форму, а плечо оставляет свободу движения.</p>
+            </div>
+          </li>
+
+          <li class="look look-3" data-animate="card">
+            <div class="look-media">
+              <img src="media/look-03.jpg" alt="" loading="lazy" width="800" height="1000">
+              <span class="look-no" aria-hidden="true">03</span>
+            </div>
+            <div class="look-body">
+              <div class="look-head">
+                <h3 class="look-name">Брюки 03</h3>
+                <p class="look-material">Плотный хлопок</p>
+              </div>
+              <p class="look-desc">Высокая посадка, прямая нога. Матовая фактура, которая одинаково работает с рубашкой и с джемпером.</p>
+            </div>
+          </li>
+
+          <li class="look look-4" data-animate="card">
+            <div class="look-media">
+              <img src="media/look-04.jpg" alt="" loading="lazy" width="800" height="1000">
+              <span class="look-no" aria-hidden="true">04</span>
+            </div>
+            <div class="look-body">
+              <div class="look-head">
+                <h3 class="look-name">Джемпер 04</h3>
+                <p class="look-material">Шерсть мериноса</p>
+              </div>
+              <p class="look-desc">Тонкая вязка, мягкий ворот. Греет без объёма, и его не нужно стирать после каждой носки.</p>
+            </div>
+          </li>
+
+          <li class="look look-5" data-animate="card">
+            <div class="look-media">
+              <img src="media/look-05.jpg" alt="" loading="lazy" width="800" height="1000">
+              <span class="look-no" aria-hidden="true">05</span>
+            </div>
+            <div class="look-body">
+              <div class="look-head">
+                <h3 class="look-name">Юбка 05</h3>
+                <p class="look-material">Шёлк</p>
+              </div>
+              <p class="look-desc">Длина миди, плиссе. Матовый шёлк: держит складку и работает отдельно, под жакет или джемпер.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="look-foot" data-animate="reveal">
+        <p class="look-note">Остальные вещи покажем ближе к запуску. Цены назовём в день открытия.</p>
+        <a class="link-cta" href="#early-access" data-animate="button">
+          <span>Получить доступ раньше</span>
+          <span class="link-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. MATERIALS & CRAFT -->
+  <section class="section materials" id="materials" aria-labelledby="materials-title">
+    <div class="wrap materials-grid">
+
+      <div class="materials-media" data-animate="reveal">
+        <img src="media/materials-fabric.jpg" alt="" loading="lazy" width="800" height="1000">
+      </div>
+
+      <div class="materials-body">
+
+      <header class="sec-head" data-animate="reveal">
+        <p class="kicker">Materials & Craft</p>
+        <h2 class="display" id="materials-title">Четыре волокна. Два города.</h2>
+        <p class="intro">Каждая ткань выбрана под конкретную вещь.</p>
+      </header>
+
+      <ol class="mats">
+        <li class="mat" data-animate="reveal">
+          <div class="mat-head">
+            <span class="mat-no" aria-hidden="true">01</span>
+            <h3 class="mat-title">Ткани</h3>
+          </div>
+          <p class="mat-text">Лён, хлопок, шерсть мериноса и шёлк. В основной ткани нет синтетики. Состав каждой вещи указываем полностью.</p>
+        </li>
+        <li class="mat" data-animate="reveal">
+          <div class="mat-head">
+            <span class="mat-no" aria-hidden="true">02</span>
+            <h3 class="mat-title">Екатеринбург — дизайн</h3>
+          </div>
+          <p class="mat-text">Силуэты, выкройки и подбор тканей делаем в студии в Екатеринбурге. Рисуем меньше вещей и дольше доводим каждую.</p>
+        </li>
+        <li class="mat" data-animate="reveal">
+          <div class="mat-head">
+            <span class="mat-no" aria-hidden="true">03</span>
+            <h3 class="mat-title">Москва — пошив</h3>
+          </div>
+          <p class="mat-text">Шьём в Москве небольшими партиями. Поэтому тираж ограничен.</p>
+        </li>
+        <li class="mat" data-animate="reveal">
+          <div class="mat-head">
+            <span class="mat-no" aria-hidden="true">04</span>
+            <h3 class="mat-title">Срок службы</h3>
+          </div>
+          <p class="mat-text">Мы думаем о цене за одну носку. Хорошая вещь стоит больше в день покупки и меньше через три года.</p>
+        </li>
+      </ol>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 5. EARLY ACCESS -->
+  <section class="section access" id="early-access" aria-labelledby="access-title">
+    <div class="wrap">
+      <div class="tag-wrap" data-animate="reveal">
+        <div class="tag">
+
+          <div class="tag-main">
+            <p class="kicker">Early access</p>
+            <h2 class="display display--m" id="access-title">Подписчики заходят первыми</h2>
+            <p class="lede">Продажи откроются 22 ноября. Подписчики получат доступ на 48 часов раньше. Тираж ограничен, и у них больше шансов успеть.</p>
+          </div>
+
+          <ul class="perks">
+            <li class="perk">
+              <h3 class="perk-title">На 48 часов раньше</h3>
+              <p class="perk-text">Ссылка на каталог придёт 20 ноября. Размер можно выбрать до открытия для всех.</p>
+            </li>
+            <li class="perk">
+              <h3 class="perk-title">−15% на первый заказ</h3>
+              <p class="perk-text">Промокод придёт в том же письме.</p>
+            </li>
+            <li class="perk">
+              <h3 class="perk-title">Открытка с вашим именем</h3>
+              <p class="perk-text">В посылке будет открытка, подписанная для вас.</p>
+            </li>
+          </ul>
+
+          <div class="tag-form">
+            <p class="access-when" data-early-when>Ссылка на каталог уйдёт 20 ноября<span data-early-left></span></p>
+            <form class="notify" id="access-form" data-source="access" novalidate>
+              <label for="email-access" class="sr-only">Email</label>
+              <div class="notify-field">
+                <input type="email" id="email-access" name="email" placeholder="Ваш email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
+                <button type="submit" class="btn" data-animate="button">
+                  <span class="btn-label">Получить ранний доступ</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+              <div class="notify-meta">
+                <p class="form-hint">Бесплатно. Писем будет немного, отписаться можно в один клик.</p>
+                <p class="form-note" id="access-note" role="status"></p>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FAQ -->
+  <section class="section faq" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+
+      <header class="sec-head faq-head" data-animate="reveal">
+        <p class="kicker">FAQ</p>
+        <h2 class="display" id="faq-title">Вопросы</h2>
+      </header>
+
+      <div class="faq-list">
+        <details class="qa" data-animate="accordion">
+          <summary><span class="qa-q">Когда начнутся продажи?</span><span class="qa-icon" aria-hidden="true"></span></summary>
+          <div class="qa-a"><p>22 ноября 2026 года в 20:00 по Екатеринбургу, это 18:00 по Москве. Подписчики получат доступ на 48 часов раньше, 20 ноября.</p></div>
+        </details>
+        <details class="qa" data-animate="accordion">
+          <summary><span class="qa-q">Доставляете ли вы в регионы?</span><span class="qa-icon" aria-hidden="true"></span></summary>
+          <div class="qa-a"><p>Да. Отправляем по всей России и за границу. Стоимость и срок покажем при оформлении заказа.</p></div>
+        </details>
+        <details class="qa" data-animate="accordion">
+          <summary><span class="qa-q">Как подобрать размер?</span><span class="qa-icon" aria-hidden="true"></span></summary>
+          <div class="qa-a"><p>Для каждой вещи будет таблица мер и параметры модели на фото. Сомневаетесь между двумя размерами, напишите нам, и мы подскажем.</p></div>
+        </details>
+        <details class="qa" data-animate="accordion">
+          <summary><span class="qa-q">Можно ли вернуть вещь?</span><span class="qa-icon" aria-hidden="true"></span></summary>
+          <div class="qa-a"><p>Да. В течение 7 дней после получения, как предусмотрено законом, если вещь не носили, а бирки и упаковка сохранены.</p></div>
+        </details>
+        <details class="qa" data-animate="accordion">
+          <summary><span class="qa-q">Будут ли новые капсулы?</span><span class="qa-icon" aria-hidden="true"></span></summary>
+          <div class="qa-a"><p>Да, но без календаря. Новую капсулу мы выпускаем, когда она готова, а не потому что наступил сезон. Подписчики узнают первыми.</p></div>
+        </details>
+        <details class="qa" data-animate="accordion">
+          <summary><span class="qa-q">Сколько это будет стоить?</span><span class="qa-icon" aria-hidden="true"></span></summary>
+          <div class="qa-a"><p>Цены назовём в день запуска. Мы считаем их от ткани и пошива, без наценки за имя. Это дороже массмаркета, но вещь рассчитана на годы.</p></div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- 7. FOOTER -->
+<footer class="foot" id="contact">
+  <div class="wrap">
+
+    <div class="foot-top">
+      <p class="foot-tagline">Независимый бренд одежды.</p>
+
+      <div class="foot-groups">
+        <div class="foot-group">
+          <p class="foot-label">Почта</p>
+          <a class="foot-link foot-mail" href="mailto:hello@aurel.studio">hello@aurel.studio</a>
+        </div>
+
+        <ul class="foot-group foot-social">
+          <li><a class="foot-link" href="https://instagram.com" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a class="foot-link" href="https://t.me" target="_blank" rel="noopener">Telegram</a></li>
+        </ul>
+
+        <ul class="foot-group foot-studios">
+          <li>
+            <p class="foot-city">Екатеринбург</p>
+            <p class="foot-role">Студия, дизайн</p>
+          </li>
+          <li>
+            <p class="foot-city">Москва</p>
+            <p class="foot-role">Пошив</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <a class="foot-mark" href="#hero" aria-label="AUREL">AUREL</a>
+
+    <div class="foot-bottom">
+      <p>© AUREL studio, 2026</p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- 8. CRO: sticky CTA (мобилка) и exit-intent попап. Логика в cro.js -->
+<aside class="sticky-cta" id="sticky-cta" aria-label="Ранний доступ" inert>
+  <a class="sticky-cta-link" href="#early-access">
+    <span>Получить ранний доступ</span>
+    <span class="link-arrow" aria-hidden="true">→</span>
+  </a>
+  <button type="button" class="sticky-cta-close" aria-label="Скрыть панель"></button>
+</aside>
+
+<div class="xp" id="exit-popup" hidden>
+  <div class="xp-backdrop" data-xp-close></div>
+  <div class="xp-card" role="dialog" aria-modal="true" aria-labelledby="xp-title" tabindex="-1">
+    <button type="button" class="xp-close" data-xp-close aria-label="Закрыть"></button>
+    <p class="kicker">Capsule 01</p>
+    <h2 class="xp-title" id="xp-title">Пришлём ссылку раньше всех</h2>
+    <p class="xp-text">Каталог откроется для подписчиков 20 ноября, на 48 часов раньше остальных. Вместе со ссылкой придёт промокод −15%.</p>
+    <form class="notify" id="popup-form" data-source="popup" novalidate>
+      <label for="email-popup" class="sr-only">Email</label>
+      <div class="notify-field">
+        <input type="email" id="email-popup" name="email" placeholder="Ваш email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="send" required>
+        <button type="submit" class="btn">
+          <span class="btn-label">Получить ранний доступ</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+      <div class="notify-meta">
+        <p class="form-hint">Бесплатно. Отписаться можно в один клик.</p>
+        <p class="form-note" id="popup-note" role="status"></p>
+      </div>
+    </form>
+    <button type="button" class="xp-skip" data-xp-close>Не сейчас</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="animations.js" defer></script>
+<script src="cro.js" defer></script>
+</body>
+</html>
