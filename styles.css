@@ -3056,3 +3056,84 @@ body { background: var(--ink-0); position: relative; }
   .more-works-grid { grid-template-columns: 1fr; }
   .more-works-toggle { width: 100%; justify-content: space-between; }
 }
+
+/* ==================== MOBILE: убираем iframe-превью и анимации ====================
+   На мобиле iframe грузит целый сайт (видео, GSAP, анимации) — главный источник
+   лагов. Заменяем на статичный типографический fallback через data-атрибуты
+   на .shot-live-frame. Также отключаем 3D entrance и reveal — всё сразу видно. */
+@media (max-width: 900px) {
+  /* Iframe удаляется JS'ом; оставшийся контейнер показывает fallback */
+  .shot-live-frame iframe { display: none !important; }
+  .shot-live-frame {
+    background: linear-gradient(135deg, #141210 0%, #1c1a16 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .shot-live-frame::before {
+    content: attr(data-fallback-eyebrow);
+    position: absolute;
+    top: 24px; left: 24px; right: 24px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(233, 223, 201, 0.65);
+    font-weight: 500;
+  }
+  .shot-live-frame::after {
+    content: attr(data-fallback-title) " \A " attr(data-fallback-sub);
+    white-space: pre;
+    font-family: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 10vw, 54px);
+    line-height: 1.15;
+    color: #f5ead1;
+    text-align: center;
+    padding: 0 16px;
+    letter-spacing: -0.01em;
+  }
+  .shot-live-frame.mini::before { top: 16px; left: 20px; right: 20px; font-size: 10px; }
+  .shot-live-frame.mini::after { font-size: clamp(22px, 7vw, 34px); }
+
+  /* Карточки появляются сразу — без 3D-spiral entrance (жрёт GPU на мобиле) */
+  .case:not(.is-in) {
+    --c-rx: 0deg !important; --c-ry: 0deg !important; --c-rz: 0deg !important;
+    --c-x: 0px !important; --c-y: 0px !important; --c-z: 0px !important;
+    --c-scale: 1 !important;
+    opacity: 1 !important;
+  }
+  .case { transform: none !important; }
+
+  /* Reveal — выключаем, всё видно сразу */
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-reveal].is-visible { opacity: 1 !important; transform: none !important; }
+
+  /* parallax на case-shot image через scroll-driven animation — отключаем */
+  .case-shot.is-in img { animation: none !important; }
+
+  /* case-shot целиком кликабельна на touch */
+  .case-shot { cursor: pointer; -webkit-tap-highlight-color: rgba(236,231,216,0.1); }
+}
+
+/* ==================== MOBILE: KILL ALL ANIMATIONS ====================
+   Общий kill-switch — на мобиле любой transition / animation / backdrop-filter
+   отключается, чтобы процессор телефона не захлёбывался. Transform оставляем
+   (нужен для layout), но hover/scroll-driven его не меняют. */
+@media (max-width: 900px) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  /* Hero ambient — убираем canvas/shader подложку, оставляем CSS-градиент */
+  .hero-shader-canvas { display: none !important; }
+  /* Scroll-driven CSS animations через animation-timeline */
+  [style*="animation-timeline"], .case-shot.is-in img { animation: none !important; }
+  /* 3D tilt-shine, cursor-tracking эффекты */
+  .tilt-shine { display: none !important; }
+}

@@ -6,7 +6,10 @@
    CDN-зависимости: gsap, ScrollTrigger, ScrollSmoother, SplitType.
    ============================================================ */
 
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* На мобиле (≤900px) всё тяжёлое отключается — GSAP cinematic, ScrollSmoother,
+   SplitType, hero shader. Это снимает основную нагрузку с процессора телефона. */
+const isMobile = window.matchMedia('(max-width: 900px)').matches;
+const reduceMotion = isMobile || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
 /* -------------------- GSAP + ScrollSmoother boot --------------------
@@ -648,9 +651,26 @@ const modal       = document.getElementById('caseModal');
 const modalScroll = document.getElementById('modalScroll');
 const modalTitle  = document.getElementById('modalTitle');
 
+/* На мобиле вытаскиваем src из html-строки CASE_DATA, чтобы открыть сайт
+   в новой системной вкладке — там и видео проигрывается, и браузер не лагает. */
+function extractIframeSrc(html) {
+  const m = html.match(/src="([^"]+)"/);
+  return m ? m[1] : null;
+}
+
 function openCase(id) {
   const data = CASE_DATA[id];
   if (!data || !modal || !modalScroll) return;
+
+  if (isMobile) {
+    const src = extractIframeSrc(data.html);
+    if (src) {
+      // Абсолютный URL, если это относительный путь к локальному демо
+      const url = src.startsWith('http') ? src : new URL(src, window.location.href).href;
+      window.open(url, '_blank', 'noopener');
+      return;
+    }
+  }
 
   modalTitle.textContent = data.title;
   modalScroll.innerHTML = `<div class="cm-frame">${data.html}</div>`;
@@ -748,7 +768,14 @@ function hideIframeScrollbar(iframe) {
   iframe.addEventListener('load', inject);
   inject();
 }
-document.querySelectorAll('.shot-live-frame iframe').forEach(hideIframeScrollbar);
+/* На мобиле iframe-превью грузят целый сайт (видео, GSAP) и душат страницу.
+   Удаляем iframe'ы — CSS fallback показывает статичную типографическую карточку. */
+const isMobile = window.matchMedia('(max-width: 900px)').matches;
+if (isMobile) {
+  document.querySelectorAll('.shot-live-frame iframe').forEach(i => i.remove());
+} else {
+  document.querySelectorAll('.shot-live-frame iframe').forEach(hideIframeScrollbar);
+}
 
 document.querySelectorAll('[data-modal-close]').forEach((el) => {
   el.addEventListener('click', closeCase);
