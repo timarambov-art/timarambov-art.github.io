@@ -3115,25 +3115,10 @@ body { background: var(--ink-0); position: relative; }
   .case-shot { cursor: pointer; -webkit-tap-highlight-color: rgba(236,231,216,0.1); }
 }
 
-/* ==================== MOBILE: KILL ALL ANIMATIONS ====================
-   Общий kill-switch — на мобиле любой transition / animation / backdrop-filter
-   отключается, чтобы процессор телефона не захлёбывался. Transform оставляем
-   (нужен для layout), но hover/scroll-driven его не меняют. */
+/* ==================== MOBILE: только тяжёлые эффекты ====================
+   Точечно убираем самое прожорливое: scroll-driven parallax на картинках кейсов,
+   декоративный tilt-shine. hover/burger/FAQ/модалка/toggle «ещё работы» — работают. */
 @media (max-width: 900px) {
-  *, *::before, *::after {
-    animation-duration: 0s !important;
-    animation-delay: 0s !important;
-    transition-duration: 0s !important;
-    transition-delay: 0s !important;
-  }
-  * {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-  /* Hero ambient — убираем canvas/shader подложку, оставляем CSS-градиент */
-  .hero-shader-canvas { display: none !important; }
-  /* Scroll-driven CSS animations через animation-timeline */
-  [style*="animation-timeline"], .case-shot.is-in img { animation: none !important; }
-  /* 3D tilt-shine, cursor-tracking эффекты */
+  .case-shot.is-in img { animation: none !important; }
   .tilt-shine { display: none !important; }
 }

@@ -6,10 +6,12 @@
    CDN-зависимости: gsap, ScrollTrigger, ScrollSmoother, SplitType.
    ============================================================ */
 
-/* На мобиле (≤900px) всё тяжёлое отключается — GSAP cinematic, ScrollSmoother,
-   SplitType, hero shader. Это снимает основную нагрузку с процессора телефона. */
+/* isMobile — используется точечно: для фолбэка iframe-превью (на мобиле они
+   грузили целый сайт с видео и душили страницу → показываем статичную карточку)
+   и чтобы не инициализировать тяжёлые scroll-driven эффекты, которые на desktop
+   уже сами ограничены `if (isDesktop)`. Общий scroll/hover/FAQ/burger работает. */
 const isMobile = window.matchMedia('(max-width: 900px)').matches;
-const reduceMotion = isMobile || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
 /* -------------------- GSAP + ScrollSmoother boot --------------------
@@ -651,26 +653,9 @@ const modal       = document.getElementById('caseModal');
 const modalScroll = document.getElementById('modalScroll');
 const modalTitle  = document.getElementById('modalTitle');
 
-/* На мобиле вытаскиваем src из html-строки CASE_DATA, чтобы открыть сайт
-   в новой системной вкладке — там и видео проигрывается, и браузер не лагает. */
-function extractIframeSrc(html) {
-  const m = html.match(/src="([^"]+)"/);
-  return m ? m[1] : null;
-}
-
 function openCase(id) {
   const data = CASE_DATA[id];
   if (!data || !modal || !modalScroll) return;
-
-  if (isMobile) {
-    const src = extractIframeSrc(data.html);
-    if (src) {
-      // Абсолютный URL, если это относительный путь к локальному демо
-      const url = src.startsWith('http') ? src : new URL(src, window.location.href).href;
-      window.open(url, '_blank', 'noopener');
-      return;
-    }
-  }
 
   modalTitle.textContent = data.title;
   modalScroll.innerHTML = `<div class="cm-frame">${data.html}</div>`;

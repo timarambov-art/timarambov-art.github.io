@@ -1053,8 +1053,7 @@
   <!-- Hero shader: ink-amber warp через Three.js. ES module, не блокирует,
        если importmap/CDN не работает — hero-ambient остаётся с CSS gradient. -->
   <script type="module">
-    const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    const reduceMotion = isMobile || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const reduceTransparency = window.matchMedia('(prefers-reduced-transparency: reduce)').matches;
     const ambient = document.querySelector('.hero-ambient');
     if (ambient && !reduceMotion && !reduceTransparency) {
