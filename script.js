@@ -6,11 +6,6 @@
    CDN-зависимости: gsap, ScrollTrigger, ScrollSmoother, SplitType.
    ============================================================ */
 
-/* isMobile — используется точечно: для фолбэка iframe-превью (на мобиле они
-   грузили целый сайт с видео и душили страницу → показываем статичную карточку)
-   и чтобы не инициализировать тяжёлые scroll-driven эффекты, которые на desktop
-   уже сами ограничены `if (isDesktop)`. Общий scroll/hover/FAQ/burger работает. */
-const isMobile = window.matchMedia('(max-width: 900px)').matches;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
@@ -753,14 +748,7 @@ function hideIframeScrollbar(iframe) {
   iframe.addEventListener('load', inject);
   inject();
 }
-/* На мобиле iframe-превью грузят целый сайт (видео, GSAP) и душат страницу.
-   Удаляем iframe'ы — CSS fallback показывает статичную типографическую карточку. */
-const isMobile = window.matchMedia('(max-width: 900px)').matches;
-if (isMobile) {
-  document.querySelectorAll('.shot-live-frame iframe').forEach(i => i.remove());
-} else {
-  document.querySelectorAll('.shot-live-frame iframe').forEach(hideIframeScrollbar);
-}
+document.querySelectorAll('.shot-live-frame iframe').forEach(hideIframeScrollbar);
 
 document.querySelectorAll('[data-modal-close]').forEach((el) => {
   el.addEventListener('click', closeCase);
