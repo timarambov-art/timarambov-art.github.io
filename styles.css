@@ -3057,3 +3057,22 @@ body { background: var(--ink-0); position: relative; }
   .more-works-toggle { width: 100%; justify-content: space-between; }
 }
 
+
+/* ==================== MOBILE: точечно убираем тяжёлые entrance ==================== */
+@media (max-width: 900px) {
+  /* Reveal fade-up — показываем всё сразу */
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-reveal].is-visible { opacity: 1 !important; transform: none !important; }
+  /* Кейсы без 3D spiral entrance */
+  .case:not(.is-in) {
+    --c-rx: 0deg !important; --c-ry: 0deg !important; --c-rz: 0deg !important;
+    --c-x: 0px !important; --c-y: 0px !important; --c-z: 0px !important;
+    --c-scale: 1 !important;
+    opacity: 1 !important;
+  }
+  .case { transform: none !important; }
+  /* SplitType char reveal на hero — слова/буквы видны сразу */
+  .hero h1 .w, .hero h1 .c, .hero h1 .char { opacity: 1 !important; transform: none !important; filter: none !important; }
+  /* parallax на картинках кейсов */
+  .case-shot.is-in img { animation: none !important; }
+}

@@ -748,7 +748,31 @@ function hideIframeScrollbar(iframe) {
   iframe.addEventListener('load', inject);
   inject();
 }
-document.querySelectorAll('.shot-live-frame iframe').forEach(hideIframeScrollbar);
+/* На мобиле заменяем iframe-превью сайтов с видео (ПилиПилить, Svarka) на
+   статичные hero-скриншоты — чтобы видео не грузилось и не ело батарею.
+   Другие iframe'ы (AUREL, РЕЗЕРВ, OBSCURA) без видео — оставляем живыми. */
+const isMobileView = window.matchMedia('(max-width: 900px)').matches;
+const previewReplaceMap = [
+  { match: 'pilipilit-demo', img: 'assets/pilipilit-hero.webp' },
+  { match: 'svarkaural196',  img: 'assets/svarka-hero.webp'    },
+];
+document.querySelectorAll('.shot-live-frame iframe').forEach((iframe) => {
+  if (isMobileView) {
+    const src = iframe.getAttribute('src') || '';
+    const hit = previewReplaceMap.find(r => src.includes(r.match));
+    if (hit) {
+      const img = document.createElement('img');
+      img.src = hit.img;
+      img.alt = iframe.title || '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;';
+      iframe.replaceWith(img);
+      return;
+    }
+  }
+  hideIframeScrollbar(iframe);
+});
 
 document.querySelectorAll('[data-modal-close]').forEach((el) => {
   el.addEventListener('click', closeCase);
