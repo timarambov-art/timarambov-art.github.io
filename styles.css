@@ -489,6 +489,10 @@ p  { margin: 0; }
 
 .hero h1 {
   max-width: 22ch;
+  /* Две строки с nowrap должны помещаться в контейнер целиком: самая длинная
+     строка занимает ~11.6em, поэтому кегль ограничен шириной контента
+     (минус запас на скроллбар). */
+  font-size: clamp(56px, calc((min(100vw, var(--max-w)) - 2 * var(--gutter) - 20px) / 11.6), 98px);
   margin-bottom: clamp(32px, 4vw, 56px);
 }
 .hero h1 .accent { white-space: nowrap; }
@@ -501,6 +505,7 @@ p  { margin: 0; }
   /* На мобиле белый space переносит слова как обычно — иначе headline
      вылетит за viewport. */
   .hero h1 .line { white-space: normal; }
+  .hero h1 .accent { white-space: normal; }
 }
 
 .hero .sub {
