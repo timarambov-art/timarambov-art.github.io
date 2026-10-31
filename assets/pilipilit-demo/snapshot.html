@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПилиПилить — студия красоты в Екатеринбурге</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>.hero__video-img{width:100%;height:100%;object-fit:cover;display:block}</style>
+</head>
+<body>
+
+  <!-- ХЕДЕР -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#" class="header__logo">
+        <img src="assets/logo.png" alt="ПилиПилить">
+      </a>
+      <nav class="nav">
+        <a href="#services">Услуги</a>
+        <a href="#works">Работы</a>
+        <a href="#masters">Мастера</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <a href="#booking" class="btn btn--gold header__cta">Записаться онлайн</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__videos" aria-hidden="true">
+      <div class="hero__video-col">
+        <img class="hero__video-img" src="assets/hero-1-poster.jpg" alt="">
+      </div>
+      <div class="hero__video-col">
+        <img class="hero__video-img" src="assets/hero-2-poster.jpg" alt="">
+      </div>
+      <div class="hero__video-col">
+        <img class="hero__video-img" src="assets/hero-3-poster.jpg" alt="">
+      </div>
+    </div>
+    <div class="hero__overlay" aria-hidden="true"></div>
+
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <div class="hero__badge reveal">
+          <span class="hero__badge-icon">✦</span>
+          Хорошее место 2026 · Яндекс
+        </div>
+
+        <h1 class="hero__title">
+          <span class="word">Студия</span>
+          <span class="word">красоты,</span>
+          <span class="word">где</span>
+          <span class="word hero__accent">вам</span>
+          <span class="word hero__accent">рады</span>
+        </h1>
+
+        <p class="hero__subtitle reveal">
+          Маникюр, педикюр и уход в уютной атмосфере центра Екатеринбурга.
+          Стерильные инструменты, премиум-материалы, любимые мастера.
+        </p>
+
+        <div class="hero__rating reveal">
+          <div class="stars" aria-label="Рейтинг 4.8 из 5">
+            <span class="stars__fill" style="width: 96%"></span>
+          </div>
+          <span class="hero__rating-num">4.8</span>
+          <span class="hero__rating-text">из 5 · 59 отзывов</span>
+        </div>
+
+        <div class="hero__actions reveal">
+          <a href="#booking" class="btn btn--gold btn--lg">Записаться онлайн</a>
+          <a href="#works" class="btn btn--ghost btn--lg">Смотреть работы</a>
+        </div>
+      </div>
+
+      <div class="hero__foreground reveal">
+        <div class="hero__photo">
+          <img src="assets/hero-interior.jpg" alt="Интерьер студии ПилиПилить">
+        </div>
+        <div class="hero__photo-badge">
+          <span class="hero__photo-badge-num">4.8</span>
+          <span class="hero__photo-badge-stars">★★★★★</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <span></span>
+    </div>
+  </section>
+
+  <!-- СЧЁТЧИКИ -->
+  <section class="stats">
+    <div class="container stats__grid">
+      <div class="stat reveal">
+        <div class="stat__num" data-count="4.8" data-decimals="1">0</div>
+        <div class="stat__label">Рейтинг на Яндексе</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat__num" data-count="59" data-suffix="">0</div>
+        <div class="stat__label">Отзывов клиентов</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat__num" data-count="5" data-suffix="+">0</div>
+        <div class="stat__label">Лет на рынке</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat__num" data-count="3000" data-suffix="+">0</div>
+        <div class="stat__label">Довольных гостей</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРЕИМУЩЕСТВА -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow">Почему выбирают нас</span>
+        <h2 class="section__title">Аккуратно. Чисто.<br><span class="accent">Со вкусом.</span></h2>
+        <p class="section__lead">Уютная студия в центре Екатеринбурга, где о ваших руках и ногах заботятся как о своих.</p>
+      </div>
+      <div class="features">
+        <div class="feature reveal">
+          <i class="ti ti-shield-check" aria-hidden="true"></i>
+          <h3>Стерильность</h3>
+          <p>Одноразовый инструмент и полная дезинфекция после каждого гостя.</p>
+        </div>
+        <div class="feature reveal">
+          <i class="ti ti-diamond" aria-hidden="true"></i>
+          <h3>Премиум-материалы</h3>
+          <p>Лаки и гели только проверенных производителей. Стойкое покрытие.</p>
+        </div>
+        <div class="feature reveal">
+          <i class="ti ti-heart" aria-hidden="true"></i>
+          <h3>Любимые мастера</h3>
+          <p>Поможем найти именно вашего мастера — того, к кому захочется вернуться.</p>
+        </div>
+        <div class="feature reveal">
+          <i class="ti ti-award" aria-hidden="true"></i>
+          <h3>Хорошее место 2026</h3>
+          <p>Награда Яндекса и рейтинг 4.8 — нам доверяют десятки гостей.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- УСЛУГИ -->
+  <section class="section services" id="services">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow">Услуги</span>
+        <h2 class="section__title">Что мы делаем</h2>
+      </div>
+      <div class="services__grid">
+        <div class="service reveal">
+          <i class="ti ti-sparkles" aria-hidden="true"></i>
+          <h3>Маникюр</h3>
+          <p>Классический, аппаратный, френч, дизайн, японский, мужской.</p>
+          <div class="service__price">от 1 100 ₽</div>
+          <a href="#booking" class="service__link">Записаться <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="service reveal">
+          <i class="ti ti-wash" aria-hidden="true"></i>
+          <h3>Педикюр</h3>
+          <p>Полный, пальчики, мужской, СПА-уход для ног.</p>
+          <div class="service__price">от 1 400 ₽</div>
+          <a href="#booking" class="service__link">Записаться <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="service reveal">
+          <i class="ti ti-diamond" aria-hidden="true"></i>
+          <h3>Наращивание</h3>
+          <p>Гелевое, верхние формы, любая длина и форма.</p>
+          <div class="service__price">от 3 600 ₽</div>
+          <a href="#booking" class="service__link">Записаться <i class="ti ti-arrow-right"></i></a>
+        </div>
+        <div class="service reveal">
+          <i class="ti ti-eye" aria-hidden="true"></i>
+          <h3>Брови и ресницы</h3>
+          <p>Коррекция, окрашивание, ламинирование, тонирование.</p>
+          <div class="service__price">от 650 ₽</div>
+          <a href="#booking" class="service__link">Записаться <i class="ti ti-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ГАЛЕРЕЯ РАБОТ -->
+  <section class="section works" id="works">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow">Галерея</span>
+        <h2 class="section__title">Наши работы</h2>
+        <p class="section__lead">Мягкий цвет, аккуратная форма и дизайн с характером.</p>
+      </div>
+      <div class="works__grid">
+        <div class="work reveal"><img src="assets/work-7.jpg" alt="Маникюр с дизайном"></div>
+        <div class="work reveal"><img src="assets/work-2.jpg" alt="Французский маникюр"></div>
+        <div class="work reveal"><img src="assets/hero-foreground.jpg" alt="Маникюр в студии ПилиПилить"></div>
+        <div class="work reveal"><img src="assets/work-5.jpg" alt="Покрытие гель-лаком"></div>
+        <div class="work reveal"><img src="assets/work-1.jpg" alt="Процесс маникюра"></div>
+        <div class="work reveal"><img src="assets/work-4.jpg" alt="Маникюр в студии"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРАЙС -->
+  <section class="section price" id="price">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow">Цены</span>
+        <h2 class="section__title">Прайс-лист</h2>
+      </div>
+      <div class="price__grid">
+        <div class="price__col reveal">
+          <h3>Маникюр</h3>
+          <ul>
+            <li><span>Маникюр без покрытия</span><b>1 100 ₽</b></li>
+            <li><span>Маникюр с покрытием</span><b>2 300 ₽</b></li>
+            <li><span>Маникюр с дизайном</span><b>2 365 ₽</b></li>
+            <li><span>Японский маникюр</span><b>1 800 ₽</b></li>
+            <li><span>Укрепление гелем</span><b>3 300 ₽</b></li>
+            <li><span>Укрепление гелем френч</span><b>3 850 ₽</b></li>
+            <li><span>Мужской маникюр</span><b>1 150 ₽</b></li>
+            <li><span>СПА-уход для рук</span><b>600 ₽</b></li>
+          </ul>
+        </div>
+        <div class="price__col reveal">
+          <h3>Педикюр</h3>
+          <ul>
+            <li><span>Полный без покрытия</span><b>2 000 ₽</b></li>
+            <li><span>Полный с покрытием</span><b>2 900 ₽</b></li>
+            <li><span>Пальчики без покрытия</span><b>1 400 ₽</b></li>
+            <li><span>Пальчики с покрытием</span><b>2 200 ₽</b></li>
+            <li><span>Мужской педикюр</span><b>2 200 ₽</b></li>
+            <li><span>СПА-уход для ног</span><b>800 ₽</b></li>
+          </ul>
+        </div>
+        <div class="price__col reveal">
+          <h3>Наращивание</h3>
+          <ul>
+            <li><span>Гелевое (гипсовое)</span><b>3 600 ₽</b></li>
+            <li><span>Верхние формы</span><b>4 200 ₽</b></li>
+          </ul>
+          <h3 style="margin-top:28px">Брови и ресницы</h3>
+          <ul>
+            <li><span>Коррекция бровей</span><b>650 ₽</b></li>
+            <li><span>Окрашивание бровей</span><b>650 ₽</b></li>
+            <li><span>Коррекция + окрашивание</span><b>1 200 ₽</b></li>
+            <li><span>Ламинирование бровей</span><b>1 800 ₽</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="price__cta reveal">
+        <a href="#booking" class="btn btn--gold btn--lg">Записаться онлайн</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- БОНУС НОВЫМ ГОСТЯМ -->
+  <section class="bonus reveal" id="bonus-offer">
+    <div class="container bonus__inner">
+      <div class="bonus__text">
+        <span class="eyebrow eyebrow--gold">Подарок новым гостям</span>
+        <h2 class="bonus__title">−15% на первый визит<br>и <span class="accent">1 500 ₽</span> на счёт</h2>
+        <p>500 ₽ дарим сразу на первое посещение, ещё 1 000 ₽ — на счёт после первого визита. Премиум-материалы и профессиональные мастера с заботой о результате.</p>
+        <a href="#booking" class="btn btn--gold btn--lg">Забрать подарок</a>
+      </div>
+      <div class="bonus__badge">
+        <span class="bonus__badge-num">1 500 ₽</span>
+        <span class="bonus__badge-label">бонусами новым гостям</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- МАСТЕРА -->
+  <section class="section masters" id="masters">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow">Команда</span>
+        <h2 class="section__title">Наши мастера</h2>
+        <p class="section__lead">Поможем найти именно вашего мастера — того, к кому захочется возвращаться.</p>
+      </div>
+      <div class="masters__grid">
+        <div class="master reveal"><div class="master__photo"><img src="assets/master-1.jpg" alt="Мастер студии"></div><h3>Анна</h3><p>Маникюр · Дизайн</p></div>
+        <div class="master reveal"><div class="master__photo"><img src="assets/master-2.jpg" alt="Мастер студии"></div><h3>Мария</h3><p>Педикюр · Уход</p></div>
+        <div class="master reveal"><div class="master__photo"><img src="assets/master-3.jpg" alt="Мастер студии"></div><h3>Екатерина</h3><p>Наращивание</p></div>
+        <div class="master reveal"><div class="master__photo"><img src="assets/master-4.jpg" alt="Мастер студии"></div><h3>Ольга</h3><p>Брови · Ресницы</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ОТЗЫВЫ -->
+  <section class="section reviews" id="reviews">
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow">Отзывы</span>
+        <h2 class="section__title">Что говорят гости</h2>
+      </div>
+      <div class="reviews__top reveal">
+        <div class="reviews__score">4.8</div>
+        <div class="reviews__score-info">
+          <div class="reviews__stars">★★★★★</div>
+          <div>59 отзывов на Яндекс.Картах</div>
+        </div>
+      </div>
+      <div class="reviews__grid">
+        <div class="review reveal">
+          <div class="review__stars">★★★★★</div>
+          <p>Хожу к девочкам уже полгода — маникюр держится идеально, ни разу не скололся. Всегда подскажут по форме и цвету. Уютно, чисто, выхожу довольная.</p>
+          <div class="review__author"><img src="assets/review-1.jpg" alt=""><span>Анастасия</span></div>
+        </div>
+        <div class="review reveal">
+          <div class="review__stars">★★★★★</div>
+          <p>Записалась на педикюр, попала к прекрасному мастеру. Всё стерильно, инструмент вскрывали при мне. Спокойная атмосфера, приятная музыка. Вернусь.</p>
+          <div class="review__author"><img src="assets/review-2.jpg" alt=""><span>Ольга</span></div>
+        </div>
+        <div class="review reveal">
+          <div class="review__stars">★★★★★</div>
+          <p>Делала брови и ламинирование — форму подобрали идеально под лицо. Адекватные цены и никакого навязывания. Лучшая студия в районе.</p>
+          <div class="review__author"><img src="assets/review-3.jpg" alt=""><span>Дарья</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section faq" id="faq">
+    <div class="container container--narrow">
+      <div class="section__head reveal">
+        <span class="eyebrow">Вопросы</span>
+        <h2 class="section__title">Частые вопросы</h2>
+      </div>
+      <div class="faq__list">
+        <div class="faq__item reveal">
+          <button class="faq__q">Вредно ли покрытие гель-лаком?<i class="ti ti-chevron-down"></i></button>
+          <div class="faq__a"><p>Нет. Мы используем материалы проверенных производителей и аккуратную технику, которая исключает повреждение ногтя. После снятия ноготь остаётся здоровым.</p></div>
+        </div>
+        <div class="faq__item reveal">
+          <button class="faq__q">Какой инструмент вы используете?<i class="ti ti-chevron-down"></i></button>
+          <div class="faq__a"><p>Качественный и одноразовый инструмент. Многоразовый проходит полную стерилизацию после каждого гостя.</p></div>
+        </div>
+        <div class="faq__item reveal">
+          <button class="faq__q">Сколько держится покрытие?<i class="ti ti-chevron-down"></i></button>
+          <div class="faq__a"><p>В среднем 3–4 недели — зависит от ухода и индивидуальных особенностей. Подберём подходящее покрытие именно вам.</p></div>
+        </div>
+        <div class="faq__item reveal">
+          <button class="faq__q">Как записаться?<i class="ti ti-chevron-down"></i></button>
+          <div class="faq__a"><p>Онлайн через DIKIDI кнопкой «Записаться онлайн» или по телефону +7 (912) 780-02-20.</p></div>
+        </div>
+        <div class="faq__item reveal">
+          <button class="faq__q">Есть ли парковка и Wi-Fi?<i class="ti ti-chevron-down"></i></button>
+          <div class="faq__a"><p>Да. Рядом есть парковка, в студии — Wi-Fi и оплата картой.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ / ЗАПИСЬ -->
+  <section class="section contacts" id="booking">
+    <div class="container contacts__inner">
+      <div class="contacts__info reveal">
+        <span class="eyebrow">Контакты</span>
+        <h2 class="section__title">Запишитесь онлайн</h2>
+        <p class="section__lead">Выберите удобное время — мастер подтвердит запись.</p>
+        <ul class="contacts__list">
+          <li><i class="ti ti-map-pin"></i><span>Екатеринбург, ул. Кузнецова, 6<br><small>цокольный этаж</small></span></li>
+          <li><i class="ti ti-phone"></i><a href="tel:+79127800220">+7 (912) 780-02-20</a></li>
+          <li><i class="ti ti-clock"></i><span>Ежедневно, 10:00–21:00</span></li>
+          <li><i class="ti ti-wifi"></i><span>Wi-Fi · Парковка · Оплата картой</span></li>
+        </ul>
+        <a href="#" class="btn btn--gold btn--lg" data-dikidi>Записаться онлайн в DIKIDI</a>
+      </div>
+      <div class="contacts__map reveal">
+        <iframe src="https://yandex.ru/map-widget/v1/?ll=60.609728%2C56.888230&z=16&pt=60.609728,56.888230,pm2rdm" width="100%" height="100%" frameborder="0" allowfullscreen="true" title="ПилиПилить на карте"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ФУТЕР -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.png" alt="ПилиПилить">
+        <p>Студия красоты в центре Екатеринбурга. Маникюр, педикюр, брови и ресницы с заботой о вас.</p>
+      </div>
+      <nav class="footer__nav">
+        <a href="#services">Услуги</a>
+        <a href="#price">Цены</a>
+        <a href="#works">Работы</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#faq">Вопросы</a>
+      </nav>
+      <div class="footer__contacts">
+        <a href="tel:+79127800220">+7 (912) 780-02-20</a>
+        <span>Екатеринбург, ул. Кузнецова, 6</span>
+        <a href="#booking" class="btn btn--gold">Записаться</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 ПилиПилить · Студия красоты</span>
+      <span>Хорошее место 2026 · Яндекс</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

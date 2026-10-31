@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OBSCURA — Нишевая парфюмерия ручной сборки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0a09;
+    --bg-soft: #141210;
+    --ink: #efe9df;
+    --ink-dim: #a39888;
+    --ink-mute: #645b4f;
+    --gold: #c9a76a;
+    --gold-deep: #8f7442;
+    --line: #262220;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: hidden; }
+  ::selection { background: var(--gold); color: var(--bg); }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+  .serif { font-family: 'Fraunces', serif; font-weight: 300; letter-spacing: -0.02em; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--ink-mute); font-weight: 500;
+  }
+  .divider { height: 1px; background: var(--line); width: 100%; }
+
+  /* Scroll reveal — JS-gated so no-JS still shows content */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1);
+  }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .js .reveal.d1 { transition-delay: .08s; }
+  .js .reveal.d2 { transition-delay: .18s; }
+  .js .reveal.d3 { transition-delay: .28s; }
+  .js .reveal.d4 { transition-delay: .38s; }
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal { opacity:1; transform:none; transition:none; }
+  }
+
+  /* ====== NAV ====== */
+  nav.top {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    padding: 24px 0;
+    transition: background .4s ease, backdrop-filter .4s ease, padding .4s ease, border-color .4s ease;
+    border-bottom: 1px solid transparent;
+  }
+  nav.top.scrolled {
+    background: rgba(11, 10, 9, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 16px 0;
+    border-bottom-color: var(--line);
+  }
+  nav.top .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .logo {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    letter-spacing: 0.35em; font-size: 15px;
+    color: var(--ink);
+  }
+  .nav-links { display: flex; gap: 36px; font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-dim); }
+  .nav-links a {
+    color: inherit; text-decoration: none;
+    position: relative; padding-bottom: 4px;
+    transition: color .3s ease;
+  }
+  .nav-links a::after {
+    content: ""; position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 1px; background: var(--gold);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform .4s cubic-bezier(.2,.7,.2,1);
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+  @media (max-width: 640px) { .nav-links { display: none; } }
+
+  /* ====== HERO — Editorial split, 12-col asymmetric ====== */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: grid; grid-template-columns: 6fr 6fr;
+    align-items: stretch;
+    padding: 120px 0 0;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 110px 0 0; min-height: auto; }
+  }
+  .hero-text {
+    padding: 60px 60px 60px max(32px, calc((100vw - 1240px) / 2 + 32px));
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative;
+  }
+  .hero-text::after {
+    content: ""; position: absolute; top: 50%; right: 0; width: 1px;
+    height: 60%; background: var(--line); transform: translateY(-50%);
+  }
+  @media (max-width: 900px) {
+    .hero-text { padding: 0 20px; }
+    .hero-text::after { display: none; }
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif; font-weight: 300;
+    font-size: clamp(48px, 6.6vw, 112px);
+    line-height: 0.95; letter-spacing: -0.035em;
+    color: var(--ink);
+  }
+  .hero h1 em {
+    font-style: italic; font-weight: 300;
+    color: var(--gold);
+  }
+  .hero p.lead {
+    font-family: 'Fraunces', serif; font-weight: 300; font-style: italic;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.5; margin-top: 36px; max-width: 440px;
+    color: var(--ink-dim);
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-top: 56px; padding: 18px 28px;
+    background: var(--ink); color: var(--bg);
+    text-decoration: none;
+    font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; font-weight: 500;
+    align-self: flex-start;
+    transition: background .3s ease, color .3s ease, gap .3s ease;
+  }
+  .hero-cta:hover { background: var(--gold); color: var(--bg); gap: 22px; }
+  .hero-cta svg { transition: transform .3s ease; }
+  .hero-cta:hover svg { transform: translateX(4px); }
+
+  /* ====== MARQUEE ====== */
+  .marquee {
+    position: relative; overflow: hidden;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    padding: 22px 0;
+  }
+  .marquee-track {
+    display: inline-flex; gap: 48px; white-space: nowrap;
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+    font-size: 22px; color: var(--ink-dim);
+    animation: scroll 42s linear infinite;
+    padding-left: 48px;
+  }
+  .marquee-track .dot { color: var(--gold); font-style: normal; }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+  }
+
+  /* HERO visual: full-bleed photo, floats a meta card */
+  .hero-visual {
+    position: relative; min-height: calc(100vh - 120px);
+    overflow: hidden;
+    background: #0a0806;
+  }
+  @media (max-width: 900px) {
+    .hero-visual { min-height: 68vh; height: 68vh; }
+  }
+
+  .hero-meta-card {
+    position: absolute; z-index: 3;
+    bottom: 32px; left: 32px; right: 32px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .hero-meta-card > div {
+    background: rgba(11, 10, 9, 0.72);
+    padding: 20px 22px;
+  }
+  .hero-meta-card span {
+    display: block; font-size: 9px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--ink-mute); margin-bottom: 8px;
+  }
+  .hero-meta-card strong {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: 18px; color: var(--ink); letter-spacing: 0.01em;
+  }
+  @media (max-width: 640px) {
+    .hero-meta-card { grid-template-columns: 1fr; left: 16px; right: 16px; bottom: 16px; }
+    .hero-meta-card > div { padding: 14px 16px; }
+  }
+  .hero-visual img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.78) contrast(1.08) saturate(0.9);
+    transition: transform 1.4s cubic-bezier(.2,.7,.2,1), opacity 1.4s ease;
+  }
+  .js .hero-visual img { opacity: 0; transform: scale(1.05); }
+  .js .hero-visual img.loaded { opacity: 1; transform: scale(1); }
+  .hero-visual::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, var(--bg) 0%, transparent 25%, transparent 75%, rgba(11,10,9,0.3) 100%),
+      radial-gradient(ellipse at 50% 100%, rgba(11,10,9,0.5), transparent 70%);
+    pointer-events: none; z-index: 1;
+  }
+  .side-label {
+    position: absolute; right: 20px; bottom: 32px; z-index: 3;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-size: 10px; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--ink-dim);
+  }
+  .hero-tag {
+    position: absolute; top: 32px; left: 28px; z-index: 3;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .hero-tag::before {
+    content: ""; width: 24px; height: 1px; background: var(--gold);
+  }
+
+  /* ====== CRAFT SECTION ====== */
+  .craft-head { margin-bottom: 48px; display: flex; justify-content: space-between; align-items: baseline; gap: 32px; }
+  .craft-head .eyebrow { margin: 0; }
+  .craft {
+    padding: 160px 0;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+    position: relative;
+  }
+  @media (max-width: 640px) { .craft { padding: 100px 0; } }
+
+  /* 5x2 bento: photo 2x2 + title 3x1 + 3 pillars 1x1 */
+  .craft-bento {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1.1fr 0.9fr;
+    grid-auto-flow: dense;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    min-height: 640px;
+  }
+  @media (max-width: 900px) {
+    .craft-bento { grid-template-columns: 1fr; grid-template-rows: auto; min-height: 0; }
+  }
+  .craft-bento > * {
+    background: var(--bg-soft);
+    padding: 44px 40px;
+    position: relative;
+  }
+  @media (max-width: 640px) { .craft-bento > * { padding: 32px 24px; } }
+
+  .cb-photo {
+    grid-column: span 2; grid-row: span 2;
+    padding: 0 !important;
+    overflow: hidden;
+    background: #0f0d0b;
+    min-height: 460px;
+  }
+  @media (max-width: 900px) { .cb-photo { grid-column: span 1; aspect-ratio: 4/5; min-height: 0; } }
+  .cb-photo img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.74) contrast(1.1) saturate(0.85);
+    transform: scale(1.08);
+    transition: transform 1.6s cubic-bezier(.2,.7,.2,1);
+  }
+  .cb-photo.in img, .cb-photo:hover img { transform: scale(1); }
+  .cb-photo::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(11,10,9,0.65) 100%);
+    pointer-events: none; z-index: 1;
+  }
+  .cb-photo .big-num {
+    position: absolute; bottom: 28px; left: 32px; z-index: 2;
+    font-family: 'Fraunces', serif; font-size: 92px; font-weight: 300;
+    color: var(--gold); line-height: 1; letter-spacing: -0.05em;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.8);
+  }
+  .cb-photo .big-num small {
+    display: block; font-family: 'Inter', sans-serif; font-weight: 400;
+    font-size: 10px; letter-spacing: 0.32em; color: var(--ink);
+    margin-top: 10px; text-transform: uppercase;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+  }
+
+  .cb-title {
+    grid-column: span 3; grid-row: span 1;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  @media (max-width: 900px) { .cb-title { grid-column: span 1; } }
+  .cb-title h2 {
+    font-size: clamp(28px, 3.2vw, 44px); line-height: 1.08;
+    margin: 16px 0 20px; letter-spacing: -0.02em;
+  }
+  .cb-title h2 em { color: var(--gold); font-style: italic; }
+  .cb-title .body {
+    font-size: 14px; line-height: 1.75; color: var(--ink-dim);
+    max-width: 540px;
+  }
+
+  .cb-pillar {
+    grid-column: span 1; grid-row: span 1;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 180px;
+    transition: background .4s ease;
+  }
+  @media (max-width: 900px) { .cb-pillar { grid-column: span 1; min-height: 140px; } }
+  .cb-pillar:hover { background: #1a1613; }
+  .cb-pillar .n {
+    font-family: 'Fraunces', serif; font-size: 56px;
+    color: var(--gold); font-weight: 300; line-height: 1; letter-spacing: -0.04em;
+  }
+  .cb-pillar .t {
+    font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--ink-dim); line-height: 1.65;
+    margin-top: 20px;
+  }
+  .cb-pillar .u {
+    font-family: 'Fraunces', serif; font-size: 11px;
+    color: var(--ink-mute); margin-top: 6px; letter-spacing: 0.1em;
+  }
+
+  /* ====== COLLECTION ====== */
+  .collection { padding: 180px 0 120px; }
+  @media (max-width: 640px) { .collection { padding: 110px 0 80px; } }
+  .collection .head {
+    display: flex; justify-content: space-between; align-items: end;
+    margin-bottom: 80px; gap: 40px;
+  }
+  @media (max-width: 640px) { .collection .head { flex-direction: column; align-items: flex-start; margin-bottom: 56px; } }
+  .collection h2 {
+    font-size: clamp(40px, 5.5vw, 76px); line-height: 1; letter-spacing: -0.03em;
+    max-width: 640px;
+  }
+  .collection h2 em { color: var(--gold); font-style: italic; }
+  .collection .head p {
+    font-size: 14px; color: var(--ink-dim); line-height: 1.6; max-width: 280px;
+  }
+
+  /* 2x2 asymmetric mosaic: Vesper 1x2 big + Silva 1x1 + Pietra 1x1 */
+  .cards {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-rows: 1fr 1fr;
+    grid-auto-flow: dense;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    min-height: 920px;
+  }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; grid-template-rows: auto; min-height: 0; }
+  }
+
+  .card {
+    background: var(--bg-soft);
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    overflow: hidden;
+    transition: background .5s ease;
+  }
+  .card.card-big { grid-column: span 1; grid-row: span 2; }
+  .card.card-small { grid-column: span 1; grid-row: span 1; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+  @media (max-width: 900px) {
+    .card.card-big, .card.card-small { grid-column: span 1; grid-row: span 1; grid-template-columns: 1fr; grid-template-rows: 1fr auto; min-height: 480px; }
+  }
+  .card:hover { background: #181412; }
+  .card:hover .scene img { transform: scale(1.05); }
+
+  .card .num {
+    position: absolute; top: 20px; right: 24px;
+    font-family: 'Fraunces', serif; font-size: 11px; letter-spacing: 0.3em;
+    color: var(--ink-mute); z-index: 3;
+  }
+  .card .scene {
+    position: relative; overflow: hidden;
+    background: #0f0d0b;
+    min-height: 240px;
+  }
+  .card.card-big .scene { min-height: 520px; }
+  .card .scene img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.72) contrast(1.08) saturate(0.9);
+    transition: transform 1.2s cubic-bezier(.2,.7,.2,1), filter .5s ease;
+  }
+  .card .scene::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(10,8,6,0.75) 100%);
+    pointer-events: none;
+  }
+  .card .scene .mini-label {
+    position: absolute; bottom: 20px; left: 24px; z-index: 2;
+    font-family: 'Fraunces', serif; font-size: 11px; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase;
+  }
+
+  .card .info { padding: 32px 28px 28px; display: flex; flex-direction: column; }
+  .card.card-small .info { padding: 28px 24px 24px; }
+  .card.card-small .scene { min-height: 0; }
+
+  .card .name {
+    font-family: 'Fraunces', serif; font-weight: 400;
+    font-size: 28px; letter-spacing: -0.01em; margin-bottom: 6px;
+  }
+  .card.card-big .name { font-size: 40px; }
+  .card .name em { font-style: italic; color: var(--gold); font-weight: 300; }
+  .card .mood {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ink-mute); margin-bottom: 20px;
+  }
+  .card .notes {
+    display: flex; flex-direction: column; gap: 10px;
+    padding-top: 20px; border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--ink-dim);
+  }
+  .card .notes .row { display: flex; justify-content: space-between; gap: 16px; }
+  .card .notes .row span:first-child {
+    font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--ink-mute); min-width: 60px; align-self: center;
+  }
+  .card .notes .row span:last-child {
+    font-family: 'Fraunces', serif; text-align: right; font-size: 14px; color: var(--ink);
+  }
+  .card.card-small .notes { display: none; }
+
+  .card .foot {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: auto; padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  .card.card-small .foot { margin-top: 20px; border-top: none; padding-top: 0; }
+  .card .price {
+    font-family: 'Fraunces', serif; font-size: 22px; color: var(--ink); font-weight: 400;
+  }
+  .card.card-big .price { font-size: 28px; }
+  .card .vol { font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--ink-mute); }
+
+  /* ====== FOOTER ====== */
+  footer {
+    padding: 72px 0 48px; border-top: 1px solid var(--line);
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  footer .wrap {
+    display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  @media (max-width: 640px) { footer .wrap { flex-direction: column; align-items: flex-start; } }
+  footer a { color: inherit; text-decoration: none; transition: color .3s ease; }
+  footer a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav class="top" id="nav">
+  <div class="wrap">
+    <div class="logo">OBSCURA</div>
+    <div class="nav-links">
+      <a href="#craft">Философия</a>
+      <a href="#collection">Коллекция</a>
+      <a href="#">Ателье</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="eyebrow reveal" style="margin-bottom: 32px;">Est. MMXXIV · Санкт-Петербург</div>
+    <h1 class="reveal d1">Запах<br />как <em>личный</em><br />дневник.</h1>
+    <p class="lead reveal d2">
+      Мы не продаём ароматы — мы оставляем следы.
+      Шесть парфюмеров, одна лаборатория, малые партии от восьмидесяти флаконов.
+    </p>
+    <a href="#collection" class="hero-cta reveal d3">
+      <span>Открыть коллекцию</span>
+      <svg width="18" height="10" viewBox="0 0 18 10" fill="none"><path d="M1 5h16m0 0L13 1m4 4l-4 4" stroke="currentColor" stroke-width="1.2"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-visual reveal d2">
+    <img
+      src="https://images.unsplash.com/photo-1544006593-1a0b9255782d?w=1600&q=80&auto=format&fit=crop"
+      alt="Тёмный флакон парфюма"
+      onload="this.classList.add('loaded')" />
+    <div class="hero-tag">Nº 01 · Vesper · Edition of 240</div>
+    <div class="side-label">OBSCURA · MMXXVI</div>
+    <div class="hero-meta-card">
+      <div><span>Коллекция</span><strong>III композиций</strong></div>
+      <div><span>Концентрация</span><strong>Extrait, 24%</strong></div>
+      <div><span>Тираж</span><strong>80 – 240</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Vesper</span><span class="dot">·</span>
+    <span>Silva Oro</span><span class="dot">·</span>
+    <span>Пьетра Нера</span><span class="dot">·</span>
+    <span>24% Extrait</span><span class="dot">·</span>
+    <span>Санкт-Петербург</span><span class="dot">·</span>
+    <span>Малая партия</span><span class="dot">·</span>
+    <span>Vesper</span><span class="dot">·</span>
+    <span>Silva Oro</span><span class="dot">·</span>
+    <span>Пьетра Нера</span><span class="dot">·</span>
+    <span>24% Extrait</span><span class="dot">·</span>
+    <span>Санкт-Петербург</span><span class="dot">·</span>
+    <span>Малая партия</span><span class="dot">·</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ================= CRAFT ================= -->
+<section class="craft" id="craft">
+  <div class="wrap">
+    <div class="craft-head reveal">
+      <div class="eyebrow">Философия ателье</div>
+    </div>
+    <div class="craft-bento reveal">
+      <div class="cb-photo">
+        <img
+          src="https://images.unsplash.com/photo-1625685959735-77460dc42f06?w=1400&q=80&auto=format&fit=crop"
+          alt="Парфюмерная лаборатория" />
+        <div class="big-num">02<small>Философия</small></div>
+      </div>
+
+      <div class="cb-title">
+        <h2 class="serif">Аромат — это <em>медленное</em> ремесло, а не технологический продукт.</h2>
+        <p class="body">
+          В большой парфюмерии композиция рождается в маркетинговом отделе и месяцами ищет оправдание в лаборатории. У нас всё наоборот: сначала запах, который невозможно забыть, затем — всё остальное. Каждый флакон — месяцы мацерации, бергамот из Калабрии, живая смола бензоина, индийский уд пятилетней выдержки.
+        </p>
+      </div>
+
+      <div class="cb-pillar">
+        <div class="n">92<span style="font-size:.6em;color:var(--ink-mute);">%</span></div>
+        <div>
+          <div class="t">Натуральные экстракты</div>
+          <div class="u">от сырья до флакона</div>
+        </div>
+      </div>
+      <div class="cb-pillar">
+        <div class="n">80<span style="font-size:.5em;color:var(--ink-mute);"> – 240</span></div>
+        <div>
+          <div class="t">Флаконов в партии</div>
+          <div class="u">после — архив</div>
+        </div>
+      </div>
+      <div class="cb-pillar">
+        <div class="n">VI</div>
+        <div>
+          <div class="t">Парфюмеров ателье</div>
+          <div class="u">подпись на каждом</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ================= COLLECTION ================= -->
+<section class="collection" id="collection">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow reveal" style="margin-bottom:28px;">Коллекция · MMXXVI</div>
+        <h2 class="serif reveal d1">Три истории,<br/>записанные <em>на коже</em>.</h2>
+      </div>
+      <p class="reveal d2">Каждая композиция существует в единственной редакции. После исчерпания партии формула уходит в архив ателье и не возвращается.</p>
+    </div>
+
+    <div class="cards reveal">
+
+      <!-- CARD 1 — Vesper (big) -->
+      <article class="card card-big">
+        <div class="num">Nº 01 / 240</div>
+        <div class="scene">
+          <img
+            src="https://images.unsplash.com/photo-1549366970-4efc91d3af9f?w=1200&q=80&auto=format&fit=crop"
+            alt="Vesper — ночной мускус" />
+          <div class="mini-label">Nº 01 · Vesper</div>
+        </div>
+        <div class="info">
+          <div class="name"><em>Vesper</em></div>
+          <div class="mood">Полуночный · мускус · ирис</div>
+          <div class="notes">
+            <div class="row"><span>Верх</span><span>Бергамот, розовый перец</span></div>
+            <div class="row"><span>Сердце</span><span>Ирис, фиалка, кожа</span></div>
+            <div class="row"><span>База</span><span>Белый мускус, амбра</span></div>
+          </div>
+          <div class="foot">
+            <div class="price">24 800 ₽</div>
+            <div class="vol">50 мл · extrait</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 2 — Silva Oro (small) -->
+      <article class="card card-small">
+        <div class="num">Nº 02 / 160</div>
+        <div class="scene">
+          <img
+            src="https://images.unsplash.com/photo-1599285062038-950c5e0b672a?w=900&q=80&auto=format&fit=crop"
+            alt="Silva Oro — янтарная смола" />
+          <div class="mini-label">Nº 02</div>
+        </div>
+        <div class="info">
+          <div class="name"><em>Silva Oro</em></div>
+          <div class="mood">Янтарный · смола</div>
+          <div class="foot">
+            <div class="price">32 400 ₽</div>
+            <div class="vol">50 мл</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 3 — Пьетра Нера (small) -->
+      <article class="card card-small">
+        <div class="num">Nº 03 / 80</div>
+        <div class="scene">
+          <img
+            src="https://images.unsplash.com/photo-1780590128624-9f3354273a40?w=900&q=80&auto=format&fit=crop"
+            alt="Пьетра Нера — мокрый камень" />
+          <div class="mini-label">Nº 03</div>
+        </div>
+        <div class="info">
+          <div class="name"><em>Пьетра Нера</em></div>
+          <div class="mood">Минеральный · камень</div>
+          <div class="foot">
+            <div class="price">38 900 ₽</div>
+            <div class="vol">50 мл</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© MMXXVI Obscura Parfum Atelier</div>
+    <div>Санкт-Петербург · Галерная, 42</div>
+    <div><a href="mailto:hello@obscura-parfum.ru">hello@obscura-parfum.ru</a></div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js');
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Hero parallax
+  const heroImg = document.querySelector('.hero-visual img');
+  if (heroImg && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y < window.innerHeight) {
+        heroImg.style.transform = `scale(1) translateY(${y * 0.12}px)`;
+      }
+    }, { passive: true });
+  }
+</script>
+
+</body>
+</html>
