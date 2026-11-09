@@ -2747,6 +2747,7 @@ body { background: var(--ink-0); position: relative; }
     /* Короткая аннотация: 3 строки, остальное — в модалке через «Посмотреть сайт» */
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
