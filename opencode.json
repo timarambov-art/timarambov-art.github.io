@@ -1,0 +1,36 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "polza": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://polza.ai/api/v1",
+        "apiKey": "pza_1fvClrVNEkcIVxnQa3Bp9PJwcRXMbWcF"
+      },
+      "models": {
+        "deepseek-v4.1-flash-1017": {
+          "name": "DeepSeek V4"
+        }
+      }
+    },
+    "apinex": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "APInex",
+      "options": {
+        "baseURL": "https://api.apinex.bond/v1",
+        "apiKey": "sk-apxd401dfb0b5d5edf666c837c614eba334b247c515f4f4160"
+      },
+      "models": {
+        "free/deepseek-v4.1-flash": {
+          "name": "DeepSeek V4.1 Flash (Free)"
+        }
+      }
+    }
+  },
+  "agents": {
+    "coder": {
+      "model": "apinex/free/deepseek-v4.1-flash",
+      "maxTokens": 2048
+    }
+  }
+}
