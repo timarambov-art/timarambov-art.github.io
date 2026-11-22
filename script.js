@@ -1,49 +1,23 @@
 /* ============================================================
    Тимофей Рямбов, лендинг
-   JS: GSAP ScrollSmoother (free since GSAP 3.13) + ScrollTrigger
+   JS: GSAP + ScrollTrigger
        cinematic + SplitType char-reveal, reveal, FAQ, case modal,
        burger, counter.
-   CDN-зависимости: gsap, ScrollTrigger, ScrollSmoother, SplitType.
+   CDN-зависимости: gsap, ScrollTrigger, SplitType.
    ============================================================ */
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-/* -------------------- GSAP + ScrollSmoother boot --------------------
-   ScrollSmoother делает плавный «плыву по сайту» скролл и сам
-   интегрируется со ScrollTrigger. Lenis больше не нужен. */
+/* -------------------- GSAP + ScrollTrigger -------------------- */
 let cinematicInited = false;
-let smoother = null;
 function initCinematic() {
   if (cinematicInited || reduceMotion) return;
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   cinematicInited = true;
 
-  const plugins = [ScrollTrigger];
-  if (typeof ScrollSmoother !== 'undefined') plugins.push(ScrollSmoother);
-  gsap.registerPlugin(...plugins);
-
-  // ScrollSmoother — физический momentum скролл, premium ощущение
-  if (typeof ScrollSmoother !== 'undefined' && document.getElementById('smooth-wrapper')) {
-    smoother = ScrollSmoother.create({
-      wrapper: '#smooth-wrapper',
-      content: '#smooth-content',
-      smooth: 2,
-      effects: true,            // data-speed, data-lag работают из коробки
-      smoothTouch: 0,           // на touch — нативный скролл
-      normalizeScroll: true,    // гасит разницу между браузерами и тачпадами
-    });
-  }
-
-  // Пересчёт размеров после загрузки шрифтов — убирает race, когда hero
-  // headline рендерится fallback-шрифтом, потом свапается на Bodoni Moda
-  // и ScrollSmoother с кэшем ломает позиции.
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
-      ScrollTrigger.refresh();
-      if (smoother) smoother.refresh();
-    });
-  }
+  gsap.registerPlugin(ScrollTrigger);
+  document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
     // Hero ghost '26 — scrubbed parallax + scale при проходе hero
     gsap.to('.hero-ghost', {
@@ -71,100 +45,7 @@ function initCinematic() {
       },
     });
 
-  // Marquee: ровная скорость без разгона от скролла
-
   const isDesktop = window.matchMedia('(min-width: 900px)').matches;
-
-  /* ---------- Cases: pinned stacking cards.
-     Секция cases закрепляется (pin), страница стоит на месте, а карточки
-     одна за другой проплывают через viewport. Каждая выезжает по spiral 3D
-     (rotateX/Y/Z + translate3d с Z-глубиной) слева, задерживается, уплывает
-     вправо, следующая берёт её место тем же spiral entrance.
-     Fallback (без GSAP) — вертикальный stack через body.no-cinematic. */
-  if (isDesktop) {
-    const casesWrap = document.querySelector('.cases-wrap');
-    const casesTrack = document.querySelector('.cases-track');
-    const cases = gsap.utils.toArray('.cases-track > .case');
-    if (casesWrap && cases.length > 1) {
-      // Переводим в stacked режим — через CSS классы, карточки position:absolute
-      casesTrack.classList.add('is-stacked');
-      document.getElementById('cases').classList.add('is-stacked-mode');
-      // Отмечаем все .case и .case-shot как .is-in (clip-reveal img),
-      // чтобы entrance делала только GSAP timeline, а не IO observer
-      cases.forEach((c) => {
-        c.classList.add('is-in');
-        const shot = c.querySelector('.case-shot');
-        if (shot) shot.classList.add('is-in');
-      });
-
-      // Initial state: карточка 0 на месте, остальные — в spiral-away state
-      gsap.set(cases[0], {
-        rotateX: 0, rotateY: 0, rotateZ: 0,
-        x: 0, y: 0, z: 0, scale: 1, opacity: 1,
-        pointerEvents: 'auto',
-      });
-      gsap.set(cases.slice(1), {
-        rotateX: 22, rotateY: -42, rotateZ: -16,
-        x: -300, y: 160, z: -500, scale: 0.72, opacity: 0,
-        pointerEvents: 'none',
-      });
-
-      // Timeline: pin wrap, каждая смена карточки занимает 1 "scroll-кадр"
-      // + hold в середине. Общая длина = (N-1) * segment * vh + hold start/end.
-      const segment = 0.9; // viewport-heights per transition
-      const hold = 0.5;    // viewport-heights hold after entry
-      const total = hold + (cases.length - 1) * (segment + hold);
-
-      const tl = gsap.timeline({
-        defaults: { ease: 'power2.inOut' },
-        scrollTrigger: {
-          trigger: '#cases',       // Pin всю секцию — заголовок остаётся виден
-          start: 'top top',
-          end: () => `+=${window.innerHeight * total}`,
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // Hold первой карточки
-      tl.to({}, { duration: hold });
-
-      for (let i = 1; i < cases.length; i++) {
-        const prev = cases[i - 1];
-        const curr = cases[i];
-        const label = `swap${i}`;
-        tl.addLabel(label);
-        // Прошлая улетает вправо (exit spiral)
-        tl.to(prev, {
-          rotateX: -12,
-          rotateY: 32,
-          rotateZ: 12,
-          x: 320,
-          y: -100,
-          z: -400,
-          scale: 0.78,
-          opacity: 0,
-          pointerEvents: 'none',
-          duration: segment,
-        }, label);
-        // Текущая влетает слева (entry spiral)
-        tl.to(curr, {
-          rotateX: 0,
-          rotateY: 0,
-          rotateZ: 0,
-          x: 0, y: 0, z: 0,
-          scale: 1,
-          opacity: 1,
-          pointerEvents: 'auto',
-          duration: segment,
-        }, label);
-        // Hold текущей
-        tl.to({}, { duration: hold });
-      }
-    }
-  }
 
   /* Services pinned через CSS sticky (см. styles.css) — JS не нужен.
      Service rows при scroll получают scrubbed-fade: приглушённые пока
@@ -397,14 +278,6 @@ window.addEventListener('load', () => { setTimeout(initHeroReveal, 60); });
 // Если CDN отвалился — через 1.5с запускаем CSS-путь, чтобы hero не остался пустым
 setTimeout(heroFallback, 1500);
 
-/* Если GSAP не загрузился за 2 секунды — переключаем всё в no-cinematic режим,
-   чтобы horizontal cases и pinned services не оставались сломанными. */
-setTimeout(() => {
-  if (!cinematicInited) {
-    document.body.classList.add('no-cinematic');
-  }
-}, 2000);
-
 /* Section headlines: разбить и анимировать при входе в viewport */
 (function () {
   const headlines = document.querySelectorAll('.section-head h2, .contact-head h2');
@@ -426,24 +299,6 @@ setTimeout(() => {
   }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
   headlines.forEach((h) => io.observe(h));
 })();
-
-
-/* -------------------- Case screenshots: clip reveal on enter -------------------- */
-/* Observer наблюдает всю .case (article) — entrance теперь spiral 3D для
-   целой карточки (shot + body двигаются как один объект). Внутри shot тоже
-   получает .is-in, чтобы clip-path reveal на img по-прежнему работал. */
-const caseIO = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-in');
-      const shot = entry.target.querySelector('.case-shot');
-      if (shot) shot.classList.add('is-in');
-      caseIO.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-
-document.querySelectorAll('.cases-track > .case').forEach((c) => caseIO.observe(c));
 
 
 /* -------------------- 3D tilt (data-tilt) — mouse-tracking perspective ---
@@ -551,7 +406,7 @@ function runCounter(el) {
 }
 
 
-/* -------------------- Anchor nav: smooth scroll через ScrollSmoother + offset под хедер -------------------- */
+/* -------------------- Anchor nav: прокрутка с отступом под шапку -------------------- */
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener('click', (e) => {
     const href = a.getAttribute('href');
@@ -567,16 +422,11 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
     e.preventDefault();
     const headerEl = document.querySelector('.header');
     const headerH = headerEl ? headerEl.getBoundingClientRect().height : 72;
-    const smoother = window.ScrollSmoother && window.ScrollSmoother.get();
     closeMobileMenu();
     // даём мобильному меню закрыться (unlock scroll), потом скроллим
     requestAnimationFrame(() => {
-      if (smoother) {
-        smoother.scrollTo(target, true, `top ${headerH + 12}px`);
-      } else {
-        const y = target.getBoundingClientRect().top + window.scrollY - headerH - 12;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
+      const y = target.getBoundingClientRect().top + window.scrollY - headerH - 12;
+      window.scrollTo({ top: y, behavior: reduceMotion ? 'instant' : 'smooth' });
       // обновим URL hash без прыжка
       history.pushState(null, '', href);
     });
@@ -621,166 +471,38 @@ window.addEventListener('resize', () => {
 
 
 /* -------------------- Case modal -------------------- */
-const CASE_DATA = {
-  aurel: {
-    title: 'AUREL — Capsule 01',
-    html: `<iframe src="assets/aurel-demo/index.html" title="AUREL, живое демо" allow="autoplay"></iframe>`,
-  },
-  pilipilit: {
-    title: 'Салон ПилиПилить',
-    html: `<iframe src="assets/pilipilit-demo/index.html" title="ПилиПилить, живое демо" allow="autoplay"></iframe>`,
-  },
-  svarka: {
-    title: 'SvarkaUral196',
-    html: `<iframe src="https://svarkaural196.ru/" title="SvarkaUral196, живое демо" allow="autoplay"></iframe>`,
-  },
-  metallprokat: {
-    title: 'РЕЗЕРВ — металлопрокат',
-    html: `<iframe src="assets/metallprokat-demo/index.html" title="РЕЗЕРВ, живое демо" allow="autoplay"></iframe>`,
-  },
-  obscura: {
-    title: 'OBSCURA — нишевая парфюмерия',
-    html: `<iframe src="assets/obscura-demo/index.html" title="OBSCURA, живое демо" allow="autoplay"></iframe>`,
-  },
-};
-
-const modal       = document.getElementById('caseModal');
+const modal = document.getElementById('caseModal');
 const modalScroll = document.getElementById('modalScroll');
-const modalTitle  = document.getElementById('modalTitle');
+const modalTitle = document.getElementById('modalTitle');
 
-function openCase(id) {
-  const data = CASE_DATA[id];
-  if (!data || !modal || !modalScroll) return;
-
-  modalTitle.textContent = data.title;
-  modalScroll.innerHTML = `<div class="cm-frame">${data.html}</div>`;
-  modalScroll.scrollTop = 0;
-
-  modal.classList.add('is-open');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.classList.add('scroll-lock');
-
-  // Прячем scrollbar внутри same-origin iframe'ов (WebKit/Blink не поддерживают
-  // scrollbar-width снаружи, только внутри самого документа iframe)
-  const iframe = modalScroll.querySelector('iframe');
-  if (iframe) {
-    const hideScroll = () => {
-      try {
-        const doc = iframe.contentDocument;
-        if (!doc) return;
-        if (doc.getElementById('__cmScrollHide')) return;
-        const s = doc.createElement('style');
-        s.id = '__cmScrollHide';
-        s.textContent = `
-          html { scrollbar-width: none; -ms-overflow-style: none; }
-          html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
-        `;
-        doc.head.appendChild(s);
-      } catch (e) { /* cross-origin — ничего не делаем, браузер сам покажет свой scrollbar */ }
-    };
-    iframe.addEventListener('load', hideScroll);
-    hideScroll();
-  }
-}
-
-function closeCase() {
-  if (!modal) return;
-  modal.classList.remove('is-open');
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('scroll-lock');
-  setTimeout(() => { if (modalScroll) modalScroll.innerHTML = ''; }, 320);
-}
-
-document.querySelectorAll('[data-open-case]').forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openCase(btn.dataset.openCase);
+if (modal && typeof modal.showModal === 'function') {
+  modal.querySelector('.cm-close').addEventListener('click', () => modal.close());
+  modal.addEventListener('close', () => {
+    modalScroll.replaceChildren();
+    document.body.classList.remove('scroll-lock');
   });
-});
 
-document.querySelectorAll('.case[data-case]').forEach((card) => {
-  const shot = card.querySelector('.case-shot');
-  if (shot) {
-    shot.style.cursor = 'pointer';
-    shot.addEventListener('click', () => openCase(card.dataset.case));
-  }
-});
+  document.querySelectorAll('[data-open-case]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
 
-/* -------------------- More works toggle + mini-cases -------------------- */
-const moreToggle = document.querySelector('.more-works-toggle');
-const moreGrid   = document.getElementById('moreWorksGrid');
-if (moreToggle && moreGrid) {
-  moreToggle.addEventListener('click', () => {
-    const open = moreToggle.getAttribute('aria-expanded') === 'true';
-    moreToggle.setAttribute('aria-expanded', String(!open));
-    if (open) {
-      moreGrid.classList.remove('is-open');
-    } else {
-      moreGrid.classList.add('is-open');
-      requestAnimationFrame(() => {
-        moreGrid.style.opacity = '1';
-        moreGrid.style.transform = 'translateY(0)';
-      });
-    }
+      const title = link.closest('article').querySelector('h2, h3').textContent;
+      const frame = document.createElement('iframe');
+      frame.title = title;
+      frame.allow = 'autoplay';
+      frame.src = link.href;
+
+      modalTitle.textContent = title;
+      modalScroll.replaceChildren(frame);
+      modal.showModal();
+      document.body.classList.add('scroll-lock');
+    });
   });
 }
-document.querySelectorAll('.mini-case[data-case]').forEach((card) => {
-  card.style.cursor = 'pointer';
-  card.addEventListener('click', () => openCase(card.dataset.case));
-});
 
-/* -------------------- Скрываем scrollbar внутри same-origin preview-iframes -------- */
-function hideIframeScrollbar(iframe) {
-  const inject = () => {
-    try {
-      const doc = iframe.contentDocument;
-      if (!doc || doc.getElementById('__previewScrollHide')) return;
-      const s = doc.createElement('style');
-      s.id = '__previewScrollHide';
-      s.textContent = `
-        html { scrollbar-width: none; -ms-overflow-style: none; }
-        html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
-      `;
-      doc.head.appendChild(s);
-    } catch (e) { /* cross-origin — пропускаем */ }
-  };
-  iframe.addEventListener('load', inject);
-  inject();
-}
-/* На мобиле заменяем iframe-превью сайтов с видео (ПилиПилить, Svarka) на
-   статичные hero-скриншоты — чтобы видео не грузилось и не ело батарею.
-   Другие iframe'ы (AUREL, РЕЗЕРВ, OBSCURA) без видео — оставляем живыми. */
-const isMobileView = window.matchMedia('(max-width: 900px)').matches;
-const previewReplaceMap = [
-  { match: 'pilipilit-demo', img: 'assets/pilipilit-hero.webp' },
-  { match: 'svarkaural196',  img: 'assets/svarka-hero.webp'    },
-];
-document.querySelectorAll('.shot-live-frame iframe').forEach((iframe) => {
-  if (isMobileView) {
-    const src = iframe.getAttribute('src') || '';
-    const hit = previewReplaceMap.find(r => src.includes(r.match));
-    if (hit) {
-      const img = document.createElement('img');
-      img.src = hit.img;
-      img.alt = iframe.title || '';
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;display:block;';
-      iframe.replaceWith(img);
-      return;
-    }
-  }
-  hideIframeScrollbar(iframe);
-});
-
-document.querySelectorAll('[data-modal-close]').forEach((el) => {
-  el.addEventListener('click', closeCase);
-});
-
-document.addEventListener('keydown', (e) => {
-  if (!modal || !modal.classList.contains('is-open')) return;
-  if (e.key === 'Escape') closeCase();
+document.querySelector('.more-works')?.addEventListener('toggle', () => {
+  if (cinematicInited) ScrollTrigger.refresh();
 });
 
 
