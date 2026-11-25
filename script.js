@@ -2,7 +2,7 @@
    Тимофей Рямбов, лендинг
    JS: GSAP + ScrollTrigger
        cinematic + SplitType char-reveal, reveal, FAQ, case modal,
-       burger, counter.
+       burger.
    CDN-зависимости: gsap, ScrollTrigger, SplitType.
    ============================================================ */
 
@@ -28,18 +28,6 @@ function initCinematic() {
       scrollTrigger: {
         trigger: '.hero',
         start: 'top top',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    });
-
-    // Hero stats — subtle lift при выходе из viewport
-    gsap.to('.hero-stats', {
-      yPercent: -15,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.hero-stats',
-        start: 'top bottom',
         end: 'bottom top',
         scrub: 1,
       },
@@ -235,9 +223,8 @@ function initHeroReveal() {
   if (typeof gsap !== 'undefined' && typeof SplitType !== 'undefined') {
     title.querySelectorAll('.accent').forEach(a => a.classList.add('splittype-ignore'));
     new SplitType(title, {
-      types: 'lines,words,chars',
+      types: 'words,chars',
       tagName: 'span',
-      lineClass: 'line',
       wordClass: 'w',
       charClass: 'ch',
     });
@@ -375,35 +362,11 @@ const revealIO = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     entry.target.classList.add('is-visible');
-    entry.target.querySelectorAll('[data-count]').forEach(runCounter);
     revealIO.unobserve(entry.target);
   });
 }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
 document.querySelectorAll('[data-reveal]').forEach((el) => revealIO.observe(el));
-
-
-/* -------------------- Number counter -------------------- */
-function runCounter(el) {
-  if (el.dataset.counted === 'yes') return;
-  el.dataset.counted = 'yes';
-  const target = parseFloat(el.dataset.count);
-  if (isNaN(target)) return;
-
-  const duration = 900;
-  const start = performance.now();
-  const isFloat = !Number.isInteger(target);
-
-  const tick = (now) => {
-    const p = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - p, 3);
-    const value = target * eased;
-    el.textContent = isFloat ? value.toFixed(1) : Math.round(value);
-    if (p < 1) requestAnimationFrame(tick);
-    else el.textContent = isFloat ? target.toFixed(1) : target;
-  };
-  requestAnimationFrame(tick);
-}
 
 
 /* -------------------- Anchor nav: прокрутка с отступом под шапку -------------------- */
